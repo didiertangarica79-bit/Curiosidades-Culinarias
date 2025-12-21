@@ -733,4 +733,404 @@
         
         .payment-methods {
             display: flex;
-           
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .payment-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .payment-card:hover {
+            border-color: var(--primary);
+            background-color: #f8f9fa;
+        }
+        
+        .payment-icon {
+            font-size: 1.8rem;
+            color: var(--gray);
+        }
+        
+        .payment-card.selected .payment-icon {
+            color: var(--primary);
+        }
+        
+        .success-message {
+            background: linear-gradient(to right, #d4edda, #c3e6cb);
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            border-left: 5px solid #28a745;
+        }
+        
+        .download-section {
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            border: 2px dashed #2196f3;
+        }
+        
+        .download-button {
+            background: linear-gradient(to right, #2196f3, #1976d2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+        }
+        
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+        }
+        
+        .download-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #0d47a1;
+        }
+        
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .purchase-id {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+        
+        /* Panel Admin */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            z-index: 3000;
+            overflow-y: auto;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: #1a2238;
+            padding: 25px 20px;
+            border-right: 2px solid #3b82f6;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .menu-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #252f4a;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            color: #e2e8f0;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: #3b82f6;
+            transform: translateX(5px);
+        }
+        
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .admin-table {
+            width: 100%;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .admin-table th, .admin-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            color: #e2e8f0;
+        }
+        
+        .admin-table th {
+            background: #252f4a;
+            font-weight: 600;
+        }
+        
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Login */
+        .login-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 4000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-box {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            background: #252f4a;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-container, .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .admin-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .tracker-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-utensils logo-icon"></i>
+                <h1>Curiosidades <span>Culinarias</span></h1>
+            </div>
+            
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#libros">Libros PDF</a></li>
+                    <li><a href="#seguimiento">Panel Ventas</a></li>
+                    <li><a href="#sobre">Sobre Didier</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="https://youtube.com/@didiertangarica" target="_blank">YouTube</a></li>
+                </ul>
+            </nav>
+            
+            <button class="cta-button" id="adminAccessBtn">
+                <i class="fas fa-chart-line"></i> Panel Admin
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <h2>Descubre los secretos de la cocina</h2>
+            <p>Compra mis libros en PDF con recetas únicas, técnicas profesionales y curiosidades gastronómicas. Pago seguro con tarjeta y <strong>descarga inmediata del PDF</strong>.</p>
+            <div class="hero-buttons">
+                <button class="cta-button" id="viewBooks">
+                    <i class="fas fa-shopping-cart"></i> Comprar libros ahora
+                </button>
+                <a href="https://youtube.com/@didiertangarica" target="_blank" class="secondary-button">
+                    <i class="fab fa-youtube"></i> Ver canal YouTube
+                </a>
+                <button class="secondary-button" onclick="scrollToTracker()">
+                    <i class="fas fa-chart-line"></i> Ver Estadísticas
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Books Section -->
+    <section id="libros">
+        <div class="container">
+            <div class="section-title">
+                <h2>Libros de Cocina en PDF</h2>
+                <p>Descarga inmediata después del pago. Formato PDF compatible con cualquier dispositivo.</p>
+            </div>
+            
+            <div class="books-grid">
+                <!-- Libro 1 -->
+                <div class="book-card">
+                    <div class="book-badge">MÁS VENDIDO</div>
+                    <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="book-content">
+                        <h3>Secretos de la Cocina Internacional</h3>
+                        <p>Técnicas y sabores de 5 continentes en 50+ recetas auténticas paso a paso. Incluye videos complementarios.</p>
+                        <div class="book-features">
+                            <span class="book-feature">50+ recetas</span>
+                            <span class="book-feature">Videos incluidos</span>
+                            <span class="book-feature">120 páginas</span>
+                        </div>
+                        <div class="book-price">
+                            <div>
+                                <span class="original-price">$19.99</span>
+                                <span class="price">$12.99</span>
+                            </div>
+                            <button class="cta-button buy-btn" data-book="Secretos de la Cocina Internacional" data-price="12.99" data-id="LIB001">
+                                <i class="fas fa-cart-plus"></i> Comprar ahora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Libro 2 -->
+                <div class="book-card">
+                    <div class="book-badge">NUEVO</div>
+                    <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80');"></div>
+                    <div class="book-content">
+                        <h3>Técnicas Profesionales para el Hogar</h3>
+                        <p>Métodos de chefs profesionales adaptados para tu cocina. Desde cuchillos hasta emplatado.</p>
+                        <div class="book-features">
+                            <span class="book
