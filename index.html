@@ -1,468 +1,148 @@
-{
-  "sistema": "BookSales Live Tracker v3.0",
-  "version": "1.0.0",
-  "descripcion": "Sistema completo de seguimiento en tiempo real de ventas de libros con estadísticas, promociones y notificaciones",
-  "ultima_actualizacion": "2025-12-21",
-  
-  "configuracion_principal": {
-    "modo": "tiempo_real",
-    "idioma": "es",
-    "moneda": "USD",
-    "zona_horaria": "America/Mexico_City",
-    "url_panel": "https://panel.tusitio.com/admin",
-    "url_publico": "https://tusitio.com/estadisticas",
-    "acceso_publico": {
-      "ver_estadisticas": true,
-      "ver_contador": true,
-      "ver_reloj": true,
-      "comprar_libros": true
-    }
-  },
-  
-  "modulos_activos": {
-    "ventas_tiempo_real": true,
-    "estadisticas_completas": true,
-    "sistema_rifas": true,
-    "notificaciones": true,
-    "panel_administracion": true,
-    "integracion_redes": true,
-    "seguimiento_envios": false
-  },
-  
-  "estadisticas_visualizacion": {
-    "para_publico": ["libros_vendidos_hoy", "libros_vendidos_total", "contador_promocion"],
-    "para_admin": {
-      "detalles_ventas": {
-        "mostrar_cliente": true,
-        "mostrar_email": true,
-        "mostrar_telefono": false,
-        "mostrar_direccion": false,
-        "mostrar_precio": true,
-        "mostrar_libro": true,
-        "mostrar_fecha": true,
-        "mostrar_ubicacion": true,
-        "mostrar_metodo_pago": true
-      },
-      "reportes_automaticos": {
-        "diario": true,
-        "semanal": true,
-        "mensual": true,
-        "por_libro": true,
-        "por_cliente": true,
-        "por_ubicacion": true
-      }
-    }
-  },
-  
-  "rifas_promociones": {
-    "modo_rifa_negativa": {
-      "activado": true,
-      "formato": "dias_restantes",
-      "mostrar_en": ["panel_admin", "sitio_web", "redes_sociales"],
-      "colores": {
-        "mas_5_dias": "#4CAF50",
-        "3_a_5_dias": "#FF9800",
-        "1_a_2_dias": "#FF5722",
-        "ultimo_dia": "#F44336"
-      }
-    },
-    "reloj_promocion": {
-      "activado": true,
-      "mostrar_inicio": true,
-      "mostrar_fin": true,
-      "alertas_sonoras": {
-        "inicio_promocion": true,
-        "fin_promocion": true,
-        "24_horas_antes": true,
-        "1_hora_antes": true
-      },
-      "mensajes": {
-        "inicio": "¡La promoción ha comenzado!",
-        "fin": "¡La promoción ha finalizado!",
-        "contador": "Tiempo restante para la rifa:"
-      }
-    }
-  },
-  
-  "notificaciones_automaticas": {
-    "para_cliente": {
-      "confirmacion_pedido": {
-        "activado": true,
-        "metodos": ["email", "whatsapp"],
-        "mensaje_email": "Gracias por tu compra. Hemos recibido tu pedido del libro: [LIBRO]",
-        "mensaje_whatsapp": "✅ Pedido confirmado. Libro: [LIBRO]. Precio: [PRECIO]"
-      },
-      "confirmacion_pago": {
-        "activado": true,
-        "metodos": ["email"],
-        "mensaje": "✅ Pago verificado. Tu libro será procesado en 24-48 horas."
-      },
-      "recordatorio_rifa": {
-        "activado": true,
-        "dias_antes": [3, 1],
-        "mensaje": "⏰ Recordatorio: La rifa cierra en [DIAS] días. ¡No te quedes fuera!"
-      }
-    },
-    
-    "para_admin": {
-      "nueva_venta": {
-        "activado": true,
-        "metodos": ["email", "whatsapp", "notificacion_panel"],
-        "mensaje": "🛒 NUEVA VENTA: [LIBRO] por [PRECIO] a [CLIENTE] - [FECHA]",
-        "datos_incluir": ["libro", "precio", "cliente", "fecha", "ubicacion", "metodo_pago"]
-      },
-      "pago_verificado": {
-        "activado": true,
-        "metodos": ["notificacion_panel"],
-        "mensaje": "💰 Pago verificado: Pedido #[ID_PEDIDO]"
-      },
-      "alerta_rifa": {
-        "activado": true,
-        "metodos": ["email"],
-        "24_horas_antes": true,
-        "1_hora_antes": true,
-        "finalizada": true
-      }
-    }
-  },
-  
-  "integraciones": {
-    "pasarelas_pago": {
-      "paypal": {
-        "activado": true,
-        "modo": "sandbox",
-        "webhooks": ["payment.completed", "payment.captured"]
-      },
-      "stripe": {
-        "activado": false,
-        "modo": "test"
-      },
-      "mercado_pago": {
-        "activado": true,
-        "modo": "production"
-      }
-    },
-    
-    "redes_sociales": {
-      "autopublicacion": {
-        "activado": true,
-        "plataformas": ["facebook", "twitter", "instagram"],
-        "eventos_publicar": ["nueva_venta", "inicio_rifa", "fin_rifa", "meta_alcanzada"]
-      },
-      "api_keys": {
-        "facebook": "FB_APP_ID",
-        "twitter": "TWITTER_BEARER_TOKEN",
-        "instagram": "IG_ACCESS_TOKEN"
-      }
-    },
-    
-    "email": {
-      "servicio": "sendgrid",
-      "api_key": "SENDGRID_API_KEY",
-      "plantillas": {
-        "confirmacion_compra": "template_confirmation_id",
-        "notificacion_admin": "template_admin_notification_id"
-      }
-    },
-    
-    "whatsapp": {
-      "servicio": "twilio",
-      "account_sid": "TWILIO_ACCOUNT_SID",
-      "auth_token": "TWILIO_AUTH_TOKEN",
-      "numero_whatsapp": "+1234567890"
-    }
-  },
-  
-  "base_datos": {
-    "tipo": "firebase_realtime",
-    "estructura": {
-      "ventas": {
-        "id_venta": "string",
-        "id_libro": "string",
-        "titulo_libro": "string",
-        "precio": "number",
-        "cliente": {
-          "nombre": "string",
-          "email": "string",
-          "telefono": "string"
-        },
-        "fecha_venta": "timestamp",
-        "ubicacion": {
-          "pais": "string",
-          "ciudad": "string"
-        },
-        "metodo_pago": "string",
-        "estado_pago": ["pendiente", "completado", "fallido"],
-        "notificado": "boolean"
-      },
-      "libros": {
-        "id_libro": "string",
-        "titulo": "string",
-        "autor": "string",
-        "precio": "number",
-        "stock": "number",
-        "categorias": "array",
-        "descripcion": "string"
-      },
-      "rifas": {
-        "id_rifa": "string",
-        "nombre": "string",
-        "fecha_inicio": "timestamp",
-        "fecha_fin": "timestamp",
-        "premio": "string",
-        "participantes": "array",
-        "estado": ["activa", "finalizada", "pendiente"]
-      },
-      "configuracion": {
-        "contadores": "object",
-        "estadisticas_diarias": "object",
-        "alertas_programadas": "array"
-      }
-    }
-  },
-  
-  "frontend_config": {
-    "panel_publico": {
-      "diseno": "moderno_oscuro",
-      "elementos": [
-        {
-          "nombre": "contador_ventas",
-          "tipo": "contador_live",
-          "posicion": "top_center",
-          "actualizacion": "5_seconds"
-        },
-        {
-          "nombre": "reloj_promocion",
-          "tipo": "reloj_cuenta_regresiva",
-          "posicion": "top_right",
-          "formato": "DD:HH:MM:SS"
-        },
-        {
-          "nombre": "ultimas_ventas",
-          "tipo": "lista_tiempo_real",
-          "posicion": "centro",
-          "mostrar": 5,
-          "campos": ["libro", "hace", "ubicacion"]
-        },
-        {
-          "nombre": "estadisticas_grafico",
-          "tipo": "grafico_barras",
-          "posicion": "bottom_left",
-          "datos": ["ventas_hoy", "ventas_semana", "libro_mas_vendido"]
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curiosidades Culinarias - Panel de Ventas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #2d3436;
+            --color-secondary: #0984e3;
+            --color-success: #00b894;
+            --color-warning: #fdcb6e;
+            --color-danger: #d63031;
+            --color-text: #dfe6e9;
+            --color-bg: #1e272e;
         }
-      ],
-      "animaciones": {
-        "nueva_venta": "flash_verde",
-        "actualizacion": "fade_in",
-        "alerta_promocion": "parpadeo_naranja"
-      }
-    },
-    
-    "panel_admin": {
-      "diseno": "profesional_claro",
-      "vistas": ["dashboard", "ventas", "libros", "rifas", "clientes", "reportes"],
-      "acceso": "password_protegido",
-      "permisos": {
-        "ver_todo": true,
-        "editar_libros": true,
-        "crear_rifas": true,
-        "exportar_datos": true,
-        "configurar_sistema": true
-      }
-    }
-  },
-  
-  "seguridad": {
-    "autenticacion": {
-      "admin": "usuario_password",
-      "api_keys": "encriptadas",
-      "webhooks": "firmados"
-    },
-    "ssl": true,
-    "backup_automatico": {
-      "frecuencia": "diario",
-      "retencion": "30_dias",
-      "ubicacion": "cloud_storage"
-    }
-  },
-  
-  "cron_jobs": {
-    "tareas_automaticas": [
-      {
-        "nombre": "actualizar_contadores",
-        "frecuencia": "cada_5_segundos",
-        "accion": "actualizar_estadisticas_tiempo_real"
-      },
-      {
-        "nombre": "verificar_pagos_pendientes",
-        "frecuencia": "cada_hora",
-        "accion": "revisar_estados_pago"
-      },
-      {
-        "nombre": "enviar_notificaciones_rifa",
-        "frecuencia": "cada_dia_09:00",
-        "accion": "enviar_recordatorios_rifa"
-      },
-      {
-        "nombre": "generar_reportes_diarios",
-        "frecuencia": "cada_dia_23:59",
-        "accion": "crear_reporte_ventas_diario"
-      },
-      {
-        "nombre": "backup_base_datos",
-        "frecuencia": "cada_dia_02:00",
-        "accion": "respaldar_toda_informacion"
-      }
-    ]
-  },
-  
-  "configuracion_despliegue": {
-    "servidor": {
-      "tipo": "nodejs",
-      "version": "18.x",
-      "puerto": 3000,
-      "entorno": "production"
-    },
-    "hosting": "vercel",
-    "dominio": "tudominio.com",
-    "ssl": "letsencrypt",
-    "monitoreo": {
-      "uptime": true,
-      "errores": true,
-      "rendimiento": true
-    }
-  },
-  
-  "instrucciones_implementacion": [
-    "1. Crear cuenta en Firebase y configurar base de datos en tiempo real",
-    "2. Configurar cuentas en SendGrid (email) y Twilio (WhatsApp)",
-    "3. Configurar pasarelas de pago (PayPal, Mercado Pago)",
-    "4. Desplegar frontend en Vercel/Netlify",
-    "5. Desplegar backend en servidor Node.js",
-    "6. Configurar dominios y SSL",
-    "7. Probar flujo completo de compra",
-    "8. Activar monitoreo y alertas"
-  ],
-  
-  "variables_entorno": {
-    "FIREBASE_API_KEY": "tu_api_key_firebase",
-    "FIREBASE_DATABASE_URL": "https://tu-proyecto.firebaseio.com",
-    "SENDGRID_API_KEY": "tu_sendgrid_key",
-    "TWILIO_ACCOUNT_SID": "tu_twilio_sid",
-    "TWILIO_AUTH_TOKEN": "tu_twilio_token",
-    "PAYPAL_CLIENT_ID": "tu_paypal_id",
-    "PAYPAL_SECRET": "tu_paypal_secret",
-    "MERCADOPAGO_ACCESS_TOKEN": "tu_mp_token",
-    "ADMIN_PASSWORD": "contraseña_segura_admin",
-    "JWT_SECRET": "secreto_jwt_para_auth"
-  }
-}
-{
-  "name": "book-sales-tracker",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.0",
-    "socket.io": "^4.5.0",
-    "firebase-admin": "^11.0.0",
-    "@sendgrid/mail": "^7.7.0",
-    "twilio": "^3.80.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.0"
-  }
-}
-FIREBASE_API_KEY=tu_api_key_aqui
-FIREBASE_DATABASE_URL=https://tu-proyecto.firebaseio.com
-SENDGRID_API_KEY=SG.tu_key_aqui
-TWILIO_ACCOUNT_SID=ACtu_sid_aqui
-TWILIO_AUTH_TOKEN=tu_token_aqui
-PAYPAL_CLIENT_ID=tu_client_id
-MERCADOPAGO_ACCESS_TOKEN=APP_USR-tu_token
-ADMIN_PASSWORD=contraseñaSegura123
-JWT_SECRET=miSecretoSuperSeguroJWT
-PORT=3000
-NODE_ENV=production
-const express = require('express');
-const socketIO = require('socket.io');
-const admin = require('firebase-admin');
-require('dotenv').config();
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--color-bg); color: var(--color-text); line-height: 1.6; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; padding: 20px; border-bottom: 2px solid var(--color-secondary); }
+        h1 { color: var(--color-success); font-size: 2.8rem; }
+        .subtitle { color: var(--color-warning); font-size: 1.2rem; margin-top: 10px; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .card { background: rgba(45, 52, 54, 0.7); border-radius: 15px; padding: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: transform 0.3s; border-left: 5px solid var(--color-secondary); }
+        .card:hover { transform: translateY(-5px); }
+        .card h2 { color: var(--color-secondary); margin-bottom: 15px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .stat-number { font-size: 3.5rem; font-weight: bold; text-align: center; margin: 15px 0; color: var(--color-success); }
+        .countdown { font-size: 2.2rem; font-weight: bold; text-align: center; color: var(--color-warning); font-family: monospace; margin: 10px 0; }
+        .countdown-label { text-align: center; color: #aaa; }
+        .sale-item { padding: 12px; border-bottom: 1px solid #444; display: flex; justify-content: space-between; }
+        .sale-item:last-child { border-bottom: none; }
+        .location { color: var(--color-warning); }
+        .time { color: #aaa; font-size: 0.9rem; }
+        .flash-new { animation: flashGreen 2s; }
+        @keyframes flashGreen { 0%, 100% { background-color: transparent; } 50% { background-color: rgba(0, 184, 148, 0.3); } }
+        footer { text-align: center; margin-top: 40px; padding: 20px; color: #777; border-top: 1px solid #444; }
+        @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } h1 { font-size: 2.2rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> Curiosidades Culinarias</h1>
+            <p class="subtitle">Panel de Ventas en Tiempo Real | Seguimiento de Libros Vendidos</p>
+        </header>
 
-const app = express();
-const server = require('http').createServer(app);
-const io = socketIO(server, { cors: { origin: '*' } });
+        <div class="dashboard-grid">
+            <!-- Tarjeta 1: Contador Total de Ventas -->
+            <div class="card">
+                <h2><i class="fas fa-book"></i> Libros Vendidos Hoy</h2>
+                <div class="stat-number" id="salesToday">0</div>
+                <p style="text-align: center;">Ventas confirmadas en las últimas 24 horas.</p>
+            </div>
 
-// Inicializar Firebase
-const serviceAccount = require('./firebase-key.json');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.FIREBASE_DATABASE_URL
-});
-const db = admin.database();
+            <!-- Tarjeta 2: Contador de Rifa Negativa -->
+            <div class="card">
+                <h2><i class="fas fa-clock"></i> Rifa Activa</h2>
+                <p class="countdown-label">La rifa cierra en:</p>
+                <div class="countdown" id="raffleCountdown">05:00:00:00</div>
+                <p style="text-align: center; margin-top: 10px;">¡No pierdas la oportunidad de ganar!</p>
+            </div>
 
-// Configuración básica
-app.use(express.json());
-app.use(cors());
+            <!-- Tarjeta 3: Libro Más Vendido -->
+            <div class="card">
+                <h2><i class="fas fa-crown"></i> Libro del Día</h2>
+                <div class="stat-number" id="topBookTitle">-</div>
+                <p style="text-align: center;" id="topBookSales">Esperando ventas...</p>
+            </div>
+        </div>
 
-// Rutas principales
-app.post('/api/venta', registrarVenta);
-app.get('/api/estadisticas', obtenerEstadisticas);
-app.post('/api/rifa', crearRifa);
-app.get('/api/tiempo-real', socketConection);
+        <!-- Sección de Ventas Recientes -->
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2><i class="fas fa-history"></i> Últimas Ventas en Tiempo Real</h2>
+            <div id="recentSalesList">
+                <p style="text-align: center; padding: 20px;" id="waitingSales">El sistema se está conectando... Las nuevas ventas aparecerán aquí automáticamente.</p>
+                <!-- Las ventas se insertarán aquí por JavaScript -->
+            </div>
+        </div>
 
-// Configuración Socket.io para tiempo real
-io.on('connection', (socket) => {
-  console.log('Cliente conectado');
-  
-  // Escuchar nuevas ventas
-  socket.on('nueva_venta', (venta) => {
-    io.emit('actualizar_ventas', venta);
-  });
-  
-  // Enviar contador de rifa
-  setInterval(() => {
-    const tiempoRestante = calcularTiempoRifa();
-    socket.emit('actualizar_contador', tiempoRestante);
-  }, 1000);
-});
+        <footer>
+            <p>Sistema de Seguimiento Live Tracker v3.0 | Actualizado en tiempo real | <i class="fas fa-lock"></i> Conexión segura</p>
+            <p>Configuración activa: Modo tiempo real, Rifas negativas, Notificaciones automáticas.</p>
+        </footer>
+    </div>
 
-// Funciones principales
-async function registrarVenta(req, res) {
-  const venta = req.body;
-  const ventaRef = db.ref('ventas').push();
-  
-  await ventaRef.set({
-    ...venta,
-    fecha: Date.now(),
-    estado: 'completado'
-  });
-  
-  // Notificar a todos los clientes conectados
-  io.emit('nueva_venta', venta);
-  
-  // Enviar notificaciones
-  enviarNotificacionCliente(venta);
-  enviarNotificacionAdmin(venta);
-  
-  res.json({ success: true, id: ventaRef.key });
-}
+    <!-- JavaScript Básico para Dinamismo -->
+    <script>
+        // Simulación inicial de datos - Luego se conectaría a Firebase/Socket.io
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ejemplo: Actualizar contadores (luego vendrían de la base de datos)
+            document.getElementById('salesToday').textContent = '42';
+            document.getElementById('topBookTitle').textContent = 'Recetas Místicas';
+            document.getElementById('topBookSales').textContent = '15 vendidos hoy';
 
-function calcularTiempoRifa() {
-  // Lógica para calcular días restantes
-  const fechaFin = new Date('2025-12-31');
-  const ahora = new Date();
-  const diferencia = fechaFin - ahora;
-  
-  return {
-    dias: Math.floor(diferencia / (1000 * 60 * 60 * 24)),
-    horas: Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-    minutos: Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60)),
-    segundos: Math.floor((diferencia % (1000 * 60)) / 1000)
-  };
-}
+            // Simular una nueva venta después de 3 segundos (para demostración)
+            setTimeout(() => {
+                const salesList = document.getElementById('recentSalesList');
+                const waitingMsg = document.getElementById('waitingSales');
+                if(waitingMsg) waitingMsg.remove();
 
-server.listen(process.env.PORT || 3000, () => {
-  console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
-});
+                const newSale = document.createElement('div');
+                newSale.className = 'sale-item flash-new';
+                newSale.innerHTML = `
+                    <strong>✏️ "Secretos de la Cocina"</strong>
+                    <span class="location"><i class="fas fa-map-marker-alt"></i> Ciudad de México</span>
+                    <span class="time">Justo ahora</span>
+                `;
+                salesList.prepend(newSale);
+
+                // Actualizar contador
+                const todayCount = document.getElementById('salesToday');
+                todayCount.textContent = (parseInt(todayCount.textContent) + 1).toString();
+                todayCount.classList.add('flash-new');
+                setTimeout(() => todayCount.classList.remove('flash-new'), 2000);
+
+            }, 3000);
+
+            // Contador regresivo de ejemplo para la rifa
+            function updateCountdown() {
+                const countdownElement = document.getElementById('raffleCountdown');
+                // Fecha objetivo de ejemplo (3 días en el futuro)
+                const targetDate = new Date();
+                targetDate.setDate(targetDate.getDate() + 3);
+                targetDate.setHours(17, 0, 0, 0); // 5:00 PM
+
+                const now = new Date();
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                    countdownElement.textContent = "¡Rifa Finalizada!";
+                    countdownElement.style.color = "var(--color-danger)";
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                countdownElement.textContent = `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        });
+    </script>
+</body>
+</html>
