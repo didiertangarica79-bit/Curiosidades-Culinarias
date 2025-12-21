@@ -3,96 +3,2136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curiosidades Culinarias</title>
+    <title>Curiosidades Culinarias - Tienda y Panel de Ventas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
+        /* ===== ESTILOS UNIFICADOS ===== */
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #f39c12;
+            --light: #fdf2e9;
+            --dark: #2c3e50;
+            --text: #333;
+            --gray: #95a5a6;
+            --success: #27ae60;
+            --info: #3498db;
+            --tracker-bg: #0f172a;
+            --tracker-card: #1e293b;
+            --tracker-primary: #3b82f6;
+            --tracker-success: #10b981;
+            --tracker-warning: #f59e0b;
+            --tracker-danger: #ef4444;
         }
         
-        header {
-            background-color: #e74c3c;
-            color: white;
-            padding: 20px;
-            text-align: center;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #fff;
         }
         
         .container {
+            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 15px;
         }
         
-        .book {
-            background: white;
+        /* ===== HEADER ===== */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        .logo h1 span {
+            color: var(--secondary);
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .logo-icon {
+            color: var(--primary);
+            font-size: 2.2rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+        }
+        
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .secondary-button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .secondary-button:hover {
+            background-color: white;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+        
+        /* ===== SECCIONES GENERALES ===== */
+        section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 4px;
+            background-color: var(--primary);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 15px auto 0;
+        }
+        
+        /* ===== LIBROS ===== */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .book-card {
+            background-color: white;
             border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            position: relative;
         }
         
-        button {
-            background-color: #e74c3c;
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .book-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--secondary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        .book-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .book-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.3));
+        }
+        
+        .book-content {
+            padding: 25px;
+        }
+        
+        .book-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .book-content p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .book-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .book-feature {
+            background-color: var(--light);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        
+        .book-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+        
+        /* ===== PANEL DE SEGUIMIENTO ===== */
+        .tracker-section {
+            background: linear-gradient(135deg, var(--tracker-bg) 0%, #1e293b 100%);
+            color: #e2e8f0;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tracker-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .tracker-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .tracker-header h2 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .tracker-header h2 i {
+            color: var(--secondary);
+        }
+        
+        .tracker-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tracker-btn {
+            background: linear-gradient(to right, var(--tracker-primary), #6366f1);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+        
+        .tracker-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .tracker-btn-secondary {
+            background: transparent;
+            border: 2px solid var(--tracker-primary);
+            box-shadow: none;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .tracker-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-left: 5px solid var(--tracker-primary);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .tracker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--tracker-success);
+            text-align: center;
+            margin: 15px 0;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .countdown {
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--tracker-warning);
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .live-sales-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding-right: 10px;
+        }
+        
+        .live-sales-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .live-sales-list::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        
+        .live-sales-list::-webkit-scrollbar-thumb {
+            background: var(--tracker-primary);
+            border-radius: 10px;
+        }
+        
+        .sale-item {
+            background: rgba(255, 255, 255, 0.05);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--tracker-success);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .sale-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sale-item.new {
+            animation: highlight 2s;
+        }
+        
+        @keyframes highlight {
+            0% { background: rgba(16, 185, 129, 0.3); }
+            100% { background: rgba(255, 255, 255, 0.05); }
+        }
+        
+        /* ===== SOBRE DIDIER ===== */
+        .about-section {
+            background-color: var(--light);
+        }
+        
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .about-img {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+        }
+        
+        .youtube-channel {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .youtube-channel:hover {
+            color: var(--primary-dark);
+        }
+        
+        /* ===== CONTACTO ===== */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .whatsapp-button {
+            background-color: #25D366;
             color: white;
             border: none;
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 30px;
+            font-weight: 600;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin-top: 5px;
+        }
+        
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+        }
+        
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            transition: border 0.3s;
+        }
+        
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* ===== MODALES ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: modalFade 0.3s;
+        }
+        
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            background-color: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .payment-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
+            cursor: pointer;
+        }
+        
+        .payment-card:hover {
+            border-color: var(--primary);
+            background-color: #f8f9fa;
+        }
+        
+        .payment-card.selected {
+            border-color: var(--primary);
+            background-color: #e3f2fd;
+        }
+        
+        .payment-icon {
+            font-size: 1.8rem;
+            color: var(--gray);
+        }
+        
+        .payment-card.selected .payment-icon {
+            color: var(--primary);
+        }
+        
+        .success-message {
+            background: linear-gradient(to right, #d4edda, #c3e6cb);
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            border-left: 5px solid #28a745;
+        }
+        
+        .download-section {
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            border: 2px dashed #2196f3;
+        }
+        
+        .download-button {
+            background: linear-gradient(to right, #2196f3, #1976d2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+        }
+        
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+        }
+        
+        .download-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #0d47a1;
+        }
+        
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .purchase-id {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+        
+        /* ===== PANEL ADMINISTRADOR ===== */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--tracker-bg);
+            z-index: 3000;
+            overflow-y: auto;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: #1a2238;
+            padding: 25px 20px;
+            border-right: 2px solid var(--tracker-primary);
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .menu-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #252f4a;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            color: #e2e8f0;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: var(--tracker-primary);
+            transform: translateX(5px);
+        }
+        
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .admin-table {
+            width: 100%;
+            background: var(--tracker-card);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .admin-table th, .admin-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            color: #e2e8f0;
+        }
+        
+        .admin-table th {
+            background: #252f4a;
+            font-weight: 600;
+        }
+        
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* ===== LOGIN ===== */
+        .login-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 4000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-box {
+            background: var(--tracker-card);
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            background: #252f4a;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--tracker-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .about-container, .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .admin-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .tracker-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-card {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- ===== HEADER ===== -->
     <header>
-        <h1>Curiosidades Culinarias</h1>
-        <p>Tienda de libros de cocina en PDF</p>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-utensils logo-icon"></i>
+                <h1>Curiosidades <span>Culinarias</span></h1>
+            </div>
+            
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#libros">Libros PDF</a></li>
+                    <li><a href="#seguimiento">Panel Ventas</a></li>
+                    <li><a href="#sobre">Sobre Didier</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="https://youtube.com/@didiertangarica" target="_blank">YouTube</a></li>
+                </ul>
+            </nav>
+            
+            <button class="cta-button" id="adminAccessBtn">
+                <i class="fas fa-chart-line"></i> Panel Admin
+            </button>
+        </div>
     </header>
-    
-    <div class="container">
-        <h2>Libros Disponibles</h2>
-        
-        <div class="book">
-            <h3>Secretos de la Cocina Internacional</h3>
-            <p>Precio: $12.99 USD</p>
-            <button onclick="comprarLibro()">Comprar y Descargar PDF</button>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <h2>Descubre los secretos de la cocina</h2>
+            <p>Compra mis libros en PDF con recetas únicas, técnicas profesionales y curiosidades gastronómicas. Pago seguro con tarjeta y <strong>descarga inmediata del PDF</strong>.</p>
+            <div class="hero-buttons">
+                <button class="cta-button" id="viewBooks">
+                    <i class="fas fa-shopping-cart"></i> Comprar libros ahora
+                </button>
+                <a href="https://youtube.com/@didiertangarica" target="_blank" class="secondary-button">
+                    <i class="fab fa-youtube"></i> Ver canal YouTube
+                </a>
+                <button class="secondary-button" onclick="scrollToTracker()">
+                    <i class="fas fa-chart-line"></i> Ver Estadísticas
+                </button>
+            </div>
         </div>
-        
-        <div class="book">
-            <h3>Técnicas Profesionales para el Hogar</h3>
-            <p>Precio: $9.99 USD</p>
-            <button onclick="comprarLibro()">Comprar y Descargar PDF</button>
+    </section>
+
+    <!-- ===== LIBROS EN PDF ===== -->
+    <section id="libros">
+        <div class="container">
+            <div class="section-title">
+                <h2>Libros de Cocina en PDF</h2>
+                <p>Descarga inmediata después del pago. Formato PDF compatible con cualquier dispositivo.</p>
+            </div>
+            
+            <div class="books-grid">
+                <!-- Libro 1 -->
+                <div class="book-card">
+                    <div class="book-badge">MÁS VENDIDO</div>
+                    <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="book-content">
+                        <h3>Secretos de la Cocina Internacional</h3>
+                        <p>Técnicas y sabores de 5 continentes en 50+ recetas auténticas paso a paso. Incluye videos complementarios.</p>
+                        <div class="book-features">
+                            <span class="book-feature">50+ recetas</span>
+                            <span class="book-feature">Videos incluidos</span>
+                            <span class="book-feature">120 páginas</span>
+                        </div>
+                        <div class="book-price">
+                            <div>
+                                <span class="original-price">$19.99</span>
+                                <span class="price">$12.99</span>
+                            </div>
+                            <button class="cta-button buy-btn" data-book="Secretos de la Cocina Internacional" data-price="12.99" data-id="LIB001">
+                                <i class="fas fa-cart-plus"></i> Comprar ahora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Libro 2 -->
+                <div class="book-card">
+                    <div class="book-badge">NUEVO</div>
+                    <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80');"></div>
+                    <div class="book-content">
+                        <h3>Técnicas Profesionales para el Hogar</h3>
+                        <p>Métodos de chefs profesionales adaptados para tu cocina. Desde cuchillos hasta emplatado.</p>
+                        <div class="book-features">
+                            <span class="book-feature">35 técnicas</span>
+                            <span class="book-feature">Guía visual</span>
+                            <span class="book-feature">80 páginas</span>
+                        </div>
+                        <div class="book-price">
+                            <div>
+                                <span class="original-price">$14.99</span>
+                                <span class="price">$9.99</span>
+                            </div>
+                            <button class="cta-button buy-btn" data-book="Técnicas Profesionales para el Hogar" data-price="9.99" data-id="LIB002">
+                                <i class="fas fa-cart-plus"></i> Comprar ahora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Libro 3 -->
+                <div class="book-card">
+                    <div class="book-badge">ESPECIAL</div>
+                    <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="book-content">
+                        <h3>Curiosidades Históricas de la Gastronomía</h3>
+                        <p>Historia de los alimentos, recetas ancestrales y orígenes gastronómicos.</p>
+                        <div class="book-features">
+                            <span class="book-feature">Historia culinaria</span>
+                            <span class="book-feature">Recetas antiguas</span>
+                            <span class="book-feature">100 páginas</span>
+                        </div>
+                        <div class="book-price">
+                            <div>
+                                <span class="original-price">$18.99</span>
+                                <span class="price">$14.99</span>
+                            </div>
+                            <button class="cta-button buy-btn" data-book="Curiosidades Históricas de la Gastronomía" data-price="14.99" data-id="LIB003">
+                                <i class="fas fa-cart-plus"></i> Comprar ahora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="book">
-            <h3>Curiosidades Históricas de la Gastronomía</h3>
-            <p>Precio: $14.99 USD</p>
-            <button onclick="comprarLibro()">Comprar y Descargar PDF</button>
+    </section>
+
+    <!-- ===== PANEL DE SEGUIMIENTO ===== -->
+    <section class="tracker-section" id="seguimiento">
+        <div class="container">
+            <div class="tracker-header">
+                <h2><i class="fas fa-chart-line"></i> Panel de Seguimiento en Tiempo Real</h2>
+                <p>Visualiza las estadísticas de ventas de libros actualizadas automáticamente</p>
+                <div class="tracker-buttons">
+                    <button class="tracker-btn" onclick="simulateSale()">
+                        <i class="fas fa-plus"></i> Simular Nueva Venta
+                    </button>
+                    <button class="tracker-btn tracker-btn-secondary" onclick="showLogin()">
+                        <i class="fas fa-user-cog"></i> Acceso Administrador
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- CONTADOR DE VENTAS -->
+                <div class="tracker-card">
+                    <h2><i class="fas fa-chart-line"></i> Ventas Hoy</h2>
+                    <div class="stat-number" id="publicSalesToday">0</div>
+                    <p style="text-align: center; color: #94a3b8;">Actualizado en vivo cada 5 segundos</p>
+                </div>
+
+                <!-- RIFA NEGATIVA -->
+                <div class="tracker-card">
+                    <h2><i class="fas fa-clock"></i> Rifa Activa</h2>
+                    <p style="text-align: center; margin-bottom: 10px;">Tiempo restante:</p>
+                    <div class="countdown" id="publicRaffleTimer">05:00:00:00</div>
+                    <div id="raffleColorBar" style="height: 8px; background: #10b981; border-radius: 4px; margin-top: 15px;"></div>
+                </div>
+
+                <!-- LIBRO MÁS VENDIDO -->
+                <div class="tracker-card">
+                    <h2><i class="fas fa-crown"></i> Libro del Día</h2>
+                    <div class="stat-number" id="publicTopBook">-</div>
+                    <p style="text-align: center;" id="publicTopBookSales">Cargando estadísticas...</p>
+                </div>
+
+                <!-- RELOJ PROMOCIÓN -->
+                <div class="tracker-card">
+                    <h2><i class="fas fa-bullhorn"></i> Promoción Activa</h2>
+                    <div class="countdown" id="promotionClock">00:00:00</div>
+                    <p style="text-align: center; margin-top: 10px;" id="promotionStatus">
+                        <i class="fas fa-circle" style="color: #10b981;"></i> Promoción en curso
+                    </p>
+                </div>
+            </div>
+
+            <!-- VENTAS EN TIEMPO REAL -->
+            <div class="tracker-card" style="grid-column: 1 / -1;">
+                <h2><i class="fas fa-bolt"></i> Últimas Ventas (Live)</h2>
+                <div class="live-sales-list" id="publicSalesList">
+                    <div class="sale-item">
+                        <div>
+                            <strong>"Secretos de la Cocina Antigua"</strong><br>
+                            <small style="color: #94a3b8;">Comprado por: Ana García • $29.99 USD</small>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="color: var(--tracker-warning);">Ciudad de México</span><br>
+                            <small id="liveTime">Hace 2 minutos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SOBRE DIDIER ===== -->
+    <section id="sobre" class="about-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sobre Didier</h2>
+                <p>Conoce al chef apasionado detrás de Curiosidades Culinarias</p>
+            </div>
+            
+            <div class="about-container">
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Didier - Chef y autor">
+                </div>
+                <div class="about-text">
+                    <h3>¡Hola! Soy Didier Tangarica</h3>
+                    <p>Apasionado de la cocina desde niño, he dedicado más de 15 años a explorar, aprender y enseñar los secretos del mundo gastronómico.</p>
+                    <p>Ahora ofrezco mis conocimientos en formato PDF para que puedas aprender a tu ritmo, con contenido exclusivo y práctico.</p>
+                    <p><strong>Garantía:</strong> Si no estás satisfecho con tu compra, te devuelvo tu dinero en 7 días.</p>
+                    <a href="https://youtube.com/@didiertangarica" target="_blank" class="youtube-channel">
+                        <i class="fab fa-youtube"></i> Visita mi canal de YouTube
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACTO ===== -->
+    <section id="contacto">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contacto y Soporte</h2>
+                <p>¿Tienes preguntas o problemas con tu compra? ¡Contáctame!</p>
+            </div>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Canales de contacto</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div>
+                            <h4>Ventas y Compras</h4>
+                            <p>culinariascuriosidades4@gmail.com</p>
+                            <p><small>Para consultas sobre pagos, descargas y libros</small></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h4>Contacto General</h4>
+                            <p>didiertangarica79@gmail.com</p>
+                            <p><small>Para otros asuntos y colaboraciones</small></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <h4>WhatsApp Rápido</h4>
+                            <a href="https://wa.me/5211234567890?text=Hola%20Didier,%20quiero%20información%20sobre%20tus%20libros" target="_blank" class="whatsapp-button">
+                                <i class="fab fa-whatsapp"></i> Escribir por WhatsApp
+                            </a>
+                            <p><small>Respuesta en menos de 24 horas</small></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <div>
+                            <h4>Canal de YouTube</h4>
+                            <p>Curiosidades Culinarias con Didier</p>
+                            <a href="https://youtube.com/@didiertangarica" target="_blank" style="color: var(--primary); text-decoration: none;">Ver canal y recetas gratis</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Envíame un mensaje</h3>
+                    <form id="contactForm">
+                        <input type="text" placeholder="Tu nombre" required>
+                        <input type="email" placeholder="Tu email" required>
+                        <select style="width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                            <option value="">Selecciona el motivo</option>
+                            <option value="compra">Problema con una compra</option>
+                            <option value="descarga">No puedo descargar mi libro</option>
+                            <option value="pago">Consulta sobre métodos de pago</option>
+                            <option value="otro">Otro asunto</option>
+                        </select>
+                        <textarea placeholder="Tu mensaje" required></textarea>
+                        <button type="submit" class="cta-button">Enviar mensaje</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Curiosidades Culinarias</h3>
+                    <p>Tienda oficial de libros de cocina en PDF por Didier Tangarica. Pago seguro con tarjeta y descarga inmediata.</p>
+                    <div class="social-icons">
+                        <a href="https://youtube.com/@didiertangarica" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/5211234567890" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#libros">Comprar libros</a></li>
+                        <li><a href="#seguimiento">Panel de ventas</a></li>
+                        <li><a href="#sobre">Sobre Didier</a></li>
+                        <li><a href="#contacto">Soporte</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Libros disponibles</h3>
+                    <ul class="footer-links">
+                        <li><a href="#libros">Secretos Cocina Internacional</a></li>
+                        <li><a href="#libros">Técnicas Profesionales</a></li>
+                        <li><a href="#libros">Curiosidades Históricas</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Pagos seguros</h3>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <i class="fab fa-cc-visa" style="font-size: 2rem; color: #bbb;"></i>
+                        <i class="fab fa-cc-mastercard" style="font-size: 2rem; color: #bbb;"></i>
+                        <i class="fab fa-cc-amex" style="font-size: 2rem; color: #bbb;"></i>
+                        <i class="fab fa-cc-paypal" style="font-size: 2rem; color: #bbb;"></i>
+                    </div>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: #bbb;">Transacciones 100% seguras</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Curiosidades Culinarias con Didier. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== MODAL DE COMPRA ===== -->
+    <div class="modal" id="purchaseModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Comprar: <span id="bookTitle"></span></h3>
+            <p>Precio: <strong id="bookPrice"></strong></p>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Ingresa tu email</h4>
+                    <p>Te enviaremos el PDF a este correo:</p>
+                    <input type="email" class="email-input" id="customerEmail" placeholder="tucorreo@ejemplo.com">
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Selecciona método de pago</h4>
+                    <div class="payment-methods">
+                        <div class="payment-card" onclick="selectPaymentMethod('visa')">
+                            <i class="fab fa-cc-visa payment-icon"></i>
+                            <span>Visa / Mastercard</span>
+                        </div>
+                        <div class="payment-card" onclick="selectPaymentMethod('paypal')">
+                            <i class="fab fa-cc-paypal payment-icon"></i>
+                            <span>PayPal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Confirma tu compra</h4>
+                    <p>ID de compra: <span class="purchase-id" id="purchaseId">CC-0001</span></p>
+                    <p>Recibirás el PDF en tu email inmediatamente después del pago.</p>
+                </div>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <h4><i class="fas fa-check-circle"></i> ¡Compra exitosa!</h4>
+                <p>Tu pago ha sido procesado correctamente.</p>
+            </div>
+            
+            <div class="download-section" id="downloadSection">
+                <h4><i class="fas fa-download"></i> ¡Listo para descargar!</h4>
+                <p>Tu libro PDF está listo para descargar.</p>
+                <button class="download-button" onclick="downloadPDF()">
+                    <i class="fas fa-file-pdf"></i> Descargar PDF
+                </button>
+                <p class="download-info">El PDF también ha sido enviado a tu email.</p>
+            </div>
+            
+            <button class="cta-button" id="confirmPurchase" style="width: 100%; margin-top: 20px;">
+                <i class="fas fa-credit-card"></i> Confirmar y Pagar
+            </button>
+            
+            <p style="margin-top: 15px; font-size: 0.9rem; text-align: center;">
+                ¿Problemas con la compra? <a href="https://wa.me/5211234567890" target="_blank" style="color: var(--primary);">Escríbeme por WhatsApp</a>
+            </p>
         </div>
     </div>
-    
+
+    <!-- ===== LOGIN ADMIN ===== -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h1 style="text-align: center; margin-bottom: 30px; color: var(--tracker-primary);">
+                <i class="fas fa-lock"></i> Acceso Administrador
+            </h1>
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> Usuario</label>
+                <input type="text" id="adminUser" placeholder="admin">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-key"></i> Contraseña</label>
+                <input type="password" id="adminPass" placeholder="••••••••">
+            </div>
+            <button class="tracker-btn" style="width: 100%;" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> Ingresar al Sistema
+            </button>
+            <p style="text-align: center; margin-top: 20px; color: #94a3b8;">
+                <a href="#" style="color: var(--tracker-primary);" onclick="hideLogin()">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== PANEL ADMINISTRADOR ===== -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-container">
+            <!-- BARRA LATERAL -->
+            <div class="sidebar">
+                <h2 style="color: var(--tracker-primary); margin-bottom: 30px;">
+                    <i class="fas fa-cogs"></i> Panel Control
+                </h2>
+                
+                <button class="menu-item active" onclick="showAdminSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="menu-item" onclick="showAdminSection('ventas')">
+                    <i class="fas fa-shopping-cart"></i> Ventas
+                </button>
+                <button class="menu-item" onclick="showAdminSection('libros')">
+                    <i class="fas fa-book"></i> Libros
+                </button>
+                <button class="menu-item" onclick="showAdminSection('rifas')">
+                    <i class="fas fa-gift"></i> Rifas
+                </button>
+                <button class="menu-item" onclick="showAdminSection('clientes')">
+                    <i class="fas fa-users"></i> Clientes
+                </button>
+                <button class="menu-item" onclick="showAdminSection('config')">
+                    <i class="fas fa-sliders-h"></i> Configuración
+                </button>
+                
+                <div style="margin-top: 50px;">
+                    <button class="tracker-btn tracker-btn-secondary" onclick="hideAdminPanel()" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-eye"></i> Volver al Sitio
+                    </button>
+                    <button class="tracker-btn" onclick="logout()" style="width: 100%; background: var(--tracker-danger);">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <div class="main-content">
+                <!-- DASHBOARD ADMIN -->
+                <div id="dashboardSection" class="admin-section active">
+                    <h1><i class="fas fa-tachometer-alt"></i> Dashboard Administrativo</h1>
+                    
+                    <div class="dashboard-grid">
+                        <div class="tracker-card">
+                            <h3><i class="fas fa-chart-line"></i> Ventas Hoy</h3>
+                            <div class="stat-number" id="adminSalesToday">0</div>
+                            <p>Actualizado: <span id="lastUpdate">Ahora</span></p>
+                        </div>
+                        <div class="tracker-card">
+                            <h3><i class="fas fa-money-bill-wave"></i> Ingresos Total</h3>
+                            <div class="stat-number" id="adminRevenue">$0 USD</div>
+                            <p>Mes actual</p>
+                        </div>
+                        <div class="tracker-card">
+                            <h3><i class="fas fa-user-plus"></i> Clientes Nuevos</h3>
+                            <div class="stat-number" id="adminNewClients">0</div>
+                            <p>Últimos 7 días</p>
+                        </div>
+                        <div class="tracker-card">
+                            <h3><i class="fas fa-clock"></i> Rifa Activa</h3>
+                            <div class="countdown" id="adminRaffleTimer">05:00:00:00</div>
+                            <p>Participantes: <span id="raffleParticipants">0</span></p>
+                        </div>
+                    </div>
+
+                    <!-- TABLA DE VENTAS RECIENTES -->
+                    <h2 style="margin-top: 30px;"><i class="fas fa-history"></i> Ventas Recientes</h2>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Cliente</th><th>Libro</th><th>Precio</th><th>Fecha</th><th>Ubicación</th><th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminSalesTable">
+                            <!-- Datos cargados por JavaScript -->
+                        </tbody>
+                    </table>
+
+                    <!-- ACCIONES RÁPIDAS -->
+                    <h2 style="margin-top: 30px;"><i class="fas fa-bolt"></i> Acciones Rápidas</h2>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                        <button class="tracker-btn" onclick="simulateSale()">
+                            <i class="fas fa-plus"></i> Simular Venta
+                        </button>
+                        <button class="tracker-btn" onclick="sendTestNotification()" style="background: var(--tracker-success);">
+                            <i class="fas fa-bell"></i> Probar Notificación
+                        </button>
+                        <button class="tracker-btn" onclick="exportData()" style="background: var(--tracker-warning);">
+                            <i class="fas fa-download"></i> Exportar Datos
+                        </button>
+                    </div>
+                </div>
+
+                <!-- OTRAS SECCIONES DEL ADMIN -->
+                <div id="ventasSection" class="admin-section">
+                    <h1><i class="fas fa-shopping-cart"></i> Gestión de Ventas</h1>
+                    <p>Gestiona todas las ventas realizadas.</p>
+                </div>
+                
+                <div id="librosSection" class="admin-section">
+                    <h1><i class="fas fa-book"></i> Gestión de Libros</h1>
+                    <p>Administra tu catálogo de libros.</p>
+                </div>
+                
+                <div id="rifasSection" class="admin-section">
+                    <h1><i class="fas fa-gift"></i> Gestión de Rifas</h1>
+                    <p>Configura y administra rifas promocionales.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== JAVASCRIPT UNIFICADO ===== -->
     <script>
-        function comprarLibro() {
-            // Simulación de compra y descarga
-            alert("¡Compra realizada! Descargando PDF...");
-            
-            // Crear un enlace de descarga simulado
-            const link = document.createElement('a');
-            link.href = 'data:application/pdf;base64,' + btoa('PDF simulado - Contenido del libro');
-            link.download = 'libro-culinaria.pdf';
-            link.click();
-            
-            // Registrar la venta en el sistema
-            registrarVenta();
+        // ===== CONFIGURACIÓN DEL SISTEMA =====
+        const SYSTEM_CONFIG = {
+            sistema: "Curiosidades Culinarias v2.0",
+            version: "1.0.0",
+            descripcion: "Sistema completo de venta de libros PDF con seguimiento en tiempo real",
+            ultima_actualizacion: new Date().toISOString().split('T')[0],
+            configuracion_principal: {
+                modo: "tiempo_real",
+                idioma: "es",
+                moneda: "USD",
+                zona_horaria: "America/Mexico_City",
+                acceso_publico: {
+                    ver_estadisticas: true,
+                    ver_contador: true,
+                    ver_reloj: true,
+                    comprar_libros: true
+                }
+            },
+            modulos_activos: {
+                ventas_tiempo_real: true,
+                estadisticas_completas: true,
+                sistema_rifas: true,
+                notificaciones: true,
+                panel_administracion: true
+            }
+        };
+
+        // ===== VARIABLES GLOBALES =====
+        let salesData = [];
+        let currentView = 'public';
+        let adminLoggedIn = false;
+        let salesCounter = 42;
+        let revenueCounter = 1250;
+        let raffleEndDate = new Date();
+        raffleEndDate.setDate(raffleEndDate.getDate() + 5);
+        let selectedBook = null;
+        let selectedPaymentMethod = null;
+        let currentPurchaseId = 'CC-' + Math.floor(1000 + Math.random() * 9000);
+
+        // ===== FUNCIONES DE NAVEGACIÓN =====
+        function scrollToTracker() {
+            document.querySelector('#seguimiento').scrollIntoView({
+                behavior: 'smooth'
+            });
         }
-        
-        function registrarVenta() {
-            // Aquí iría el código para registrar en Firebase
-            console.log("Venta registrada en el sistema");
+
+        // ===== SISTEMA DE COMPRAS Y DESCARGA PDF =====
+        document.querySelectorAll('.buy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                selectedBook = {
+                    title: this.getAttribute('data-book'),
+                    price: this.getAttribute('data-price'),
+                    id: this.getAttribute('data-id')
+                };
+                
+                document.getElementById('bookTitle').textContent = selectedBook.title;
+                document.getElementById('bookPrice').textContent = '$' + selectedBook.price + ' USD';
+                document.getElementById('purchaseId').textContent = currentPurchaseId;
+                
+                // Resetear modal
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('downloadSection').style.display = 'none';
+                document.getElementById('customerEmail').value = '';
+                selectedPaymentMethod = null;
+                document.querySelectorAll('.payment-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                // Mostrar modal
+                document.getElementById('purchaseModal').style.display = 'flex';
+            });
+        });
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.payment-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
         }
+
+        document.getElementById('confirmPurchase').addEventListener('click', function() {
+            const email = document.getElementById('customerEmail').value;
+            
+            if (!email || !validateEmail(email)) {
+                alert('Por favor ingresa un email válido');
+                return;
+            }
+            
+            if (!selectedPaymentMethod) {
+                alert('Por favor selecciona un método de pago');
+                return;
+            }
+            
+            // Simular procesamiento de pago
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando pago...';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                // Simular pago exitoso
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('downloadSection').style.display = 'block';
+                this.style.display = 'none';
+                
+                // Registrar la venta
+                registerSale(selectedBook, email);
+                
+                // Actualizar estadísticas
+                updateSalesCounter();
+                
+                // Simular notificación
+                sendNotification('compra', {
+                    libro: selectedBook.title,
+                    precio: selectedBook.price,
+                    email: email,
+                    id: currentPurchaseId
+                });
+            }, 2000);
+        });
+
+        function downloadPDF() {
+            // Crear PDF simulado
+            const pdfContent = `
+                =================================
+                CURIOSIDADES CULINARIAS
+                =================================
+                
+                LIBRO: ${selectedBook.title}
+                ID DE COMPRA: ${currentPurchaseId}
+                FECHA: ${new Date().toLocaleDateString()}
+                
+                ¡Gracias por tu compra!
+                
+                Este es un PDF de demostración.
+                En un sistema real, aquí estaría
+                el contenido completo del libro.
+                
+                Contacto: culinariascuriosidades4@gmail.com
+                =================================
+            `;
+            
+            // Crear y descargar archivo
+            const blob = new Blob([pdfContent], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Curiosidades-Culinarias-${selectedBook.id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('¡PDF descargado! También se ha enviado a tu email.');
+            
+            // Cerrar modal después de descargar
+            setTimeout(() => {
+                document.getElementById('purchaseModal').style.display = 'none';
+                document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-credit-card"></i> Confirmar y Pagar';
+                document.getElementById('confirmPurchase').disabled = false;
+                document.getElementById('confirmPurchase').style.display = 'block';
+            }, 1000);
+        }
+
+        function registerSale(book, email) {
+            const sale = {
+                id: currentPurchaseId,
+                libro: book.title,
+                precio: book.price,
+                email: email,
+                fecha: new Date().toLocaleString(),
+                ubicacion: 'Online',
+                estado: 'Completado'
+            };
+            
+            salesData.unshift(sale);
+            updatePublicView();
+            
+            // Generar nuevo ID para la próxima compra
+            currentPurchaseId = 'CC-' + Math.floor(1000 + Math.random() * 9000);
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // ===== SISTEMA DE SEGUIMIENTO EN TIEMPO REAL =====
+        function updatePublicView() {
+            // Actualizar contadores
+            document.getElementById('publicSalesToday').textContent = salesCounter;
+            document.getElementById('publicTopBook').textContent = "Secretos Internacionales";
+            document.getElementById('publicTopBookSales').textContent = `${Math.floor(salesCounter/2)} vendidos`;
+            
+            // Actualizar reloj
+            updateClock();
+            updateRaffleTimer();
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('promotionClock').textContent = 
+                now.toLocaleTimeString('es-MX', {timeZone: 'America/Mexico_City'});
+            
+            document.getElementById('publicRaffleTimer').textContent = 
+                calculateTimeRemaining(raffleEndDate);
+        }
+
+        function updateRaffleTimer() {
+            const now = new Date();
+            const diff = raffleEndDate - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            // Cambiar color según días restantes
+            const colorBar = document.getElementById('raffleColorBar');
+            if(colorBar) {
+                if(days > 5) colorBar.style.background = "#10b981";
+                else if(days >= 3) colorBar.style.background = "#f59e0b";
+                else if(days >= 1) colorBar.style.background = "#f97316";
+                else colorBar.style.background = "#ef4444";
+            }
+        }
+
+        function calculateTimeRemaining(endDate) {
+            const now = new Date();
+            const diff = endDate - now;
+            
+            if(diff <= 0) return "00:00:00:00";
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            return `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function simulateSale() {
+            salesCounter++;
+            revenueCounter += 20 + Math.floor(Math.random() * 30);
+            
+            // Agregar venta simulada
+            const clients = ["Ana García", "Carlos López", "María Rodríguez", "Juan Pérez", "Laura Martínez"];
+            const books = [
+                "Secretos de la Cocina Internacional", 
+                "Técnicas Profesionales para el Hogar", 
+                "Curiosidades Históricas de la Gastronomía"
+            ];
+            const cities = ["CDMX", "Guadalajara", "Monterrey", "Puebla", "Cancún"];
+            
+            const newSale = {
+                id: 'V' + (1000 + salesCounter),
+                cliente: clients[Math.floor(Math.random() * clients.length)],
+                libro: books[Math.floor(Math.random() * books.length)],
+                precio: '$' + (20 + Math.floor(Math.random() * 30)) + ' USD',
+                fecha: new Date().toLocaleString('es-MX'),
+                ubicacion: cities[Math.floor(Math.random() * cities.length)],
+                estado: 'Completado'
+            };
+            
+            salesData.unshift(newSale);
+            
+            // Actualizar vistas
+            updatePublicView();
+            updateAdminView();
+            
+            // Efecto visual en panel público
+            const salesList = document.getElementById('publicSalesList');
+            const saleItem = document.createElement('div');
+            saleItem.className = 'sale-item new';
+            saleItem.innerHTML = `
+                <div>
+                    <strong>"${newSale.libro}"</strong><br>
+                    <small style="color: #94a3b8;">Comprado por: ${newSale.cliente} • ${newSale.precio}</small>
+                </div>
+                <div style="text-align: right;">
+                    <span style="color: var(--tracker-warning);">${newSale.ubicacion}</span><br>
+                    <small>Justo ahora</small>
+                </div>
+            `;
+            salesList.prepend(saleItem);
+            
+            // Limitar a 10 items
+            if(salesList.children.length > 10) {
+                salesList.removeChild(salesList.lastChild);
+            }
+        }
+
+        // ===== SISTEMA ADMINISTRATIVO =====
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'flex';
+        }
+
+        function hideLogin() {
+            document.getElementById('loginScreen').style.display = 'none';
+        }
+
+        function login() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+            
+            if(user === 'admin' && pass === 'admin123') {
+                adminLoggedIn = true;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                updateAdminView();
+            } else {
+                alert('Credenciales incorrectas. Usuario: admin / Contraseña: admin123');
+            }
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function logout() {
+            adminLoggedIn = false;
+            hideAdminPanel();
+            document.getElementById('adminPass').value = '';
+        }
+
+        function showAdminSection(sectionId) {
+            // Remover active de todos
+            document.querySelectorAll('.admin-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.menu-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Activar sección seleccionada
+            document.getElementById(sectionId + 'Section').classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function updateAdminView() {
+            if (!adminLoggedIn) return;
+            
+            document.getElementById('adminSalesToday').textContent = salesCounter;
+            document.getElementById('adminRevenue').textContent = `$${revenueCounter} USD`;
+            document.getElementById('adminNewClients').textContent = Math.floor(salesCounter/6);
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            document.getElementById('adminRaffleTimer').textContent = calculateTimeRemaining(raffleEndDate);
+            
+            updateAdminSalesTable();
+        }
+
+        function updateAdminSalesTable() {
+            const table = document.getElementById('adminSalesTable');
+            if(!table) return;
+            
+            // Mostrar últimas 10 ventas
+            const recentSales = salesData.slice(0, 10);
+            table.innerHTML = recentSales.map(sale => `
+                <tr>
+                    <td>${sale.id}</td>
+                    <td>${sale.cliente || sale.email}</td>
+                    <td>${sale.libro}</td>
+                    <td>${sale.precio}</td>
+                    <td>${sale.fecha}</td>
+                    <td>${sale.ubicacion}</td>
+                    <td><span style="color: var(--tracker-success);">${sale.estado}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function sendTestNotification() {
+            alert('📧 Notificación de prueba enviada\n(En producción se enviaría por email/WhatsApp)');
+        }
+
+        function exportData() {
+            alert('📥 Exportando datos a Excel...\n(En producción se descargaría el archivo)');
+        }
+
+        function sendNotification(type, data) {
+            console.log(`📧 Notificación ${type}:`, data);
+        }
+
+        // ===== FUNCIONES DE INICIALIZACIÓN =====
+        function updateSalesCounter() {
+            salesCounter++;
+            revenueCounter += parseFloat(selectedBook.price);
+            updatePublicView();
+            if (adminLoggedIn) {
+                updateAdminView();
+            }
+        }
+
+        function initMobileMenu() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu');
+            const nav = document.querySelector('nav');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    nav.classList.toggle('active');
+                });
+            }
+            
+            // Cerrar menú al hacer clic en un enlace
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('active');
+                });
+            });
+        }
+
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if(this.getAttribute('href') === '#') return;
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        function initModalEvents() {
+            // Cerrar modal
+            document.querySelector('.close-modal').addEventListener('click', function() {
+                document.getElementById('purchaseModal').style.display = 'none';
+                document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-credit-card"></i> Confirmar y Pagar';
+                document.getElementById('confirmPurchase').disabled = false;
+                document.getElementById('confirmPurchase').style.display = 'block';
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('purchaseModal');
+                if(e.target === modal) {
+                    modal.style.display = 'none';
+                    document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-credit-card"></i> Confirmar y Pagar';
+                    document.getElementById('confirmPurchase').disabled = false;
+                    document.getElementById('confirmPurchase').style.display = 'block';
+                }
+            });
+        }
+
+        function initContactForm() {
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('¡Gracias por tu mensaje! Te responderé lo antes posible.');
+                    this.reset();
+                });
+            }
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar componentes
+            initMobileMenu();
+            initSmoothScrolling();
+            initModalEvents();
+            initContactForm();
+            
+            // Configurar botón "Ver libros"
+            const viewBooksButton = document.getElementById('viewBooks');
+            if (viewBooksButton) {
+                viewBooksButton.addEventListener('click', function() {
+                    document.querySelector('#libros').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // Configurar botón de acceso admin
+            const adminAccessBtn = document.getElementById('adminAccessBtn');
+            if (adminAccessBtn) {
+                adminAccessBtn.addEventListener('click', showLogin);
+            }
+            
+            // Inicializar datos
+            for(let i = 0; i < 3; i++) {
+                simulateSale();
+            }
+            salesCounter = 42;
+            revenueCounter = 1250;
+            updatePublicView();
+            
+            // Configurar intervalos de actualización
+            setInterval(updateClock, 1000);
+            setInterval(updateRaffleTimer, 60000);
+            
+            // Simular ventas automáticas cada 60 segundos
+            setInterval(() => {
+                simulateSale();
+            }, 60000);
+        });
     </script>
 </body>
 </html>
-       
-     
-      
