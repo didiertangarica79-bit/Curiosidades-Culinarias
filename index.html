@@ -3,31 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curiosidades Culinarias con Didiert - Libros de Recetas en PDF</title>
+    <title>Curiosidades Culinarias - Libros de Cocina en PDF</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
     <style>
-        /* TUS ESTILOS EXACTOS - SIN CAMBIOS */
+        /* ===== ESTILOS UNIFICADOS ===== */
         :root {
-            --primary-color: #d35400;
-            --secondary-color: #e67e22;
-            --accent-color: #f39c12;
-            --dark-color: #2c3e50;
-            --light-color: #f9f9f9;
-            --text-color: #333;
-            --border-color: #ddd;
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #f39c12;
+            --light: #fdf2e9;
+            --dark: #2c3e50;
+            --text: #333;
+            --gray: #95a5a6;
+            --success: #27ae60;
+            --info: #3498db;
+            --cuban-blue: #00205b;
+            --cuban-red: #cf142b;
+            --tracker-bg: #0f172a;
+            --tracker-card: #1e293b;
+            --tracker-primary: #3b82f6;
+            --tracker-success: #10b981;
+            --tracker-warning: #f59e0b;
+            --tracker-danger: #ef4444;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background-color: #fff8f0;
-            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
             line-height: 1.6;
+            background-color: #fff;
         }
         
         .container {
@@ -37,1273 +51,2614 @@
             padding: 0 15px;
         }
         
-        /* Header con TUS DATOS */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        /* ===== BANDERA CUBA ===== */
+        .cuba-flag {
+            background: linear-gradient(to bottom, 
+                #00205b 33%, 
+                white 33%, 67%,
+                #00205b 67%);
+            height: 6px;
+            width: 100%;
+            position: relative;
+            margin-bottom: 5px;
+        }
+        
+        .cuba-flag::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            background: #00205b;
+            border-right: 1px solid white;
+        }
+        
+        .cuba-flag::after {
+            content: '★';
+            position: absolute;
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
             color: white;
-            padding: 25px 0;
-            text-align: center;
-            border-bottom: 5px solid #b33800;
-            box-shadow: 0 4px 12px rgba(211, 84, 0, 0.3);
+            font-size: 12px;
         }
         
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: white;
-        }
-        
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        /* Navegación */
-        .navbar {
+        /* ===== HEADER ===== */
+        header {
             background-color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
         
-        .nav-content {
+        .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 15px 0;
         }
         
-        .brand {
+        .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
+            gap: 15px;
         }
         
-        .nav-links {
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--cuban-blue);
+        }
+        
+        .logo h1 span {
+            color: var(--cuban-red);
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .logo-icon {
+            color: var(--cuban-blue);
+            font-size: 2.2rem;
+        }
+        
+        .country-badge {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        nav ul {
             display: flex;
+            list-style: none;
             gap: 25px;
         }
         
-        .nav-links a {
-            color: var(--dark-color);
+        nav a {
             text-decoration: none;
+            color: var(--dark);
             font-weight: 500;
             transition: color 0.3s;
         }
         
-        .nav-links a:hover {
-            color: var(--primary-color);
+        nav a:hover {
+            color: var(--cuban-red);
         }
         
-        /* Selector de modo - MANTENIENDO tu diseño */
-        .mode-selector {
-            background-color: #fff5eb;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 10px;
-            border: 2px solid var(--border-color);
-            text-align: center;
-        }
-        
-        .mode-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .mode-btn {
-            padding: 12px 30px;
+        .cta-button {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
             border: none;
+            padding: 12px 25px;
             border-radius: 30px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            background-color: var(--primary-color);
-            color: white;
-            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .mode-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3);
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(207, 20, 43, 0.3);
         }
         
-        .mode-btn.active {
-            background-color: var(--dark-color);
-            box-shadow: 0 4px 8px rgba(44, 62, 80, 0.3);
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
         }
         
-        .mode-btn.cuba {
-            background-color: #0066cc;
-        }
-        
-        .mode-btn.cuba.active {
-            background-color: #004c99;
-        }
-        
-        /* Hero Section */
+        /* ===== HERO SECTION ===== */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(0, 32, 91, 0.85), rgba(207, 20, 43, 0.85)), url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80');
             background-size: cover;
             background-position: center;
             color: white;
             text-align: center;
-            padding: 70px 20px;
-            margin: 30px 0;
-            border-radius: 12px;
+            padding: 100px 0;
         }
         
         .hero h2 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 20px;
-            color: #ffd166;
+            font-family: 'Dancing Script', cursive;
         }
         
         .hero p {
             font-size: 1.2rem;
             max-width: 700px;
             margin: 0 auto 30px;
-            color: #f0f0f0;
         }
         
-        /* Catálogo de Libros - TUS LIBROS */
-        .books-section {
-            padding: 40px 0;
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .secondary-button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .secondary-button:hover {
+            background-color: white;
+            color: var(--cuban-blue);
+            transform: translateY(-2px);
+        }
+        
+        /* ===== SECCIONES GENERALES ===== */
+        section {
+            padding: 80px 0;
         }
         
         .section-title {
             text-align: center;
-            color: var(--primary-color);
-            font-size: 2.2rem;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--cuban-blue);
             position: relative;
+            display: inline-block;
             padding-bottom: 15px;
         }
         
-        .section-title:after {
+        .section-title h2::after {
             content: '';
-            display: block;
-            width: 100px;
+            position: absolute;
+            width: 70px;
             height: 4px;
-            background-color: var(--accent-color);
-            margin: 10px auto;
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
         }
         
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 15px auto 0;
+        }
+        
+        /* ===== LIBROS ===== */
         .books-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 30px;
-            margin-bottom: 50px;
         }
         
         .book-card {
             background-color: white;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            border: 1px solid #e0e0e0;
         }
         
         .book-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 30px rgba(0, 32, 91, 0.15);
         }
         
-        .book-cover {
-            height: 200px;
-            background-color: #f8f1e8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            color: var(--primary-color);
-            position: relative;
-        }
-        
-        .book-cover:after {
-            content: 'PDF';
+        .book-badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            background-color: #e74c3c;
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
             color: white;
-            padding: 5px 12px;
-            border-radius: 4px;
+            padding: 5px 10px;
+            border-radius: 20px;
             font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 600;
+            z-index: 2;
         }
         
-        .book-info {
+        .book-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .book-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 70%, rgba(0, 32, 91, 0.3));
+        }
+        
+        .book-content {
             padding: 25px;
         }
         
-        .book-title {
-            font-size: 1.4rem;
-            color: var(--primary-color);
+        .book-content h3 {
+            font-size: 1.5rem;
             margin-bottom: 10px;
-            font-weight: bold;
+            color: var(--cuban-blue);
         }
         
-        .book-description {
-            color: #666;
-            margin-bottom: 15px;
+        .book-content p {
+            color: var(--gray);
+            margin-bottom: 20px;
             font-size: 0.95rem;
-            line-height: 1.5;
         }
         
-        .book-details {
+        .book-features {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 15px;
-            color: #888;
-            font-size: 0.9rem;
+        }
+        
+        .book-feature {
+            background-color: rgba(0, 32, 91, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--cuban-blue);
         }
         
         .book-price {
-            font-size: 1.8rem;
-            color: #27ae60;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        
-        .add-to-cart {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 1rem;
-        }
-        
-        .add-to-cart:hover {
-            background-color: #b33800;
-        }
-        
-        /* Carrito de Compras - TUS DATOS */
-        .cart-section {
-            background-color: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            margin-top: 40px;
-            border: 2px solid var(--border-color);
-        }
-        
-        .cart-section h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0e6db;
-            font-size: 1.8rem;
-        }
-        
-        .cart-items {
-            margin-bottom: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #f0e6db;
-        }
-        
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-        
-        .cart-item-info h4 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
-            font-size: 1.1rem;
-        }
-        
-        .cart-item-price {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            padding: 20px 0;
-            border-top: 2px solid #f0e6db;
             margin-top: 20px;
         }
         
-        .checkout-btn {
-            width: 100%;
-            padding: 16px;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
+        .price-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cuban-red);
+        }
+        
+        .cup-price {
             font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
+            color: var(--cuban-blue);
+            margin-top: 5px;
         }
         
-        .checkout-btn:hover {
-            background-color: #219653;
+        .original-price {
+            text-decoration: line-through;
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-right: 5px;
         }
         
-        /* Modal CORREGIDO - No se atasca */
-        .modal-overlay {
-            position: fixed;
+        /* ===== PANEL DE SEGUIMIENTO ===== */
+        .tracker-section {
+            background: linear-gradient(135deg, var(--tracker-bg) 0%, #1e293b 100%);
+            color: #e2e8f0;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tracker-section::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            padding: 20px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-        
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal {
-            background-color: white;
-            border-radius: 15px;
-            padding: 30px;
             width: 100%;
-            max-width: 500px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            position: relative;
-            transform: translateY(20px);
-            transition: transform 0.3s;
-            border: 3px solid var(--primary-color);
+            height: 5px;
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
         }
         
-        .modal-overlay.active .modal {
-            transform: translateY(0);
-        }
-        
-        .modal h3 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
+        .tracker-header {
             text-align: center;
-            font-size: 1.8rem;
+            margin-bottom: 50px;
         }
         
-        .modal p {
-            color: #666;
-            margin-bottom: 25px;
-            text-align: center;
-            line-height: 1.6;
+        .tracker-header h2 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         
-        .modal-buttons {
+        .tracker-header h2 i {
+            color: var(--cuban-red);
+        }
+        
+        .tracker-buttons {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
         
-        .modal-btn {
-            padding: 12px 30px;
-            border-radius: 8px;
+        .tracker-btn {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
             border: none;
-            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             transition: all 0.3s;
-            font-size: 1rem;
-            min-width: 140px;
+            box-shadow: 0 4px 10px rgba(0, 32, 91, 0.3);
         }
         
-        .modal-btn.primary {
-            background-color: #27ae60;
+        .tracker-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 32, 91, 0.4);
+        }
+        
+        .tracker-btn-secondary {
+            background: transparent;
+            border: 2px solid var(--cuban-blue);
+            box-shadow: none;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .tracker-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-left: 5px solid var(--cuban-blue);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .tracker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--tracker-success);
+            text-align: center;
+            margin: 15px 0;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .countdown {
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--tracker-warning);
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .live-sales-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding-right: 10px;
+        }
+        
+        .live-sales-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .live-sales-list::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        
+        .live-sales-list::-webkit-scrollbar-thumb {
+            background: var(--cuban-blue);
+            border-radius: 10px;
+        }
+        
+        .sale-item {
+            background: rgba(255, 255, 255, 0.05);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--tracker-success);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .sale-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sale-item.new {
+            animation: highlight 2s;
+        }
+        
+        @keyframes highlight {
+            0% { background: rgba(16, 185, 129, 0.3); }
+            100% { background: rgba(255, 255, 255, 0.05); }
+        }
+        
+        /* ===== SOBRE DIDIERT ===== */
+        .about-section {
+            background-color: var(--light);
+        }
+        
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .about-img {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 32, 91, 0.1);
+        }
+        
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--cuban-blue);
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .ai-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+        
+        .youtube-channel {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: var(--cuban-red);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .youtube-channel:hover {
+            color: var(--cuban-blue);
+        }
+        
+        /* ===== CONTACTO Y PAGOS CUBA ===== */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--cuban-blue);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 32, 91, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cuban-blue);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .whatsapp-button {
+            background: linear-gradient(to right, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin-top: 5px;
+        }
+        
+        .whatsapp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        /* MÉTODOS DE PAGO CUBA */
+        .payment-methods-cuba {
+            background: rgba(0, 32, 91, 0.05);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid var(--cuban-red);
+        }
+        
+        .payment-methods-cuba h4 {
+            color: var(--cuban-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .payment-option i {
+            color: var(--cuban-blue);
+            font-size: 1.5rem;
+        }
+        
+        .payment-details {
+            flex: 1;
+        }
+        
+        .payment-details h5 {
+            color: var(--cuban-blue);
+            margin-bottom: 5px;
+        }
+        
+        .payment-details p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .cup-badge {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            transition: border 0.3s;
+        }
+        
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            outline: none;
+            border-color: var(--cuban-blue);
+        }
+        
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer {
+            background: linear-gradient(to bottom, var(--cuban-blue), #001942);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(to right, white, var(--cuban-red));
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
             color: white;
         }
         
-        .modal-btn.primary:hover {
-            background-color: #219653;
-        }
-        
-        .modal-btn.secondary {
-            background-color: #95a5a6;
-            color: white;
-        }
-        
-        .modal-btn.secondary:hover {
-            background-color: #7f8c8d;
-        }
-        
-        /* Formulario de pago */
-        .checkout-form {
+        .social-icons {
+            display: flex;
+            gap: 15px;
             margin-top: 20px;
         }
         
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
         
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--primary-color);
-            font-weight: bold;
+        .social-icons a:hover {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
         }
         
-        .form-group input, .form-group select {
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* ===== MODALES - CORREGIDOS ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            animation: modalFadeIn 0.3s ease;
         }
         
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--primary-color);
-            outline: none;
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-modal:hover {
+            color: var(--cuban-red);
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--cuban-blue);
+        }
+        
+        .step-number {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
         }
         
         .payment-methods {
             display: flex;
-            gap: 15px;
-            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
         }
         
-        .payment-method {
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
+        .payment-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
             border-radius: 8px;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
             cursor: pointer;
+            background: white;
+        }
+        
+        .payment-card:hover {
+            border-color: var(--cuban-blue);
+            background-color: rgba(0, 32, 91, 0.05);
+        }
+        
+        .payment-card.selected {
+            border-color: var(--cuban-blue);
+            background-color: rgba(0, 32, 91, 0.1);
+        }
+        
+        .payment-icon {
+            font-size: 1.8rem;
+            color: var(--gray);
+        }
+        
+        .payment-card.selected .payment-icon {
+            color: var(--cuban-blue);
+        }
+        
+        .success-message {
+            background: linear-gradient(to right, #d4edda, #c3e6cb);
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            border-left: 5px solid #28a745;
+        }
+        
+        .download-section {
+            background: linear-gradient(to right, rgba(0, 32, 91, 0.1), rgba(207, 20, 43, 0.1));
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            border: 2px dashed var(--cuban-blue);
+        }
+        
+        .download-button {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 32, 91, 0.3);
+        }
+        
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 32, 91, 0.4);
+        }
+        
+        .download-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--cuban-blue);
+        }
+        
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: var(--cuban-blue);
+        }
+        
+        .purchase-id {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+        
+        /* ===== PANEL ADMINISTRADOR ===== */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--tracker-bg);
+            z-index: 3000;
+            overflow-y: auto;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: #1a2238;
+            padding: 25px 20px;
+            border-right: 2px solid var(--cuban-blue);
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .menu-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #252f4a;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            color: #e2e8f0;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            transform: translateX(5px);
+        }
+        
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .admin-table {
+            width: 100%;
+            background: var(--tracker-card);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .admin-table th, .admin-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            color: #e2e8f0;
+        }
+        
+        .admin-table th {
+            background: #252f4a;
+            font-weight: 600;
+        }
+        
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* ===== LOGIN ===== */
+        .login-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 4000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-box {
+            background: var(--tracker-card);
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            background: #252f4a;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
             transition: all 0.3s;
         }
         
-        .payment-method:hover {
-            border-color: var(--primary-color);
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--cuban-blue);
+            box-shadow: 0 0 0 3px rgba(0, 32, 91, 0.2);
         }
         
-        .payment-method.selected {
-            border-color: var(--primary-color);
-            background-color: #fff5eb;
-        }
-        
-        /* Mensaje de confirmación */
-        .confirmation-message {
-            text-align: center;
-            padding: 30px 20px;
-        }
-        
-        .confirmation-icon {
-            font-size: 70px;
-            color: #27ae60;
-            margin-bottom: 20px;
-        }
-        
-        .confirmation-message h3 {
-            color: #27ae60;
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-        
-        .back-to-shop {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 25px;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .back-to-shop:hover {
-            background-color: #b33800;
-        }
-        
-        /* TUS DATOS de Contacto */
-        .contact-section {
-            background-color: #fff5eb;
-            padding: 40px;
-            border-radius: 12px;
-            margin: 50px 0;
-            border: 2px solid var(--border-color);
-        }
-        
-        .contact-section h2 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2rem;
-        }
-        
-        .contact-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-        
-        .contact-item {
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        
-        .contact-item i {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-        
-        .contact-item h4 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
-        
-        /* Footer */
-        .footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 40px 0;
-            margin-top: 60px;
-            text-align: center;
-        }
-        
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .footer h3 {
-            color: #ffd166;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-        
-        /* Notificación para mejor UX */
+        /* ===== NOTIFICACIONES TEMPORALES ===== */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            background-color: #27ae60;
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
             color: white;
             padding: 15px 25px;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 3000;
+            z-index: 5000;
             display: none;
-            animation: slideIn 0.5s ease;
+            animation: slideInRight 0.5s ease;
             max-width: 400px;
         }
         
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .notification.success {
+            background: linear-gradient(to right, #27ae60, #219653);
+        }
+        
         .notification.error {
-            background-color: #e74c3c;
+            background: linear-gradient(to right, #e74c3c, #c0392b);
         }
         
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
+        /* ===== SELECTOR DE MODO MEJORADO ===== */
+        .mode-selector {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid var(--cuban-blue);
+        }
+        
+        .mode-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: var(--cuban-blue);
+            color: white;
+            min-width: 180px;
+        }
+        
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 32, 91, 0.3);
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            box-shadow: 0 4px 10px rgba(207, 20, 43, 0.3);
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .about-container, .contact-container {
+                grid-template-columns: 1fr;
             }
-            to {
-                transform: translateX(0);
-                opacity: 1;
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .admin-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
             }
         }
         
-        /* Utils */
-        .hidden {
-            display: none !important;
-        }
-        
-        /* Responsive */
         @media (max-width: 768px) {
-            .nav-content {
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
                 flex-direction: column;
                 gap: 15px;
             }
             
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
             }
             
             .hero h2 {
                 font-size: 2rem;
             }
             
-            .books-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-            
-            .mode-buttons {
+            .tracker-buttons {
                 flex-direction: column;
                 align-items: center;
             }
             
-            .mode-btn {
-                width: 100%;
-                max-width: 300px;
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
             
-            .payment-methods {
+            .payment-card {
+                min-width: 100%;
+            }
+            
+            .mode-buttons {
                 flex-direction: column;
+            }
+            
+            .mode-btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header con TUS DATOS EXACTOS -->
-    <header class="header">
-        <div class="container">
-            <h1><i class="fas fa-book-open"></i> Curiosidades Culinarias con Didiert</h1>
-            <p>Descubre los secretos de la cocina profesional con nuestros libros en PDF. Recetas, técnicas y consejos exclusivos.</p>
+    <!-- ===== BANDERA CUBA ===== -->
+    <div class="cuba-flag"></div>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-utensils logo-icon"></i>
+                <h1>Curiosidades <span>Culinarias</span></h1>
+                <span class="country-badge">🇨🇺 Cuba</span>
+            </div>
+            
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#libros">Libros PDF</a></li>
+                    <li><a href="#pagos-cuba">Pagos en Cuba</a></li>
+                    <li><a href="#seguimiento">Estadísticas</a></li>
+                    <li><a href="#sobre">Sobre Didiert</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="https://youtube.com/@didiertangarica" target="_blank">YouTube</a></li>
+                </ul>
+            </nav>
+            
+            <button class="cta-button" id="adminAccessBtn">
+                <i class="fas fa-chart-line"></i> Panel Admin
+            </button>
         </div>
     </header>
 
-    <!-- Navegación -->
-    <nav class="navbar">
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="inicio">
         <div class="container">
-            <div class="nav-content">
-                <div class="brand">
-                    <i class="fas fa-utensils"></i>
-                    <span>Didiert Culinario</span>
-                </div>
-                <div class="nav-links">
-                    <a href="#libros">Libros</a>
-                    <a href="#carrito">Carrito</a>
-                    <a href="#contacto">Contacto</a>
-                    <a href="#about">Sobre Mí</a>
-                </div>
+            <h2>Sabores de Cuba y el Mundo</h2>
+            <p>Libros de cocina en PDF creados con IA. ¡Compra desde Cuba y paga en CUP! Descarga inmediata después del pago.</p>
+            <div class="hero-buttons">
+                <button class="cta-button" id="viewBooks">
+                    <i class="fas fa-shopping-cart"></i> Ver Libros
+                </button>
+                <a href="#pagos-cuba" class="secondary-button">
+                    <i class="fas fa-money-bill-wave"></i> Pagar en CUP
+                </a>
+                <a href="https://youtube.com/@didiertangarica" target="_blank" class="secondary-button">
+                    <i class="fab fa-youtube"></i> Mi Canal YouTube
+                </a>
             </div>
         </div>
-    </nav>
+    </section>
 
-    <div class="container">
-        <!-- Selector de modo - CORREGIDO -->
-        <div class="mode-selector">
-            <h3>Selecciona tu método de compra:</h3>
-            <div class="mode-buttons">
-                <button id="cubaModeBtn" class="mode-btn cuba active">
-                    <i class="fas fa-map-marker-alt"></i> Compra desde Cuba
-                </button>
-                <button id="internationalModeBtn" class="mode-btn">
-                    <i class="fas fa-globe-americas"></i> Compra Internacional
-                </button>
-            </div>
-            <p id="currentModeText" style="margin-top: 15px; font-weight: bold; color: var(--primary-color);">
-                Modo actual: <span style="color: #0066cc;">Compra desde Cuba</span>
-            </p>
+    <!-- ===== SELECTOR DE MODO (CORREGIDO) ===== -->
+    <div class="container mode-selector" id="modeSelector">
+        <h3>Selecciona tu método de compra:</h3>
+        <div class="mode-buttons">
+            <button id="cubaModeBtn" class="mode-btn active">
+                <i class="fas fa-flag"></i> Compra desde Cuba
+            </button>
+            <button id="internationalModeBtn" class="mode-btn">
+                <i class="fas fa-globe-americas"></i> Compra Internacional
+            </button>
         </div>
+        <p id="currentModeText" style="margin-top: 15px; font-weight: 600; color: var(--cuban-blue);">
+            Modo actual: <span style="color: var(--cuban-red);">Compra desde Cuba</span>
+        </p>
+    </div>
 
-        <!-- Hero Section -->
-        <section class="hero">
-            <h2>Transforma tu Cocina con Conocimiento</h2>
-            <p>Libros en PDF con recetas exclusivas, técnicas profesionales y secretos culinarios que harán de ti un experto en la cocina.</p>
-        </section>
-
-        <!-- TUS LIBROS ESPECÍFICOS -->
-        <section id="libros" class="books-section">
-            <h2 class="section-title">Mis Libros de Cocina en PDF</h2>
+    <!-- ===== LIBROS EN PDF ===== -->
+    <section id="libros">
+        <div class="container">
+            <div class="section-title">
+                <h2>Libros de Cocina en PDF</h2>
+                <p>Recetas creadas con IA - Descarga inmediata - Compatible con cualquier dispositivo</p>
+            </div>
             
             <div class="books-grid">
-                <!-- Libro 1: TUS DATOS -->
+                <!-- Libro 1 -->
                 <div class="book-card">
-                    <div class="book-cover">
-                        <i class="fas fa-pepper-hot"></i>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Secretos de la Cocina Cubana</h3>
-                        <p class="book-description">Recetas familiares tradicionales, técnicas de cocción y secretos transmitidos por generaciones de cocineros cubanos.</p>
-                        <div class="book-details">
-                            <span>180 páginas</span>
-                            <span>⭐ 4.9/5</span>
+                    <div class="book-badge">MÁS VENDIDO</div>
+                    <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="book-content">
+                        <h3>Fusión Caribeña con IA</h3>
+                        <p>Recetas tradicionales cubanas reinventadas con toques modernos usando inteligencia artificial.</p>
+                        <div class="book-features">
+                            <span class="book-feature">45 recetas</span>
+                            <span class="book-feature">Cocina cubana</span>
+                            <span class="book-feature">Creado con IA</span>
                         </div>
-                        <div class="book-price">$14.99 USD</div>
-                        <button class="add-to-cart" data-id="1" data-name="Secretos de la Cocina Cubana" data-price="14.99">
-                            <i class="fas fa-cart-plus"></i> Añadir al Carrito
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Libro 2: TUS DATOS -->
-                <div class="book-card">
-                    <div class="book-cover">
-                        <i class="fas fa-mortar-pestle"></i>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Técnicas Avanzadas de Cocina</h3>
-                        <p class="book-description">Domina técnicas profesionales: sous-vide, emulsiones, deshidratación y más. Incluye videos tutoriales en línea.</p>
-                        <div class="book-details">
-                            <span>220 páginas</span>
-                            <span>⭐ 5.0/5</span>
-                        </div>
-                        <div class="book-price">$18.99 USD</div>
-                        <button class="add-to-cart" data-id="2" data-name="Técnicas Avanzadas de Cocina" data-price="18.99">
-                            <i class="fas fa-cart-plus"></i> Añadir al Carrito
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Libro 3: TUS DATOS -->
-                <div class="book-card">
-                    <div class="book-cover">
-                        <i class="fas fa-seedling"></i>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Cocina Vegetariana Gourmet</h3>
-                        <p class="book-description">Platos vegetarianos que impresionan. Recetas creativas, balance nutricional y presentación profesional.</p>
-                        <div class="book-details">
-                            <span>160 páginas</span>
-                            <span>⭐ 4.8/5</span>
-                        </div>
-                        <div class="book-price">$15.99 USD</div>
-                        <button class="add-to-cart" data-id="3" data-name="Cocina Vegetariana Gourmet" data-price="15.99">
-                            <i class="fas fa-cart-plus"></i> Añadir al Carrito
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Libro 4: TUS DATOS -->
-                <div class="book-card">
-                    <div class="book-cover">
-                        <i class="fas fa-birthday-cake"></i>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Postres y Repostería Fina</h3>
-                        <p class="book-description">Desde postres clásicos hasta creaciones modernas. Técnicas de decoración, glaseados y presentación.</p>
-                        <div class="book-details">
-                            <span>200 páginas</span>
-                            <span>⭐ 4.9/5</span>
-                        </div>
-                        <div class="book-price">$16.99 USD</div>
-                        <button class="add-to-cart" data-id="4" data-name="Postres y Repostería Fina" data-price="16.99">
-                            <i class="fas fa-cart-plus"></i> Añadir al Carrito
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Libro 5: TUS DATOS -->
-                <div class="book-card">
-                    <div class="book-cover">
-                        <i class="fas fa-cocktail"></i>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Mixología y Coctelería</h3>
-                        <p class="book-description">Cócteles clásicos y modernos, técnicas de mixología, combinaciones innovadoras y presentación espectacular.</p>
-                        <div class="book-details">
-                            <span>150 páginas</span>
-                            <span>⭐ 4.7/5</span>
-                        </div>
-                        <div class="book-price">$13.99 USD</div>
-                        <button class="add-to-cart" data-id="5" data-name="Mixología y Coctelería" data-price="13.99">
-                            <i class="fas fa-cart-plus"></i> Añadir al Carrito
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Libro 6: TUS DATOS -->
-                <div class="book-card">
-                    <div class="book-cover">
-                        <i class="fas fa-bread-slice"></i>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Panadería Artesanal</h3>
-                        <p class="book-description">Todo sobre masas madre, fermentación, horneado y variedades de pan de todo el mundo. Incluye recetas paso a paso.</p>
-                        <div class="book-details">
-                            <span>190 páginas</span>
-                            <span>⭐ 4.8/5</span>
-                        </div>
-                        <div class="book-price">$17.99 USD</div>
-                        <button class="add-to-cart" data-id="6" data-name="Panadería Artesanal" data-price="17.99">
-                            <i class="fas fa-cart-plus"></i> Añadir al Carrito
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Carrito de Compras - TUS DATOS -->
-            <div id="carrito" class="cart-section">
-                <h2><i class="fas fa-shopping-cart"></i> Tu Carrito de Libros</h2>
-                <div class="cart-items" id="cartItemsContainer">
-                    <p id="emptyCartMessage" style="text-align: center; color: #666; padding: 20px;">
-                        Tu carrito está vacío. Añade libros para comenzar.
-                    </p>
-                </div>
-                <div class="cart-total">
-                    <span>Total:</span>
-                    <span id="cartTotalAmount">$0.00</span>
-                </div>
-                <button id="checkoutButton" class="checkout-btn hidden">
-                    <i class="fas fa-lock"></i> Proceder al Pago
-                </button>
-            </div>
-        </section>
-
-        <!-- TUS DATOS de Contacto -->
-        <section id="contacto" class="contact-section">
-            <h2>Contacta con Didiert</h2>
-            <div class="contact-details">
-                <div class="contact-item">
-                    <i class="fas fa-user-circle"></i>
-                    <h4>Didiert García</h4>
-                    <p>Chef Profesional & Autor</p>
-                    <p>Especialista en Cocina Internacional</p>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-phone-alt"></i>
-                    <h4>Teléfono / WhatsApp</h4>
-                    <p>+1 (786) 234-5678</p>
-                    <p>Disponible para consultas culinarias</p>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <h4>Email</h4>
-                    <p>didiert@curiosidadesculinarias.com</p>
-                    <p>soporte@curiosidadesculinarias.com</p>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-credit-card"></i>
-                    <h4>Métodos de Pago</h4>
-                    <p>Tarjetas Visa/MasterCard</p>
-                    <p>PayPal • Transferencia</p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Modal para Cuba - CORREGIDO (No se atasca) -->
-    <div id="cubaModal" class="modal-overlay">
-        <div class="modal">
-            <h3><i class="fas fa-check-circle"></i> ¡Compra desde Cuba Exitosa!</h3>
-            <p>Tu pedido ha sido procesado correctamente en modo simulación para Cuba.</p>
-            <p><strong>Referencia:</strong> CUB-<span id="cubaOrderNumber">00000</span></p>
-            <p>Recibirás los libros en PDF por email en las próximas 24 horas.</p>
-            <div class="modal-buttons">
-                <button id="confirmCubaOrder" class="modal-btn primary">
-                    <i class="fas fa-check"></i> Aceptar
-                </button>
-            </div>
-            <p style="margin-top: 20px; font-size: 0.9em; color: #7f8c8d; text-align: center;">
-                Esta ventana se cerrará automáticamente en 5 segundos...
-            </p>
-        </div>
-    </div>
-
-    <!-- Modal para Internacional -->
-    <div id="internationalModal" class="modal-overlay">
-        <div class="modal">
-            <div id="checkoutFormContainer">
-                <h3><i class="fas fa-globe-americas"></i> Pago Internacional</h3>
-                
-                <div class="checkout-form">
-                    <div class="form-group">
-                        <label for="customerName"><i class="fas fa-user"></i> Nombre Completo</label>
-                        <input type="text" id="customerName" placeholder="Ej: María González Pérez" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="customerEmail"><i class="fas fa-envelope"></i> Email</label>
-                        <input type="email" id="customerEmail" placeholder="tuemail@ejemplo.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label><i class="fas fa-credit-card"></i> Método de Pago</label>
-                        <div class="payment-methods">
-                            <div class="payment-method" data-method="tarjeta">
-                                <i class="fas fa-credit-card fa-2x"></i><br>
-                                Tarjeta
+                        <div class="book-price">
+                            <div class="price-container">
+                                <span class="price">$9.99 USD</span>
+                                <span class="cup-price">≈ 250 CUP</span>
                             </div>
-                            <div class="payment-method" data-method="paypal">
-                                <i class="fab fa-paypal fa-2x"></i><br>
-                                PayPal
-                            </div>
-                            <div class="payment-method" data-method="transferencia">
-                                <i class="fas fa-university fa-2x"></i><br>
-                                Transferencia
-                            </div>
+                            <button class="cta-button buy-btn" data-book="Fusión Caribeña con IA" data-price="9.99" data-id="LIB001" data-cup="250">
+                                <i class="fas fa-cart-plus"></i> Comprar
+                            </button>
                         </div>
-                        <input type="hidden" id="paymentMethod" required>
-                    </div>
-                    
-                    <div class="modal-buttons">
-                        <button id="submitInternationalOrder" class="modal-btn primary">
-                            <i class="fas fa-check-circle"></i> Confirmar Compra
-                        </button>
-                        <button id="cancelInternationalOrder" class="modal-btn secondary">
-                            <i class="fas fa-times"></i> Cancelar
-                        </button>
                     </div>
                 </div>
-            </div>
-            
-            <div id="confirmationMessage" class="confirmation-message hidden">
-                <div class="confirmation-icon">
-                    <i class="fas fa-check-circle"></i>
+                
+                <!-- Libro 2 -->
+                <div class="book-card">
+                    <div class="book-badge">NUEVO</div>
+                    <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80');"></div>
+                    <div class="book-content">
+                        <h3>Cocina Internacional AI</h3>
+                        <p>Platos de 5 continentes generados por inteligencia artificial con ingredientes accesibles en Cuba.</p>
+                        <div class="book-features">
+                            <span class="book-feature">60 recetas</span>
+                            <span class="book-feature">Ingredientes locales</span>
+                            <span class="book-feature">Paso a paso</span>
+                        </div>
+                        <div class="book-price">
+                            <div class="price-container">
+                                <span class="price">$7.99 USD</span>
+                                <span class="cup-price">≈ 200 CUP</span>
+                            </div>
+                            <button class="cta-button buy-btn" data-book="Cocina Internacional AI" data-price="7.99" data-id="LIB002" data-cup="200">
+                                <i class="fas fa-cart-plus"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <h3>¡Compra Confirmada!</h3>
-                <p>Tu pedido ha sido procesado exitosamente.</p>
-                <p><strong>Número de pedido:</strong> INT-<span id="internationalOrderNumber">00000</span></p>
-                <p>Recibirás los libros en PDF en tu email en minutos.</p>
-                <button id="backToShop" class="back-to-shop">
-                    <i class="fas fa-store"></i> Volver a la Tienda
-                </button>
+                
+                <!-- Libro 3 -->
+                <div class="book-card">
+                    <div class="book-badge">ESPECIAL</div>
+                    <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="book-content">
+                        <h3>Postres con Chat GPT</h3>
+                        <p>Dulces y postres creados completamente por IA, desde lo tradicional hasta innovaciones únicas.</p>
+                        <div class="book-features">
+                            <span class="book-feature">35 postres</span>
+                            <span class="book-feature">Ingredientes cubanos</span>
+                            <span class="book-feature">Fácil preparación</span>
+                        </div>
+                        <div class="book-price">
+                            <div class="price-container">
+                                <span class="price">$6.99 USD</span>
+                                <span class="cup-price">≈ 175 CUP</span>
+                            </div>
+                            <button class="cta-button buy-btn" data-book="Postres con Chat GPT" data-price="6.99" data-id="LIB003" data-cup="175">
+                                <i class="fas fa-cart-plus"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Notification -->
-    <div id="notification" class="notification"></div>
-
-    <!-- Footer con TUS DATOS -->
-    <footer class="footer" id="about">
+    <!-- ===== PAGOS EN CUBA ===== -->
+    <section id="pagos-cuba" style="background-color: #f8f9fa;">
         <div class="container">
-            <div class="footer-content">
-                <h3>Curiosidades Culinarias con Didiert</h3>
-                <p>Especialistas en libros de cocina en formato PDF. Recetas exclusivas, técnicas profesionales y conocimiento culinario al alcance de todos.</p>
-                <p style="margin-top: 20px; color: #ffd166;">
-                    <i class="fas fa-map-marker-alt"></i> Miami, FL • 
-                    <i class="fas fa-phone"></i> +1 (786) 234-5678 • 
-                    <i class="fas fa-envelope"></i> didiert@curiosidadesculinarias.com
-                </p>
-                <p style="margin-top: 15px; font-size: 0.9em;">
-                    © 2024 Curiosidades Culinarias con Didiert. Todos los derechos reservados.
-                </p>
+            <div class="section-title">
+                <h2>Pagos desde Cuba 🇨🇺</h2>
+                <p>Múltiples opciones para comprar desde Cuba pagando en CUP (Peso Cubano)</p>
+            </div>
+            
+            <div class="payment-methods-cuba">
+                <h4><i class="fas fa-wallet"></i> Métodos de Pago Disponibles en Cuba</h4>
+                
+                <div class="payment-option">
+                    <i class="fas fa-mobile-alt"></i>
+                    <div class="payment-details">
+                        <h5>Transfermóvil</h5>
+                        <p><strong>Número:</strong> +53 5xxx xxxx</p>
+                        <p><strong>Nombre:</strong> Didiert Tangarica</p>
+                        <span class="cup-badge">Pago en CUP</span>
+                    </div>
+                </div>
+                
+                <div class="payment-option">
+                    <i class="fas fa-university"></i>
+                    <div class="payment-details">
+                        <h5>Transferencia Bancaria</h5>
+                        <p><strong>Banco:</strong> Banco Metropolitano</p>
+                        <p><strong>Cuenta:</strong> 9201 xxxx xxxx</p>
+                        <p><strong>Titular:</strong> Didiert Tangarica</p>
+                        <span class="cup-badge">Pago en CUP</span>
+                    </div>
+                </div>
+                
+                <div class="payment-option">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <div class="payment-details">
+                        <h5>Envio Nacional</h5>
+                        <p><strong>Western Union Cuba</strong></p>
+                        <p><strong>A nombre de:</strong> Didiert Tangarica</p>
+                        <p><strong>Documento:</strong> Carnet de Identidad</p>
+                        <span class="cup-badge">Pago en CUP</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(0, 32, 91, 0.1); border-radius: 8px;">
+                    <h5><i class="fas fa-info-circle"></i> Instrucciones para pagar desde Cuba:</h5>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #555;">
+                        <li>Selecciona el libro que quieres comprar</li>
+                        <li>Elige la opción "Pago desde Cuba" en el checkout</li>
+                        <li>Realiza el pago usando uno de los métodos arriba</li>
+                        <li>Envía el comprobante por WhatsApp o email</li>
+                        <li>Recibirás el PDF inmediatamente después de confirmar el pago</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PANEL DE SEGUIMIENTO ===== -->
+    <section class="tracker-section" id="seguimiento">
+        <div class="container">
+            <div class="tracker-header">
+                <h2><i class="fas fa-chart-line"></i> Estadísticas en Tiempo Real</h2>
+                <p>Ventas actualizadas automáticamente - Hora de Cuba: <span id="cuba-time">00:00:00</span></p>
+                <div class="tracker-buttons">
+                    <button class="tracker-btn" onclick="simulateSale()">
+                        <i class="fas fa-plus"></i> Simular Venta
+                    </button>
+                    <button class="tracker-btn tracker-btn-secondary" onclick="showLogin()">
+                        <i class="fas fa-user-cog"></i> Acceso Administrador
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- CONTADOR DE VENTAS -->
+                <div class="tracker-card">
+                    <h2><i class="fas fa-chart-line"></i> Ventas Hoy</h2>
+                    <div class="stat-number" id="publicSalesToday">0</div>
+                    <p style="text-align: center; color: #94a3b8;">Actualizado en vivo</p>
+                </div>
+
+                <!-- RIFA NEGATIVA -->
+                <div class="tracker-card">
+                    <h2><i class="fas fa-clock"></i> Promoción Activa</h2>
+                    <p style="text-align: center; margin-bottom: 10px;">Tiempo restante:</p>
+                    <div class="countdown" id="publicRaffleTimer">05:00:00:00</div>
+                    <div id="raffleColorBar" style="height: 8px; background: #10b981; border-radius: 4px; margin-top: 15px;"></div>
+                </div>
+
+                <!-- LIBRO MÁS VENDIDO -->
+                <div class="tracker-card">
+                    <h2><i class="fas fa-crown"></i> Libro del Día</h2>
+                    <div class="stat-number" id="publicTopBook">-</div>
+                    <p style="text-align: center;" id="publicTopBookSales">Cargando...</p>
+                </div>
+
+                <!-- VENTAS DESDE CUBA -->
+                <div class="tracker-card">
+                    <h2><i class="fas fa-flag"></i> Ventas Cuba</h2>
+                    <div class="stat-number" id="cubaSales">0</div>
+                    <p style="text-align: center; color: #94a3b8;">Compras desde Cuba</p>
+                </div>
+            </div>
+
+            <!-- VENTAS EN TIEMPO REAL -->
+            <div class="tracker-card" style="grid-column: 1 / -1;">
+                <h2><i class="fas fa-bolt"></i> Últimas Ventas</h2>
+                <div class="live-sales-list" id="publicSalesList">
+                    <div class="sale-item">
+                        <div>
+                            <strong>"Fusión Caribeña con IA"</strong><br>
+                            <small style="color: #94a3b8;">Comprado desde: La Habana • 250 CUP</small>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="color: var(--tracker-warning);">Cuba 🇨🇺</span><br>
+                            <small>Hace 15 minutos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SOBRE DIDIERT ===== -->
+    <section id="sobre" class="about-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sobre Didiert</h2>
+                <p>Conoce al creador detrás de Curiosidades Culinarias</p>
+            </div>
+            
+            <div class="about-container">
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Didiert - Creador de contenido digital">
+                </div>
+                <div class="about-text">
+                    <h3>¡Hola! Soy Didiert Tangarica</h3>
+                    <p>Soy una persona que está comenzando su aventura en el mundo digital. Como muchos en Cuba, estoy explorando nuevas formas de creatividad y emprendimiento en internet.</p>
+                    
+                    <p>He creado este proyecto por dos razones principales: como una forma de entretenimiento creativo y como una posible fuente de sustento personal. Me apasiona la cocina y la tecnología, así que decidí unirlas.</p>
+                    
+                    <div class="ai-badge">
+                        <i class="fas fa-robot"></i> TODOS LOS LIBROS CREADOS CON INTELIGENCIA ARTIFICIAL
+                    </div>
+                    
+                    <p>Todo el contenido de los libros ha sido generado utilizando IA (ChatGPT) como herramienta creativa. Es un experimento para ver cómo la tecnología puede ayudarnos a crear contenido único y valioso.</p>
+                    
+                    <p>Si algún día logro monetizar mi canal de YouTube y vender estos libros, sería un gran paso hacia mi independencia económica. Mientras tanto, disfruto del proceso de creación y aprendizaje.</p>
+                    
+                    <a href="https://youtube.com/@didiertangarica" target="_blank" class="youtube-channel">
+                        <i class="fab fa-youtube"></i> Suscríbete a mi canal de YouTube
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACTO ===== -->
+    <section id="contacto">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contacto y Soporte</h2>
+                <p>¿Tienes preguntas o problemas con tu compra? ¡Contáctame!</p>
+            </div>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Canales de contacto</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div>
+                            <h4>Ventas y Compras</h4>
+                            <p>culinariascuriosidades4@gmail.com</p>
+                            <p><small>Para consultas sobre pagos, descargas y libros</small></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <h4>WhatsApp (Cuba)</h4>
+                            <p>+53 5xxx xxxx</p>
+                            <a href="https://wa.me/535xxxxxxxx" target="_blank" class="whatsapp-button">
+                                <i class="fab fa-whatsapp"></i> Escribir por WhatsApp
+                            </a>
+                            <p><small>Para confirmar pagos desde Cuba</small></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <div>
+                            <h4>Canal de YouTube</h4>
+                            <p>Curiosidades Culinarias con Didiert</p>
+                            <a href="https://youtube.com/@didiertangarica" target="_blank" style="color: var(--cuban-red); text-decoration: none; font-weight: 500;">
+                                <i class="fab fa-youtube"></i> Ver mi canal
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div>
+                            <h4>Soporte Técnico</h4>
+                            <p>didiertangarica79@gmail.com</p>
+                            <p><small>Para problemas con descargas o acceso</small></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Envíame un mensaje</h3>
+                    <form id="contactForm">
+                        <input type="text" placeholder="Tu nombre" required>
+                        <input type="email" placeholder="Tu email" required>
+                        <select style="width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                            <option value="">Selecciona el motivo</option>
+                            <option value="compra">Problema con una compra</option>
+                            <option value="descarga">No puedo descargar mi libro</option>
+                            <option value="pago-cuba">Consulta sobre pago desde Cuba</option>
+                            <option value="otro">Otro asunto</option>
+                        </select>
+                        <textarea placeholder="Tu mensaje" required></textarea>
+                        <button type="submit" class="cta-button">Enviar mensaje</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Curiosidades Culinarias</h3>
+                    <p>Libros de cocina en PDF creados con IA. Disponible para Cuba y todo el mundo.</p>
+                    <div class="social-icons">
+                        <a href="https://youtube.com/@didiertangarica" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/535xxxxxxxx" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#libros">Libros PDF</a></li>
+                        <li><a href="#pagos-cuba">Pagos en Cuba</a></li>
+                        <li><a href="#seguimiento">Estadísticas</a></li>
+                        <li><a href="#sobre">Sobre Didiert</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Libros disponibles</h3>
+                    <ul class="footer-links">
+                        <li><a href="#libros">Fusión Caribeña con IA</a></li>
+                        <li><a href="#libros">Cocina Internacional AI</a></li>
+                        <li><a href="#libros">Postres con Chat GPT</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Pagos aceptados</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                        <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">CUP</div>
+                        <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">USD</div>
+                        <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">Transfermóvil</div>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #bbb;">Pagos seguros desde Cuba</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Curiosidades Culinarias con Didiert. Contenido creado con IA. Todos los derechos reservados.</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">🇨🇺 Proyecto digital desde Cuba</p>
             </div>
         </div>
     </footer>
 
+    <!-- ===== MODAL DE COMPRA (CORREGIDO) ===== -->
+    <div class="modal" id="purchaseModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Comprar: <span id="bookTitle"></span></h3>
+            <p>Precio: <strong id="bookPrice"></strong> / <strong id="cupPrice"></strong> CUP</p>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Selecciona tu ubicación</h4>
+                    <div style="display: flex; gap: 10px; margin: 15px 0;">
+                        <button class="payment-card" onclick="selectLocation('cuba')">
+                            <i class="fas fa-flag"></i>
+                            <span>Comprar desde Cuba</span>
+                        </button>
+                        <button class="payment-card" onclick="selectLocation('internacional')">
+                            <i class="fas fa-globe-americas"></i>
+                            <span>Internacional</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PASO PARA CUBA -->
+            <div id="cubaPaymentStep" style="display: none;">
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Pago desde Cuba 🇨🇺</h4>
+                        <p>Precio en CUP: <strong id="finalCupPrice"></strong></p>
+                        <p><strong>Instrucciones:</strong></p>
+                        <ol style="margin-left: 20px; margin-top: 10px;">
+                            <li>Realiza el pago por Transfermóvil o banco</li>
+                            <li>Envía el comprobante a mi WhatsApp</li>
+                            <li>Recibirás el PDF inmediatamente</li>
+                        </ol>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                            <p><strong>📱 WhatsApp para confirmar pago:</strong> +53 5xxx xxxx</p>
+                            <p><strong>📧 Email alternativo:</strong> culinariascuriosidades4@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PASO INTERNACIONAL -->
+            <div id="internationalPaymentStep" style="display: none;">
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Ingresa tu email</h4>
+                        <p>Te enviaremos el PDF a este correo:</p>
+                        <input type="email" class="email-input" id="customerEmail" placeholder="tucorreo@ejemplo.com">
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Selecciona método de pago</h4>
+                        <div class="payment-methods">
+                            <div class="payment-card" onclick="selectPaymentMethod('paypal')">
+                                <i class="fab fa-cc-paypal payment-icon"></i>
+                                <span>PayPal</span>
+                            </div>
+                            <div class="payment-card" onclick="selectPaymentMethod('card')">
+                                <i class="fas fa-credit-card payment-icon"></i>
+                                <span>Tarjeta Internacional</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <h4><i class="fas fa-check-circle"></i> ¡Compra exitosa!</h4>
+                <p id="successMessageText"></p>
+            </div>
+            
+            <div class="download-section" id="downloadSection">
+                <h4><i class="fas fa-download"></i> ¡Listo para descargar!</h4>
+                <p>Tu libro PDF está listo para descargar.</p>
+                <button class="download-button" onclick="downloadPDF()">
+                    <i class="fas fa-file-pdf"></i> Descargar PDF
+                </button>
+                <p class="download-info" id="downloadInfo"></p>
+            </div>
+            
+            <button class="cta-button" id="confirmPurchase" style="width: 100%; margin-top: 20px; display: none;">
+                <i class="fas fa-check"></i> Confirmar Compra
+            </button>
+            
+            <p style="margin-top: 15px; font-size: 0.9rem; text-align: center;">
+                ¿Problemas con la compra? <a href="https://wa.me/535xxxxxxxx" target="_blank" style="color: var(--cuban-red);">Escríbeme por WhatsApp</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== LOGIN ADMIN ===== -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h1 style="text-align: center; margin-bottom: 30px; color: var(--cuban-blue);">
+                <i class="fas fa-lock"></i> Acceso Administrador
+            </h1>
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> Usuario</label>
+                <input type="text" id="adminUser" placeholder="admin">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-key"></i> Contraseña</label>
+                <input type="password" id="adminPass" placeholder="••••••••">
+            </div>
+            <button class="tracker-btn" style="width: 100%;" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> Ingresar al Sistema
+            </button>
+            <p style="text-align: center; margin-top: 20px; color: #94a3b8;">
+                <a href="#" style="color: var(--cuban-blue);" onclick="hideLogin()">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== PANEL ADMINISTRADOR ===== -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-container">
+            <!-- BARRA LATERAL -->
+            <div class="sidebar">
+                <h2 style="color: var(--cuban-blue); margin-bottom: 30px;">
+                    <i class="fas fa-cogs"></i> Panel Control
+                </h2>
+                
+                <button class="menu-item active" onclick="showAdminSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="menu-item" onclick="showAdminSection('ventas')">
+                    <i class="fas fa-shopping-cart"></i> Ventas
+                </button>
+                <button class="menu-item" onclick="showAdminSection('cuba')">
+                    <i class="fas fa-flag"></i> Ventas Cuba
+                </button>
+                <button class="menu-item" onclick="showAdminSection('libros')">
+                    <i class="fas fa-book"></i> Libros
+                </button>
+                <button class="menu-item" onclick="showAdminSection('config')">
+                    <i class="fas fa-sliders-h"></i> Configuración
+                </button>
+                
+                <div style="margin-top: 50px;">
+                    <button class="tracker-btn tracker-btn-secondary" onclick="hideAdminPanel()" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-eye"></i> Volver al Sitio
+                    </button>
+                    <button class="tracker-btn" onclick="logout()" style="width: 100%; background: var(--tracker-danger);">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <div class="main-content">
+                <!-- DASHBOARD ADMIN -->
+                <div id="dashboardSection" class="admin-section active">
+                    <h1><i class="fas fa-tachometer-alt"></i> Dashboard Administrativo</h1>
+                    
+                    <div class="dashboard-grid">
+                        <div class="tracker-card">
+                            <h3><i class="fas fa-chart-line"></i> Ventas Hoy</h3>
+                            <div class="stat-number" id="adminSalesToday">0</div>
+                            <p>Actualizado: <span id="lastUpdate">Ahora</span></p>
+                        </div>
+                        <div class="tracker-card">
+                            <h3><i class="fas fa-money-bill-wave"></i> Ingresos Total</h3>
+                            <div class="stat-number" id="adminRevenue">$0 USD</div>
+                            <p>Mes actual</p>
+                        </div>
+                        <div class="tracker-card">
+                            <h3><i class="fas fa-flag"></i> Ventas Cuba</h3>
+                            <div class="stat-number" id="adminCubaSales">0</div>
+                            <p>Compras desde Cuba</p>
+                        </div>
+                        <div class="tracker-card">
+                            <h3><i class="fas fa-clock"></i> Hora Cuba</h3>
+                            <div class="countdown" id="adminCubaTime">00:00:00</div>
+                            <p><span id="cubaDate">Cargando...</span></p>
+                        </div>
+                    </div>
+
+                    <!-- TABLA DE VENTAS RECIENTES -->
+                    <h2 style="margin-top: 30px;"><i class="fas fa-history"></i> Ventas Recientes</h2>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Cliente</th><th>Libro</th><th>Precio</th><th>Ubicación</th><th>Fecha</th><th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminSalesTable">
+                            <!-- Datos cargados por JavaScript -->
+                        </tbody>
+                    </table>
+
+                    <!-- ACCIONES RÁPIDAS -->
+                    <h2 style="margin-top: 30px;"><i class="fas fa-bolt"></i> Acciones Rápidas</h2>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                        <button class="tracker-btn" onclick="simulateCubaSale()">
+                            <i class="fas fa-flag"></i> Simular Venta Cuba
+                        </button>
+                        <button class="tracker-btn" onclick="simulateSale()">
+                            <i class="fas fa-globe"></i> Simular Venta Intl
+                        </button>
+                        <button class="tracker-btn" onclick="sendTestNotification()" style="background: var(--tracker-success);">
+                            <i class="fas fa-bell"></i> Probar Notificación
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VENTAS CUBA -->
+                <div id="cubaSection" class="admin-section">
+                    <h1><i class="fas fa-flag"></i> Ventas desde Cuba</h1>
+                    <div style="background: rgba(0, 32, 91, 0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h3><i class="fas fa-info-circle"></i> Información para pagos en Cuba</h3>
+                        <p><strong>Cuenta Transfermóvil:</strong> +53 5xxx xxxx</p>
+                        <p><strong>Banco:</strong> Banco Metropolitano - Cuenta: 9201 xxxx xxxx</p>
+                        <p><strong>WhatsApp para confirmaciones:</strong> +53 5xxx xxxx</p>
+                    </div>
+                    <p>Gestiona todas las ventas realizadas desde Cuba.</p>
+                </div>
+                
+                <!-- OTRAS SECCIONES -->
+                <div id="ventasSection" class="admin-section">
+                    <h1><i class="fas fa-shopping-cart"></i> Gestión de Ventas</h1>
+                    <p>Gestiona todas las ventas realizadas.</p>
+                </div>
+                
+                <div id="librosSection" class="admin-section">
+                    <h1><i class="fas fa-book"></i> Gestión de Libros</h1>
+                    <p>Administra tu catálogo de libros.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== NOTIFICACIONES ===== -->
+    <div id="notification" class="notification"></div>
+
+    <!-- ===== JAVASCRIPT UNIFICADO CON CORRECCIONES ===== -->
     <script>
-        // Variables globales - CON TUS DATOS
-        let cart = [];
+        // ===== CONFIGURACIÓN DEL SISTEMA =====
+        const SYSTEM_CONFIG = {
+            sistema: "Curiosidades Culinarias Cuba v2.0",
+            version: "1.0.0",
+            descripcion: "Sistema de venta de libros PDF con pagos en CUP para Cuba",
+            ultima_actualizacion: new Date().toISOString().split('T')[0],
+            zona_horaria: "America/Havana",
+            moneda_cuba: "CUP",
+            moneda_internacional: "USD",
+            tasas_cambio: {
+                usd_a_cup: 25,
+                libros: {
+                    LIB001: { cup: 250, usd: 9.99 },
+                    LIB002: { cup: 200, usd: 7.99 },
+                    LIB003: { cup: 175, usd: 6.99 }
+                }
+            }
+        };
+
+        // ===== VARIABLES GLOBALES =====
+        let salesData = [];
+        let currentView = 'public';
+        let adminLoggedIn = false;
+        let salesCounter = 42;
+        let cubaSalesCounter = 18;
+        let revenueCounter = 1250;
+        let selectedBook = null;
+        let selectedLocation = null;
+        let selectedPaymentMethod = null;
+        let currentPurchaseId = 'CC-' + Math.floor(1000 + Math.random() * 9000);
         let currentMode = 'cuba'; // 'cuba' o 'international'
-        let selectedPaymentMethod = '';
-        let orderCounter = 10000;
 
-        // Elementos del DOM
-        const cubaModeBtn = document.getElementById('cubaModeBtn');
-        const internationalModeBtn = document.getElementById('internationalModeBtn');
-        const currentModeText = document.getElementById('currentModeText');
-        const cartItemsContainer = document.getElementById('cartItemsContainer');
-        const emptyCartMessage = document.getElementById('emptyCartMessage');
-        const cartTotalAmount = document.getElementById('cartTotalAmount');
-        const checkoutButton = document.getElementById('checkoutButton');
-        const cubaModal = document.getElementById('cubaModal');
-        const confirmCubaOrder = document.getElementById('confirmCubaOrder');
-        const cubaOrderNumber = document.getElementById('cubaOrderNumber');
-        const internationalModal = document.getElementById('internationalModal');
-        const submitInternationalOrder = document.getElementById('submitInternationalOrder');
-        const cancelInternationalOrder = document.getElementById('cancelInternationalOrder');
-        const backToShop = document.getElementById('backToShop');
-        const checkoutFormContainer = document.getElementById('checkoutFormContainer');
-        const confirmationMessage = document.getElementById('confirmationMessage');
-        const internationalOrderNumber = document.getElementById('internationalOrderNumber');
-        const notification = document.getElementById('notification');
-
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCart();
-            updateCartDisplay();
-            setupEventListeners();
-            setMode('cuba');
-        });
-
-        // Configurar event listeners - CORREGIDO
-        function setupEventListeners() {
-            // Añadir al carrito
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', addToCart);
-            });
+        // ===== FUNCIONES DE HORA DE CUBA =====
+        function getCubaTime() {
+            const now = new Date();
+            const cubaTime = new Date(now.toLocaleString("en-US", {timeZone: "America/Havana"}));
             
-            // Modos de compra - FIJADO (no cambia automáticamente)
-            cubaModeBtn.addEventListener('click', () => setMode('cuba'));
-            internationalModeBtn.addEventListener('click', () => setMode('international'));
+            const options = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false 
+            };
             
-            // Checkout
-            checkoutButton.addEventListener('click', processCheckout);
+            const dateOptions = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
             
-            // Modal Cuba - CORREGIDO (no se atasca)
-            confirmCubaOrder.addEventListener('click', () => {
-                closeModal(cubaModal);
-                clearCart();
-                showNotification('¡Compra exitosa! Los PDFs llegarán a tu email.', 'success');
-            });
-            
-            // Modal Internacional
-            submitInternationalOrder.addEventListener('click', processInternationalOrder);
-            cancelInternationalOrder.addEventListener('click', () => closeModal(internationalModal));
-            backToShop.addEventListener('click', () => {
-                closeModal(internationalModal);
-                clearCart();
-                showNotification('¡Gracias por tu compra! Revisa tu email para los PDFs.', 'success');
-            });
-            
-            // Métodos de pago
-            document.querySelectorAll('.payment-method').forEach(method => {
-                method.addEventListener('click', selectPaymentMethod);
-            });
-            
-            // Cerrar modales al hacer clic fuera - CORREGIDO
-            document.querySelectorAll('.modal-overlay').forEach(overlay => {
-                overlay.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        closeModal(this);
-                    }
-                });
-            });
+            return {
+                time: cubaTime.toLocaleTimeString('es-CU', options),
+                date: cubaTime.toLocaleDateString('es-CU', dateOptions),
+                full: cubaTime
+            };
         }
 
-        // Establecer modo - CORREGIDO (no cambia solo)
+        function updateCubaTime() {
+            const cubaTime = getCubaTime();
+            const cubaTimeElement = document.getElementById('cuba-time');
+            if (cubaTimeElement) {
+                cubaTimeElement.textContent = cubaTime.time;
+            }
+            
+            if (document.getElementById('adminCubaTime')) {
+                document.getElementById('adminCubaTime').textContent = cubaTime.time;
+                document.getElementById('cubaDate').textContent = cubaTime.date;
+            }
+        }
+
+        // ===== SISTEMA DE MODOS (CORREGIDO) =====
+        function initModeSystem() {
+            const cubaModeBtn = document.getElementById('cubaModeBtn');
+            const internationalModeBtn = document.getElementById('internationalModeBtn');
+            const currentModeText = document.getElementById('currentModeText');
+            
+            if (cubaModeBtn && internationalModeBtn && currentModeText) {
+                cubaModeBtn.addEventListener('click', () => setMode('cuba'));
+                internationalModeBtn.addEventListener('click', () => setMode('international'));
+                
+                // Cargar modo guardado
+                const savedMode = localStorage.getItem('storeMode');
+                if (savedMode) {
+                    setMode(savedMode);
+                } else {
+                    setMode('cuba');
+                }
+            }
+        }
+        
         function setMode(mode) {
             currentMode = mode;
             
             // Actualizar botones
-            cubaModeBtn.classList.toggle('active', mode === 'cuba');
-            internationalModeBtn.classList.toggle('active', mode === 'international');
+            const cubaModeBtn = document.getElementById('cubaModeBtn');
+            const internationalModeBtn = document.getElementById('internationalModeBtn');
+            const currentModeText = document.getElementById('currentModeText');
             
-            // Actualizar texto
-            currentModeText.innerHTML = `Modo actual: <span style="color: ${mode === 'cuba' ? '#0066cc' : '#27ae60'};">Compra ${mode === 'cuba' ? 'desde Cuba' : 'Internacional'}</span>`;
-            
-            // Actualizar botón de checkout
-            checkoutButton.textContent = mode === 'cuba' 
-                ? 'Proceder a Compra (Modo Cuba)' 
-                : 'Proceder a Pago Internacional';
-            
-            // Guardar en localStorage
-            localStorage.setItem('storeMode', mode);
-            
-            showNotification(`Modo ${mode === 'cuba' ? 'Cuba' : 'Internacional'} activado`, 'success');
+            if (cubaModeBtn && internationalModeBtn && currentModeText) {
+                cubaModeBtn.classList.toggle('active', mode === 'cuba');
+                internationalModeBtn.classList.toggle('active', mode === 'international');
+                
+                // Actualizar texto
+                currentModeText.innerHTML = `Modo actual: <span style="color: ${mode === 'cuba' ? 'var(--cuban-red)' : 'var(--success)'};">Compra ${mode === 'cuba' ? 'desde Cuba' : 'Internacional'}</span>`;
+                
+                // Guardar en localStorage
+                localStorage.setItem('storeMode', mode);
+                
+                showNotification(`Modo ${mode === 'cuba' ? 'Cuba' : 'Internacional'} activado`, 'success');
+            }
         }
 
-        // Añadir al carrito
-        function addToCart(e) {
-            const productId = e.target.getAttribute('data-id');
-            const productName = e.target.getAttribute('data-name');
-            const productPrice = parseFloat(e.target.getAttribute('data-price'));
-            
-            const existingItem = cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    id: productId,
-                    name: productName,
-                    price: productPrice,
-                    quantity: 1
-                });
-            }
-            
-            saveCart();
-            updateCartDisplay();
-            showNotification(`"${productName}" añadido al carrito`, 'success');
-        }
-
-        // Actualizar carrito
-        function updateCartDisplay() {
-            cartItemsContainer.innerHTML = '';
-            
-            if (cart.length === 0) {
-                cartItemsContainer.appendChild(emptyCartMessage);
-                emptyCartMessage.classList.remove('hidden');
-                checkoutButton.classList.add('hidden');
-                cartTotalAmount.textContent = '0.00';
-                return;
-            }
-            
-            emptyCartMessage.classList.add('hidden');
-            let total = 0;
-            
-            cart.forEach(item => {
-                total += item.price * item.quantity;
-                
-                const cartItem = document.createElement('div');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = `
-                    <div class="cart-item-info">
-                        <h4>${item.name}</h4>
-                        <div>Cantidad: ${item.quantity} × $${item.price.toFixed(2)}</div>
-                    </div>
-                    <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
-                `;
-                cartItemsContainer.appendChild(cartItem);
-            });
-            
-            cartTotalAmount.textContent = total.toFixed(2);
-            checkoutButton.classList.remove('hidden');
-        }
-
-        // Procesar checkout - CORREGIDO
-        function processCheckout() {
-            if (cart.length === 0) {
-                showNotification('El carrito está vacío', 'error');
-                return;
-            }
-            
-            if (currentMode === 'cuba') {
-                // Modo Cuba - SIMULACIÓN MEJORADA
-                const orderNum = 'CUB-' + (++orderCounter).toString().substr(-5);
-                cubaOrderNumber.textContent = orderNum;
-                
-                openModal(cubaModal);
-                
-                // AUTO-CIERRE después de 5 segundos (SOLUCIÓN al problema)
-                setTimeout(() => {
-                    if (cubaModal.classList.contains('active')) {
-                        closeModal(cubaModal);
-                        clearCart();
-                        showNotification('Compra procesada automáticamente. Revisa tu email.', 'success');
+        // ===== SISTEMA DE COMPRAS (CORREGIDO) =====
+        function initPurchaseSystem() {
+            document.querySelectorAll('.buy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    selectedBook = {
+                        title: this.getAttribute('data-book'),
+                        price: this.getAttribute('data-price'),
+                        cupPrice: this.getAttribute('data-cup'),
+                        id: this.getAttribute('data-id')
+                    };
+                    
+                    document.getElementById('bookTitle').textContent = selectedBook.title;
+                    document.getElementById('bookPrice').textContent = '$' + selectedBook.price + ' USD';
+                    document.getElementById('cupPrice').textContent = selectedBook.cupPrice + ' CUP';
+                    document.getElementById('finalCupPrice').textContent = selectedBook.cupPrice + ' CUP';
+                    
+                    // Resetear modal
+                    document.getElementById('successMessage').style.display = 'none';
+                    document.getElementById('downloadSection').style.display = 'none';
+                    document.getElementById('cubaPaymentStep').style.display = 'none';
+                    document.getElementById('internationalPaymentStep').style.display = 'none';
+                    document.getElementById('confirmPurchase').style.display = 'none';
+                    document.getElementById('confirmPurchase').disabled = false;
+                    document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-check"></i> Confirmar Compra';
+                    
+                    // Mostrar modal
+                    document.getElementById('purchaseModal').style.display = 'flex';
+                    
+                    // Auto-seleccionar según modo actual
+                    if (currentMode === 'cuba') {
+                        selectLocation('cuba');
+                    } else {
+                        selectLocation('internacional');
                     }
-                }, 5000);
-                
-            } else {
-                // Modo Internacional
-                openModal(internationalModal);
-                checkoutFormContainer.classList.remove('hidden');
-                confirmationMessage.classList.add('hidden');
-                
-                // Resetear formulario
-                document.getElementById('customerName').value = '';
-                document.getElementById('customerEmail').value = '';
-                selectedPaymentMethod = '';
-                document.querySelectorAll('.payment-method').forEach(m => {
-                    m.classList.remove('selected');
                 });
-            }
-        }
-
-        // Abrir modal
-        function openModal(modal) {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Cerrar modal - CORREGIDO
-        function closeModal(modal) {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Seleccionar método de pago
-        function selectPaymentMethod(e) {
-            selectedPaymentMethod = e.currentTarget.getAttribute('data-method');
-            
-            document.querySelectorAll('.payment-method').forEach(m => {
-                m.classList.remove('selected');
             });
-            e.currentTarget.classList.add('selected');
             
-            document.getElementById('paymentMethod').value = selectedPaymentMethod;
+            // Cerrar modal
+            document.querySelector('.close-modal').addEventListener('click', function() {
+                closePurchaseModal();
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('purchaseModal');
+                if(e.target === modal) {
+                    closePurchaseModal();
+                }
+            });
+        }
+        
+        function closePurchaseModal() {
+            document.getElementById('purchaseModal').style.display = 'none';
+            resetPurchaseModal();
         }
 
-        // Procesar orden internacional
-        function processInternationalOrder() {
-            const name = document.getElementById('customerName').value.trim();
-            const email = document.getElementById('customerEmail').value.trim();
+        function selectLocation(location) {
+            selectedLocation = location;
             
-            if (!name || !email || !selectedPaymentMethod) {
-                showNotification('Por favor completa todos los campos', 'error');
-                return;
+            if (location === 'cuba') {
+                document.getElementById('cubaPaymentStep').style.display = 'block';
+                document.getElementById('internationalPaymentStep').style.display = 'none';
+                document.getElementById('confirmPurchase').style.display = 'block';
+                document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-check"></i> Confirmar Compra desde Cuba';
+                document.getElementById('confirmPurchase').onclick = confirmCubaPurchase;
+            } else {
+                document.getElementById('cubaPaymentStep').style.display = 'none';
+                document.getElementById('internationalPaymentStep').style.display = 'block';
+                document.getElementById('confirmPurchase').style.display = 'block';
+                document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-credit-card"></i> Confirmar y Pagar';
+                document.getElementById('confirmPurchase').onclick = confirmInternationalPurchase;
             }
-            
-            if (!isValidEmail(email)) {
-                showNotification('Email inválido', 'error');
-                return;
-            }
-            
-            const orderNum = 'INT-' + (++orderCounter).toString().substr(-5);
-            internationalOrderNumber.textContent = orderNum;
-            
-            checkoutFormContainer.classList.add('hidden');
-            confirmationMessage.classList.remove('hidden');
-            
-            // Guardar orden
-            localStorage.setItem('lastOrder', JSON.stringify({
-                orderNum,
-                name,
-                email,
-                paymentMethod: selectedPaymentMethod,
-                date: new Date().toISOString(),
-                items: cart
-            }));
         }
 
-        // Mostrar notificación
-        function showNotification(message, type = 'success') {
-            notification.textContent = message;
-            notification.className = 'notification';
-            if (type === 'error') notification.classList.add('error');
-            notification.style.display = 'block';
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.payment-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+
+        function confirmCubaPurchase() {
+            document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+            document.getElementById('confirmPurchase').disabled = true;
             
             setTimeout(() => {
+                // Mostrar mensaje de éxito con AUTO-CIERRE
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('successMessageText').textContent = '¡Compra desde Cuba simulada correctamente!';
+                document.getElementById('downloadSection').style.display = 'block';
+                document.getElementById('downloadInfo').textContent = 'En un caso real, enviarías el comprobante por WhatsApp para recibir el PDF.';
+                document.getElementById('confirmPurchase').style.display = 'none';
+                
+                // Registrar la venta desde Cuba
+                registerCubaSale(selectedBook);
+                
+                // Actualizar estadísticas
+                updateSalesCounter(true);
+                
+                // Generar nuevo ID para la próxima compra
+                currentPurchaseId = 'CC-' + Math.floor(1000 + Math.random() * 9000);
+                
+                // AUTO-CIERRE después de 3 segundos (SOLUCIÓN AL PROBLEMA)
+                setTimeout(() => {
+                    closePurchaseModal();
+                    showNotification('Compra desde Cuba procesada correctamente', 'success');
+                }, 3000);
+                
+            }, 1500);
+        }
+
+        function confirmInternationalPurchase() {
+            const email = document.getElementById('customerEmail').value;
+            
+            if (!email || !validateEmail(email)) {
+                alert('Por favor ingresa un email válido');
+                return;
+            }
+            
+            if (!selectedPaymentMethod) {
+                alert('Por favor selecciona un método de pago');
+                return;
+            }
+            
+            document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando pago...';
+            document.getElementById('confirmPurchase').disabled = true;
+            
+            setTimeout(() => {
+                // Mostrar mensaje de éxito con AUTO-CIERRE
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('successMessageText').textContent = '¡Pago internacional procesado correctamente!';
+                document.getElementById('downloadSection').style.display = 'block';
+                document.getElementById('downloadInfo').textContent = 'El PDF también ha sido enviado a tu email.';
+                document.getElementById('confirmPurchase').style.display = 'none';
+                
+                // Registrar la venta internacional
+                registerInternationalSale(selectedBook, email);
+                
+                // Actualizar estadísticas
+                updateSalesCounter(false);
+                
+                // Generar nuevo ID para la próxima compra
+                currentPurchaseId = 'CC-' + Math.floor(1000 + Math.random() * 9000);
+                
+                // AUTO-CIERRE después de 3 segundos (SOLUCIÓN AL PROBLEMA)
+                setTimeout(() => {
+                    closePurchaseModal();
+                    showNotification('Compra internacional procesada correctamente', 'success');
+                }, 3000);
+                
+            }, 2000);
+        }
+
+        function downloadPDF() {
+            const pdfContent = `
+                =================================
+                CURIOSIDADES CULINARIAS - CUBA
+                =================================
+                
+                LIBRO: ${selectedBook.title}
+                ID DE COMPRA: ${currentPurchaseId}
+                FECHA: ${getCubaTime().date}
+                HORA: ${getCubaTime().time}
+                
+                🇨🇺 ¡Gracias por tu compra desde Cuba!
+                
+                Este libro fue creado utilizando
+                Inteligencia Artificial (ChatGPT)
+                como herramienta creativa.
+                
+                Contacto en Cuba:
+                📱 WhatsApp: +53 5xxx xxxx
+                📧 Email: culinariascuriosidades4@gmail.com
+                
+                =================================
+                ¡Disfruta de la cocina con IA!
+                =================================
+            `;
+            
+            const blob = new Blob([pdfContent], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Curiosidades-Culinarias-${selectedBook.id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('¡PDF descargado correctamente!', 'success');
+            
+            setTimeout(() => {
+                closePurchaseModal();
+            }, 1000);
+        }
+
+        function registerCubaSale(book) {
+            const sale = {
+                id: currentPurchaseId,
+                libro: book.title,
+                precio: book.cupPrice + ' CUP',
+                ubicacion: 'Cuba',
+                fecha: getCubaTime().full.toLocaleString('es-CU'),
+                estado: 'Pendiente confirmación',
+                tipo: 'Cuba'
+            };
+            
+            salesData.unshift(sale);
+            cubaSalesCounter++;
+            updatePublicView();
+        }
+
+        function registerInternationalSale(book, email) {
+            const sale = {
+                id: currentPurchaseId,
+                libro: book.title,
+                precio: '$' + book.price + ' USD',
+                email: email,
+                ubicacion: 'Internacional',
+                fecha: new Date().toLocaleString(),
+                estado: 'Completado',
+                tipo: 'Internacional'
+            };
+            
+            salesData.unshift(sale);
+            updatePublicView();
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function resetPurchaseModal() {
+            document.getElementById('confirmPurchase').innerHTML = '<i class="fas fa-check"></i> Confirmar Compra';
+            document.getElementById('confirmPurchase').disabled = false;
+            document.getElementById('confirmPurchase').style.display = 'block';
+            document.getElementById('customerEmail').value = '';
+            selectedLocation = null;
+            selectedPaymentMethod = null;
+            document.querySelectorAll('.payment-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+        }
+
+        // ===== SISTEMA DE NOTIFICACIONES =====
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+            
+            notification.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.style.display = 'block';
+            
+            // Auto-ocultar después de 4 segundos
+            setTimeout(() => {
                 notification.style.display = 'none';
+                notification.className = 'notification';
             }, 4000);
         }
 
-        // Validar email
-        function isValidEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
-
-        // Guardar carrito
-        function saveCart() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
-
-        // Cargar carrito
-        function loadCart() {
-            const saved = localStorage.getItem('cart');
-            if (saved) {
-                cart = JSON.parse(saved);
+        // ===== SISTEMA DE SEGUIMIENTO =====
+        function updatePublicView() {
+            // Actualizar contadores
+            const publicSalesToday = document.getElementById('publicSalesToday');
+            const cubaSalesElement = document.getElementById('cubaSales');
+            const publicTopBook = document.getElementById('publicTopBook');
+            const publicTopBookSales = document.getElementById('publicTopBookSales');
+            
+            if (publicSalesToday) publicSalesToday.textContent = salesCounter;
+            if (cubaSalesElement) cubaSalesElement.textContent = cubaSalesCounter;
+            if (publicTopBook) publicTopBook.textContent = "Fusión Caribeña";
+            if (publicTopBookSales) publicTopBookSales.textContent = `${Math.floor(salesCounter/3)} vendidos`;
+            
+            if (adminLoggedIn) {
+                updateAdminView();
             }
         }
 
-        // Vaciar carrito
-        function clearCart() {
-            cart = [];
-            saveCart();
-            updateCartDisplay();
+        function simulateCubaSale() {
+            salesCounter++;
+            cubaSalesCounter++;
+            
+            const books = [
+                "Fusión Caribeña con IA", 
+                "Cocina Internacional AI", 
+                "Postres con Chat GPT"
+            ];
+            const ciudades = ["La Habana", "Santiago de Cuba", "Camagüey", "Holguín", "Santa Clara"];
+            
+            const newSale = {
+                id: 'C-' + (1000 + cubaSalesCounter),
+                libro: books[Math.floor(Math.random() * books.length)],
+                precio: (175 + Math.floor(Math.random() * 100)) + ' CUP',
+                ubicacion: ciudades[Math.floor(Math.random() * ciudades.length)],
+                fecha: getCubaTime().full.toLocaleString('es-CU'),
+                estado: 'Completado',
+                tipo: 'Cuba'
+            };
+            
+            salesData.unshift(newSale);
+            updatePublicView();
+            
+            // Agregar a la lista de ventas
+            const salesList = document.getElementById('publicSalesList');
+            if (salesList) {
+                const saleItem = document.createElement('div');
+                saleItem.className = 'sale-item new';
+                saleItem.innerHTML = `
+                    <div>
+                        <strong>"${newSale.libro}"</strong><br>
+                        <small style="color: #94a3b8;">${newSale.ubicacion} • ${newSale.precio}</small>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="color: var(--tracker-warning);">Cuba 🇨🇺</span><br>
+                        <small>Justo ahora</small>
+                    </div>
+                `;
+                salesList.prepend(saleItem);
+                
+                // Limitar a 10 items
+                if(salesList.children.length > 10) {
+                    salesList.removeChild(salesList.lastChild);
+                }
+            }
+            
+            showNotification('Venta desde Cuba simulada correctamente!', 'success');
         }
 
-        // Cargar modo guardado
-        const savedMode = localStorage.getItem('storeMode');
-        if (savedMode) {
-            setMode(savedMode);
+        function simulateSale() {
+            salesCounter++;
+            revenueCounter += 5 + Math.floor(Math.random() * 10);
+            
+            const books = [
+                "Fusión Caribeña con IA", 
+                "Cocina Internacional AI", 
+                "Postres con Chat GPT"
+            ];
+            const paises = ["México", "España", "Argentina", "Colombia", "Estados Unidos"];
+            
+            const newSale = {
+                id: 'I-' + (1000 + salesCounter - cubaSalesCounter),
+                libro: books[Math.floor(Math.random() * books.length)],
+                precio: '$' + (5 + Math.floor(Math.random() * 10)) + ' USD',
+                ubicacion: paises[Math.floor(Math.random() * paises.length)],
+                fecha: new Date().toLocaleString(),
+                estado: 'Completado',
+                tipo: 'Internacional'
+            };
+            
+            salesData.unshift(newSale);
+            updatePublicView();
+            
+            // Agregar a la lista de ventas
+            const salesList = document.getElementById('publicSalesList');
+            if (salesList) {
+                const saleItem = document.createElement('div');
+                saleItem.className = 'sale-item new';
+                saleItem.innerHTML = `
+                    <div>
+                        <strong>"${newSale.libro}"</strong><br>
+                        <small style="color: #94a3b8;">${newSale.ubicacion} • ${newSale.precio}</small>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="color: var(--tracker-success);">${newSale.ubicacion}</span><br>
+                        <small>Justo ahora</small>
+                    </div>
+                `;
+                salesList.prepend(saleItem);
+                
+                // Limitar a 10 items
+                if(salesList.children.length > 10) {
+                    salesList.removeChild(salesList.lastChild);
+                }
+            }
+            
+            showNotification('Venta internacional simulada correctamente!', 'success');
         }
+
+        function updateSalesCounter(isCuba) {
+            salesCounter++;
+            if (isCuba) {
+                cubaSalesCounter++;
+            } else {
+                revenueCounter += parseFloat(selectedBook.price);
+            }
+            updatePublicView();
+        }
+
+        // ===== SISTEMA ADMINISTRATIVO =====
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'flex';
+        }
+
+        function hideLogin() {
+            document.getElementById('loginScreen').style.display = 'none';
+        }
+
+        function login() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+            
+            if(user === 'admin' && pass === 'admin123') {
+                adminLoggedIn = true;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                updateAdminView();
+            } else {
+                alert('Credenciales incorrectas. Usuario: admin / Contraseña: admin123');
+            }
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function logout() {
+            adminLoggedIn = false;
+            hideAdminPanel();
+            document.getElementById('adminPass').value = '';
+        }
+
+        function showAdminSection(sectionId) {
+            document.querySelectorAll('.admin-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.menu-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId + 'Section').classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function updateAdminView() {
+            if (!adminLoggedIn) return;
+            
+            document.getElementById('adminSalesToday').textContent = salesCounter;
+            document.getElementById('adminCubaSales').textContent = cubaSalesCounter;
+            document.getElementById('adminRevenue').textContent = `$${revenueCounter} USD`;
+            document.getElementById('lastUpdate').textContent = getCubaTime().time;
+            
+            updateAdminSalesTable();
+        }
+
+        function updateAdminSalesTable() {
+            const table = document.getElementById('adminSalesTable');
+            if(!table) return;
+            
+            const recentSales = salesData.slice(0, 10);
+            table.innerHTML = recentSales.map(sale => `
+                <tr>
+                    <td>${sale.id}</td>
+                    <td>${sale.email || 'Cliente Cuba'}</td>
+                    <td>${sale.libro}</td>
+                    <td>${sale.precio}</td>
+                    <td>${sale.ubicacion}</td>
+                    <td>${sale.fecha}</td>
+                    <td>
+                        <span style="color: ${sale.estado === 'Completado' ? 'var(--tracker-success)' : 'var(--tracker-warning)'}">
+                            ${sale.estado}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function sendTestNotification() {
+            showNotification('📧 Notificación de prueba enviada correctamente', 'success');
+        }
+
+        // ===== FUNCIONES DE INICIALIZACIÓN =====
+        function initMobileMenu() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu');
+            const nav = document.querySelector('nav');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    nav.classList.toggle('active');
+                });
+            }
+            
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('active');
+                });
+            });
+        }
+
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if(this.getAttribute('href') === '#') return;
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        function initContactForm() {
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('¡Gracias por tu mensaje! Te responderé lo antes posible.', 'success');
+                    this.reset();
+                });
+            }
+        }
+
+        function initAdminAccess() {
+            const adminAccessBtn = document.getElementById('adminAccessBtn');
+            if (adminAccessBtn) {
+                adminAccessBtn.addEventListener('click', showLogin);
+            }
+        }
+
+        function initViewBooks() {
+            const viewBooksButton = document.getElementById('viewBooks');
+            if (viewBooksButton) {
+                viewBooksButton.addEventListener('click', function() {
+                    document.querySelector('#libros').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar componentes
+            initMobileMenu();
+            initSmoothScrolling();
+            initContactForm();
+            initAdminAccess();
+            initViewBooks();
+            initModeSystem();
+            initPurchaseSystem();
+            
+            // Inicializar datos
+            for(let i = 0; i < 3; i++) {
+                simulateCubaSale();
+                simulateSale();
+            }
+            
+            salesCounter = 42;
+            cubaSalesCounter = 18;
+            revenueCounter = 1250;
+            updatePublicView();
+            updateCubaTime();
+            
+            // Configurar intervalos de actualización
+            setInterval(updateCubaTime, 1000);
+            setInterval(updatePublicView, 30000);
+        });
     </script>
 </body>
 </html>
