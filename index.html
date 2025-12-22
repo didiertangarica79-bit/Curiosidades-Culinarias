@@ -589,7 +589,7 @@
             color: var(--cuban-blue);
         }
         
-        /* ===== CONTACTO Y PAGOS CUBA ===== */
+        /* ===== CONTACTO Y PAGOS ===== */
         .contact-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -652,7 +652,17 @@
             border-left: 4px solid var(--cuban-red);
         }
         
-        .payment-methods-cuba h4 {
+        /* MÉTODOS DE PAGO INTERNACIONALES (NUEVO) */
+        .payment-methods-international {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.05), rgba(52, 152, 219, 0.05));
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .payment-methods-cuba h4,
+        .payment-methods-international h4 {
             color: var(--cuban-blue);
             margin-bottom: 15px;
             display: flex;
@@ -669,11 +679,21 @@
             background: white;
             border-radius: 8px;
             border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .payment-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
         .payment-option i {
             color: var(--cuban-blue);
             font-size: 1.5rem;
+        }
+        
+        .payment-option.international i {
+            color: var(--success);
         }
         
         .payment-details {
@@ -693,6 +713,15 @@
         
         .cup-badge {
             background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .usd-badge {
+            background: linear-gradient(to right, var(--success), #219653);
             color: white;
             padding: 3px 8px;
             border-radius: 10px;
@@ -1307,7 +1336,7 @@
                 <ul>
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#libros">Libros PDF</a></li>
-                    <li><a href="#pagos-cuba">Pagos en Cuba</a></li>
+                    <li><a href="#pagos">Pagos</a></li>
                     <li><a href="#seguimiento">Estadísticas</a></li>
                     <li><a href="#sobre">Sobre Didiert</a></li>
                     <li><a href="#contacto">Contacto</a></li>
@@ -1330,8 +1359,8 @@
                 <button class="cta-button" id="viewBooks">
                     <i class="fas fa-shopping-cart"></i> Ver Libros
                 </button>
-                <a href="#pagos-cuba" class="secondary-button">
-                    <i class="fas fa-money-bill-wave"></i> Pagar en CUP
+                <a href="#pagos" class="secondary-button">
+                    <i class="fas fa-money-bill-wave"></i> Métodos de Pago
                 </a>
                 <a href="https://youtube.com/@didiertangarica" target="_blank" class="secondary-button">
                     <i class="fab fa-youtube"></i> Mi Canal YouTube
@@ -1440,16 +1469,17 @@
         </div>
     </section>
 
-    <!-- ===== PAGOS EN CUBA ===== -->
-    <section id="pagos-cuba" style="background-color: #f8f9fa;">
+    <!-- ===== PAGOS (CUBA + INTERNACIONAL) ===== -->
+    <section id="pagos" style="background-color: #f8f9fa;">
         <div class="container">
             <div class="section-title">
-                <h2>Pagos desde Cuba 🇨🇺</h2>
-                <p>Múltiples opciones para comprar desde Cuba pagando en CUP (Peso Cubano)</p>
+                <h2>Métodos de Pago</h2>
+                <p>Aceptamos pagos desde Cuba (CUP) y a nivel internacional (USD)</p>
             </div>
             
+            <!-- PAGOS DESDE CUBA -->
             <div class="payment-methods-cuba">
-                <h4><i class="fas fa-wallet"></i> Métodos de Pago Disponibles en Cuba</h4>
+                <h4><i class="fas fa-wallet"></i> Métodos de Pago en Cuba 🇨🇺</h4>
                 
                 <div class="payment-option">
                     <i class="fas fa-mobile-alt"></i>
@@ -1466,7 +1496,7 @@
                     <div class="payment-details">
                         <h5>Transferencia Bancaria</h5>
                         <p><strong>Banco:</strong> Banco Metropolitano</p>
-                        <p><strong>Cuenta:</strong> 9204-9598-7734-2917/p>
+                        <p><strong>Cuenta:</strong> 9204-9598-7734-2917</p>
                         <p><strong>Titular:</strong> Didiert Angarica</p>
                         <span class="cup-badge">Pago en CUP</span>
                     </div>
@@ -1478,7 +1508,7 @@
                         <h5>Envio Nacional</h5>
                         <p><strong>Western Union Cuba</strong></p>
                         <p><strong>A nombre de:</strong> Didiert Angarica</p>
-                        <p><strong>Documento:</strong> 79042207467</p>
+                        <p><strong>Documento:</strong> 79042207467/p>
                         <span class="cup-badge">Pago en CUP</span>
                     </div>
                 </div>
@@ -1487,12 +1517,128 @@
                     <h5><i class="fas fa-info-circle"></i> Instrucciones para pagar desde Cuba:</h5>
                     <ol style="margin-left: 20px; margin-top: 10px; color: #555;">
                         <li>Selecciona el libro que quieres comprar</li>
-                        <li>Elige la opción "Pago desde Cuba" en el checkout</li>
+                        <li>Elige la opción "Pago desde Cuba"</li>
                         <li>Realiza el pago usando uno de los métodos arriba</li>
                         <li>Envía el comprobante por WhatsApp o email</li>
                         <li>Recibirás el PDF inmediatamente después de confirmar el pago</li>
                     </ol>
                 </div>
+            </div>
+            
+            <!-- PAGOS INTERNACIONALES (NUEVO) -->
+            <div class="payment-methods-international">
+                <h4><i class="fas fa-globe-americas"></i> Métodos de Pago Internacional 🌍</h4>
+                
+                <div class="payment-option international">
+                    <i class="fab fa-paypal"></i>
+                    <div class="payment-details">
+                        <h5>PayPal</h5>
+                        <p><strong>Email de PayPal:</strong> didiertangarica79@gmail.com</p>
+                        <p><strong>Nombre:</strong> Didiert Angarica</p>
+                        <span class="usd-badge">Pago en USD</span>
+                    </div>
+                </div>
+                
+                <div class="payment-option international">
+                    <i class="fas fa-credit-card"></i>
+                    <div class="payment-details">
+                        <h5>Tarjetas Internacionales</h5>
+                        <p><strong>Aceptamos:</strong> Visa, MasterCard, American Express</p>
+                        <p><strong>Procesador seguro:</strong> Stripe</p>
+                        <span class="usd-badge">Pago en USD</span>
+                    </div>
+                </div>
+                
+                <div class="payment-option international">
+                    <i class="fas fa-university"></i>
+                    <div class="payment-details">
+                        <h5>Transferencia Bancaria Internacional</h5>
+                        <p><strong>SWIFT/BIC:</strong> Por solicitud</p>
+                        <p><strong>IBAN:</strong> Por solicitud</p>
+                        <p><strong>Banco:</strong> Banco Internacional</p>
+                        <span class="usd-badge">Pago en USD</span>
+                    </div>
+                </div>
+                
+                <div class="payment-option international">
+                    <i class="fab fa-bitcoin"></i>
+                    <div class="payment-details">
+                        <h5>Criptomonedas</h5>
+                        <p><strong>Aceptamos:</strong> Bitcoin, Ethereum, USDT</p>
+                        <p><strong>Wallet:</strong> Por solicitud</p>
+                        <span class="usd-badge">Pago en USD</span>
+                    </div>
+                </div>
+                
+                <div class="payment-option international">
+                    <i class="fas fa-money-check-alt"></i>
+                    <div class="payment-details">
+                        <h5>Western Union Internacional</h5>
+                        <p><strong>País:</strong> Estados Unidos</p>
+                        <p><strong>Nombre:</strong> Didiert Angarica</p>
+                        <p><strong>Ciudad:</strong> Miami, FL</p>
+                        <span class="usd-badge">Pago en USD</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(39, 174, 96, 0.1); border-radius: 8px;">
+                    <h5><i class="fas fa-info-circle"></i> Instrucciones para pago internacional:</h5>
+                    <ol style="margin-left: 20px; margin-top: 10px; color: #555;">
+                        <li>Selecciona el libro que quieres comprar</li>
+                        <li>Elige la opción "Pago Internacional"</li>
+                        <li>Ingresa tu email para recibir el PDF</li>
+                        <li>Selecciona tu método de pago preferido</li>
+                        <li>Recibirás el PDF inmediatamente después del pago confirmado</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- COMPARACIÓN DE MÉTODOS -->
+            <div style="margin-top: 40px; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <h4 style="color: var(--cuban-blue); margin-bottom: 20px; text-align: center;">
+                    <i class="fas fa-balance-scale"></i> Comparación de Métodos de Pago
+                </h4>
+                
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red)); color: white;">
+                            <th style="padding: 12px; text-align: left;">Método</th>
+                            <th style="padding: 12px; text-align: center;">Disponible para</th>
+                            <th style="padding: 12px; text-align: center;">Moneda</th>
+                            <th style="padding: 12px; text-align: center;">Tiempo de entrega</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 12px;"><strong>Transfermóvil</strong></td>
+                            <td style="padding: 12px; text-align: center;">🇨🇺 Cuba</td>
+                            <td style="padding: 12px; text-align: center;">CUP</td>
+                            <td style="padding: 12px; text-align: center;">Inmediato*</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 12px;"><strong>PayPal</strong></td>
+                            <td style="padding: 12px; text-align: center;">🌍 Internacional</td>
+                            <td style="padding: 12px; text-align: center;">USD</td>
+                            <td style="padding: 12px; text-align: center;">Inmediato</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 12px;"><strong>Tarjetas</strong></td>
+                            <td style="padding: 12px; text-align: center;">🌍 Internacional</td>
+                            <td style="padding: 12px; text-align: center;">USD</td>
+                            <td style="padding: 12px; text-align: center;">Inmediato</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px;"><strong>Western Union</strong></td>
+                            <td style="padding: 12px; text-align: center;">🌎 Todo el mundo</td>
+                            <td style="padding: 12px; text-align: center;">CUP/USD</td>
+                            <td style="padding: 12px; text-align: center;">1-2 horas</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p style="margin-top: 15px; font-size: 0.9rem; color: #666; text-align: center;">
+                    <small>* Inmediato después de confirmar el pago por WhatsApp/email</small>
+                </p>
             </div>
         </div>
     </section>
@@ -1576,7 +1722,7 @@
                     <img src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Didiert - Creador de contenido digital">
                 </div>
                 <div class="about-text">
-                    <h3>¡Hola! Soy Didiert Angarica</h3>
+                    <h3>¡Hola! Soy Didiert Tangarica</h3>
                     <p>Soy una persona que está comenzando su aventura en el mundo digital. Como muchos en Cuba, estoy explorando nuevas formas de creatividad y emprendimiento en internet.</p>
                     
                     <p>He creado este proyecto por dos razones principales: como una forma de entretenimiento creativo y como una posible fuente de sustento personal. Me apasiona la cocina y la tecnología, así que decidí unirlas.</p>
@@ -1626,11 +1772,22 @@
                         </div>
                         <div>
                             <h4>WhatsApp (Cuba)</h4>
-                            <p>+53 52494433</p>
+                            <p>+53 5xxx xxxx</p>
                             <a href="https://wa.me/5352494433" target="_blank" class="whatsapp-button">
                                 <i class="fab fa-whatsapp"></i> Escribir por WhatsApp
                             </a>
                             <p><small>Para confirmar pagos desde Cuba</small></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div>
+                            <h4>Soporte Internacional</h4>
+                            <p>didiertangarica79@gmail.com</p>
+                            <p><small>Para pagos PayPal e internacionales</small></p>
                         </div>
                     </div>
                     
@@ -1646,17 +1803,6 @@
                             </a>
                         </div>
                     </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-question-circle"></i>
-                        </div>
-                        <div>
-                            <h4>Soporte Técnico</h4>
-                            <p>didiertangarica79@gmail.com</p>
-                            <p><small>Para problemas con descargas o acceso</small></p>
-                        </div>
-                    </div>
                 </div>
                 
                 <div class="contact-form">
@@ -1669,6 +1815,7 @@
                             <option value="compra">Problema con una compra</option>
                             <option value="descarga">No puedo descargar mi libro</option>
                             <option value="pago-cuba">Consulta sobre pago desde Cuba</option>
+                            <option value="pago-internacional">Consulta sobre pago internacional</option>
                             <option value="otro">Otro asunto</option>
                         </select>
                         <textarea placeholder="Tu mensaje" required></textarea>
@@ -1699,7 +1846,7 @@
                     <ul class="footer-links">
                         <li><a href="#inicio">Inicio</a></li>
                         <li><a href="#libros">Libros PDF</a></li>
-                        <li><a href="#pagos-cuba">Pagos en Cuba</a></li>
+                        <li><a href="#pagos">Métodos de Pago</a></li>
                         <li><a href="#seguimiento">Estadísticas</a></li>
                         <li><a href="#sobre">Sobre Didiert</a></li>
                     </ul>
@@ -1719,15 +1866,18 @@
                     <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
                         <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">CUP</div>
                         <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">USD</div>
-                        <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">Transfermóvil</div>
+                        <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">PayPal</div>
+                        <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">Tarjetas</div>
+                        <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">Cripto</div>
+                        <div style="background: white; padding: 5px 10px; border-radius: 5px; color: var(--cuban-blue); font-weight: 600;">WU</div>
                     </div>
-                    <p style="font-size: 0.9rem; color: #bbb;">Pagos seguros desde Cuba</p>
+                    <p style="font-size: 0.9rem; color: #bbb;">Pagos seguros desde cualquier país</p>
                 </div>
             </div>
             
             <div class="copyright">
                 <p>&copy; 2023 Curiosidades Culinarias con Didiert. Contenido creado con IA. Todos los derechos reservados.</p>
-                <p style="margin-top: 10px; font-size: 0.8rem;">🇨🇺 Proyecto digital desde Cuba</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">🇨🇺 Proyecto digital desde Cuba • 🌍 Disponible mundialmente</p>
             </div>
         </div>
     </footer>
@@ -1792,7 +1942,7 @@
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h4>Selecciona método de pago</h4>
+                        <h4>Selecciona método de pago internacional</h4>
                         <div class="payment-methods">
                             <div class="payment-card" onclick="selectPaymentMethod('paypal')">
                                 <i class="fab fa-cc-paypal payment-icon"></i>
@@ -1801,6 +1951,14 @@
                             <div class="payment-card" onclick="selectPaymentMethod('card')">
                                 <i class="fas fa-credit-card payment-icon"></i>
                                 <span>Tarjeta Internacional</span>
+                            </div>
+                            <div class="payment-card" onclick="selectPaymentMethod('crypto')">
+                                <i class="fab fa-bitcoin payment-icon"></i>
+                                <span>Criptomonedas</span>
+                            </div>
+                            <div class="payment-card" onclick="selectPaymentMethod('wu')">
+                                <i class="fas fa-money-check-alt payment-icon"></i>
+                                <span>Western Union</span>
                             </div>
                         </div>
                     </div>
@@ -1874,8 +2032,8 @@
                 <button class="menu-item" onclick="showAdminSection('cuba')">
                     <i class="fas fa-flag"></i> Ventas Cuba
                 </button>
-                <button class="menu-item" onclick="showAdminSection('libros')">
-                    <i class="fas fa-book"></i> Libros
+                <button class="menu-item" onclick="showAdminSection('internacional')">
+                    <i class="fas fa-globe"></i> Ventas Internacional
                 </button>
                 <button class="menu-item" onclick="showAdminSection('config')">
                     <i class="fas fa-sliders-h"></i> Configuración
@@ -1914,9 +2072,9 @@
                             <p>Compras desde Cuba</p>
                         </div>
                         <div class="tracker-card">
-                            <h3><i class="fas fa-clock"></i> Hora Cuba</h3>
-                            <div class="countdown" id="adminCubaTime">00:00:00</div>
-                            <p><span id="cubaDate">Cargando...</span></p>
+                            <h3><i class="fas fa-globe"></i> Ventas Internacional</h3>
+                            <div class="stat-number" id="adminInternationalSales">0</div>
+                            <p>Compras internacionales</p>
                         </div>
                     </div>
 
@@ -1925,7 +2083,7 @@
                     <table class="admin-table">
                         <thead>
                             <tr>
-                                <th>ID</th><th>Cliente</th><th>Libro</th><th>Precio</th><th>Ubicación</th><th>Fecha</th><th>Estado</th>
+                                <th>ID</th><th>Cliente</th><th>Libro</th><th>Precio</th><th>Método</th><th>Fecha</th><th>Estado</th>
                             </tr>
                         </thead>
                         <tbody id="adminSalesTable">
@@ -1939,7 +2097,7 @@
                         <button class="tracker-btn" onclick="simulateCubaSale()">
                             <i class="fas fa-flag"></i> Simular Venta Cuba
                         </button>
-                        <button class="tracker-btn" onclick="simulateSale()">
+                        <button class="tracker-btn" onclick="simulateInternationalSale()">
                             <i class="fas fa-globe"></i> Simular Venta Intl
                         </button>
                         <button class="tracker-btn" onclick="sendTestNotification()" style="background: var(--tracker-success);">
@@ -1953,11 +2111,24 @@
                     <h1><i class="fas fa-flag"></i> Ventas desde Cuba</h1>
                     <div style="background: rgba(0, 32, 91, 0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                         <h3><i class="fas fa-info-circle"></i> Información para pagos en Cuba</h3>
-                        <p><strong>Cuenta Transfermóvil:</strong> +53 52494433</p>
-                        <p><strong>Banco:</strong> Banco Metropolitano - Cuenta: 9204959877342917</p>
+                        <p><strong>Cuenta Transfermóvil:</strong> +53 52494433/p>
+                        <p><strong>Banco:</strong> Banco Metropolitano - Cuenta: 9204-9598-7734-2917/p>
                         <p><strong>WhatsApp para confirmaciones:</strong> +53 52494433/p>
                     </div>
                     <p>Gestiona todas las ventas realizadas desde Cuba.</p>
+                </div>
+                
+                <!-- VENTAS INTERNACIONALES (NUEVO) -->
+                <div id="internacionalSection" class="admin-section">
+                    <h1><i class="fas fa-globe"></i> Ventas Internacionales</h1>
+                    <div style="background: rgba(39, 174, 96, 0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h3><i class="fas fa-info-circle"></i> Información para pagos internacionales</h3>
+                        <p><strong>PayPal:</strong> didiertangarica79@gmail.com</p>
+                        <p><strong>Tarjetas:</strong> Procesadas via Stripe</p>
+                        <p><strong>Western Union Internacional:</strong> Datos por solicitud</p>
+                        <p><strong>Criptomonedas:</strong> Wallets por solicitud</p>
+                    </div>
+                    <p>Gestiona todas las ventas realizadas internacionalmente.</p>
                 </div>
                 
                 <!-- OTRAS SECCIONES -->
@@ -1966,9 +2137,9 @@
                     <p>Gestiona todas las ventas realizadas.</p>
                 </div>
                 
-                <div id="librosSection" class="admin-section">
-                    <h1><i class="fas fa-book"></i> Gestión de Libros</h1>
-                    <p>Administra tu catálogo de libros.</p>
+                <div id="configSection" class="admin-section">
+                    <h1><i class="fas fa-sliders-h"></i> Configuración</h1>
+                    <p>Configura los parámetros del sistema.</p>
                 </div>
             </div>
         </div>
@@ -1977,13 +2148,13 @@
     <!-- ===== NOTIFICACIONES ===== -->
     <div id="notification" class="notification"></div>
 
-    <!-- ===== JAVASCRIPT UNIFICADO CON CORRECCIONES ===== -->
+    <!-- ===== JAVASCRIPT UNIFICADO CON CORRECCIONES Y MÉTODOS INTERNACIONALES ===== -->
     <script>
         // ===== CONFIGURACIÓN DEL SISTEMA =====
         const SYSTEM_CONFIG = {
             sistema: "Curiosidades Culinarias Cuba v2.0",
             version: "1.0.0",
-            descripcion: "Sistema de venta de libros PDF con pagos en CUP para Cuba",
+            descripcion: "Sistema de venta de libros PDF con pagos en CUP para Cuba y USD internacional",
             ultima_actualizacion: new Date().toISOString().split('T')[0],
             zona_horaria: "America/Havana",
             moneda_cuba: "CUP",
@@ -1995,6 +2166,12 @@
                     LIB002: { cup: 200, usd: 7.99 },
                     LIB003: { cup: 175, usd: 6.99 }
                 }
+            },
+            metodos_pago_internacional: {
+                paypal: { email: "didiertangarica79@gmail.com", activo: true },
+                tarjetas: { procesador: "Stripe", activo: true },
+                crypto: { btc: "1ABC...", eth: "0xDEF...", usdt: "TRC20...", activo: true },
+                western_union: { pais: "USA", ciudad: "Miami", activo: true }
             }
         };
 
@@ -2004,6 +2181,7 @@
         let adminLoggedIn = false;
         let salesCounter = 42;
         let cubaSalesCounter = 18;
+        let internationalSalesCounter = 24;
         let revenueCounter = 1250;
         let selectedBook = null;
         let selectedLocation = null;
@@ -2046,7 +2224,6 @@
             
             if (document.getElementById('adminCubaTime')) {
                 document.getElementById('adminCubaTime').textContent = cubaTime.time;
-                document.getElementById('cubaDate').textContent = cubaTime.date;
             }
         }
 
@@ -2190,7 +2367,7 @@
                 registerCubaSale(selectedBook);
                 
                 // Actualizar estadísticas
-                updateSalesCounter(true);
+                updateSalesCounter('cuba');
                 
                 // Generar nuevo ID para la próxima compra
                 currentPurchaseId = 'CC-' + Math.floor(1000 + Math.random() * 9000);
@@ -2223,7 +2400,7 @@
             setTimeout(() => {
                 // Mostrar mensaje de éxito con AUTO-CIERRE
                 document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('successMessageText').textContent = '¡Pago internacional procesado correctamente!';
+                document.getElementById('successMessageText').textContent = `¡Pago internacional procesado correctamente! Método: ${selectedPaymentMethod}`;
                 document.getElementById('downloadSection').style.display = 'block';
                 document.getElementById('downloadInfo').textContent = 'El PDF también ha sido enviado a tu email.';
                 document.getElementById('confirmPurchase').style.display = 'none';
@@ -2232,7 +2409,7 @@
                 registerInternationalSale(selectedBook, email);
                 
                 // Actualizar estadísticas
-                updateSalesCounter(false);
+                updateSalesCounter('international');
                 
                 // Generar nuevo ID para la próxima compra
                 currentPurchaseId = 'CC-' + Math.floor(1000 + Math.random() * 9000);
@@ -2256,16 +2433,17 @@
                 ID DE COMPRA: ${currentPurchaseId}
                 FECHA: ${getCubaTime().date}
                 HORA: ${getCubaTime().time}
+                MÉTODO: ${selectedLocation === 'cuba' ? 'Pago desde Cuba (CUP)' : 'Pago Internacional (USD)'}
                 
-                🇨🇺 ¡Gracias por tu compra desde Cuba!
+                ${selectedLocation === 'cuba' ? '🇨🇺 ¡Gracias por tu compra desde Cuba!' : '🌍 ¡Gracias por tu compra internacional!'}
                 
                 Este libro fue creado utilizando
                 Inteligencia Artificial (ChatGPT)
                 como herramienta creativa.
                 
-                Contacto en Cuba:
-                📱 WhatsApp: +53 52494433
-                📧 Email: culinariascuriosidades4@gmail.com
+                Contacto:
+                📱 WhatsApp Cuba: +53 52494433
+                📧 Email: ${selectedLocation === 'cuba' ? 'culinariascuriosidades4@gmail.com' : 'didiertangarica79@gmail.com'}
                 
                 =================================
                 ¡Disfruta de la cocina con IA!
@@ -2297,7 +2475,8 @@
                 ubicacion: 'Cuba',
                 fecha: getCubaTime().full.toLocaleString('es-CU'),
                 estado: 'Pendiente confirmación',
-                tipo: 'Cuba'
+                tipo: 'Cuba',
+                metodo: 'Transfermóvil/Banco'
             };
             
             salesData.unshift(sale);
@@ -2314,10 +2493,12 @@
                 ubicacion: 'Internacional',
                 fecha: new Date().toLocaleString(),
                 estado: 'Completado',
-                tipo: 'Internacional'
+                tipo: 'Internacional',
+                metodo: selectedPaymentMethod
             };
             
             salesData.unshift(sale);
+            internationalSalesCounter++;
             updatePublicView();
         }
 
@@ -2360,11 +2541,13 @@
             // Actualizar contadores
             const publicSalesToday = document.getElementById('publicSalesToday');
             const cubaSalesElement = document.getElementById('cubaSales');
+            const adminInternationalSales = document.getElementById('adminInternationalSales');
             const publicTopBook = document.getElementById('publicTopBook');
             const publicTopBookSales = document.getElementById('publicTopBookSales');
             
             if (publicSalesToday) publicSalesToday.textContent = salesCounter;
             if (cubaSalesElement) cubaSalesElement.textContent = cubaSalesCounter;
+            if (adminInternationalSales) adminInternationalSales.textContent = internationalSalesCounter;
             if (publicTopBook) publicTopBook.textContent = "Fusión Caribeña";
             if (publicTopBookSales) publicTopBookSales.textContent = `${Math.floor(salesCounter/3)} vendidos`;
             
@@ -2391,7 +2574,8 @@
                 ubicacion: ciudades[Math.floor(Math.random() * ciudades.length)],
                 fecha: getCubaTime().full.toLocaleString('es-CU'),
                 estado: 'Completado',
-                tipo: 'Cuba'
+                tipo: 'Cuba',
+                metodo: 'Transfermóvil'
             };
             
             salesData.unshift(newSale);
@@ -2423,8 +2607,9 @@
             showNotification('Venta desde Cuba simulada correctamente!', 'success');
         }
 
-        function simulateSale() {
+        function simulateInternationalSale() {
             salesCounter++;
+            internationalSalesCounter++;
             revenueCounter += 5 + Math.floor(Math.random() * 10);
             
             const books = [
@@ -2433,15 +2618,17 @@
                 "Postres con Chat GPT"
             ];
             const paises = ["México", "España", "Argentina", "Colombia", "Estados Unidos"];
+            const metodos = ["PayPal", "Tarjeta", "Crypto", "Western Union"];
             
             const newSale = {
-                id: 'I-' + (1000 + salesCounter - cubaSalesCounter),
+                id: 'I-' + (1000 + internationalSalesCounter),
                 libro: books[Math.floor(Math.random() * books.length)],
                 precio: '$' + (5 + Math.floor(Math.random() * 10)) + ' USD',
                 ubicacion: paises[Math.floor(Math.random() * paises.length)],
                 fecha: new Date().toLocaleString(),
                 estado: 'Completado',
-                tipo: 'Internacional'
+                tipo: 'Internacional',
+                metodo: metodos[Math.floor(Math.random() * metodos.length)]
             };
             
             salesData.unshift(newSale);
@@ -2455,7 +2642,7 @@
                 saleItem.innerHTML = `
                     <div>
                         <strong>"${newSale.libro}"</strong><br>
-                        <small style="color: #94a3b8;">${newSale.ubicacion} • ${newSale.precio}</small>
+                        <small style="color: #94a3b8;">${newSale.ubicacion} • ${newSale.precio} • ${newSale.metodo}</small>
                     </div>
                     <div style="text-align: right;">
                         <span style="color: var(--tracker-success);">${newSale.ubicacion}</span><br>
@@ -2473,11 +2660,22 @@
             showNotification('Venta internacional simulada correctamente!', 'success');
         }
 
-        function updateSalesCounter(isCuba) {
-            salesCounter++;
-            if (isCuba) {
-                cubaSalesCounter++;
+        // Función de simulación anterior (para compatibilidad)
+        function simulateSale() {
+            // Decidir aleatoriamente si es Cuba o Internacional
+            if (Math.random() > 0.5) {
+                simulateCubaSale();
             } else {
+                simulateInternationalSale();
+            }
+        }
+
+        function updateSalesCounter(type) {
+            salesCounter++;
+            if (type === 'cuba') {
+                cubaSalesCounter++;
+            } else if (type === 'international') {
+                internationalSalesCounter++;
                 revenueCounter += parseFloat(selectedBook.price);
             }
             updatePublicView();
@@ -2533,6 +2731,7 @@
             
             document.getElementById('adminSalesToday').textContent = salesCounter;
             document.getElementById('adminCubaSales').textContent = cubaSalesCounter;
+            document.getElementById('adminInternationalSales').textContent = internationalSalesCounter;
             document.getElementById('adminRevenue').textContent = `$${revenueCounter} USD`;
             document.getElementById('lastUpdate').textContent = getCubaTime().time;
             
@@ -2550,7 +2749,7 @@
                     <td>${sale.email || 'Cliente Cuba'}</td>
                     <td>${sale.libro}</td>
                     <td>${sale.precio}</td>
-                    <td>${sale.ubicacion}</td>
+                    <td>${sale.metodo || 'N/A'}</td>
                     <td>${sale.fecha}</td>
                     <td>
                         <span style="color: ${sale.estado === 'Completado' ? 'var(--tracker-success)' : 'var(--tracker-warning)'}">
@@ -2644,13 +2843,14 @@
             initPurchaseSystem();
             
             // Inicializar datos
-            for(let i = 0; i < 3; i++) {
+            for(let i = 0; i < 5; i++) {
                 simulateCubaSale();
-                simulateSale();
+                simulateInternationalSale();
             }
             
             salesCounter = 42;
             cubaSalesCounter = 18;
+            internationalSalesCounter = 24;
             revenueCounter = 1250;
             updatePublicView();
             updateCubaTime();
