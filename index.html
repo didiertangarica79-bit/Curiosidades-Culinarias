@@ -3,167 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Online - Venta desde Cuba e Internacional</title>
+    <title>Libros de Cocina en PDF - Recetas Profesionales</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Georgia', 'Times New Roman', serif;
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            background-color: #fff9f0;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header y Navegación */
+        .header {
+            background: linear-gradient(to right, #8B4513, #A0522D);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
         }
         
         .container {
+            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 15px;
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        .header h1 {
-            color: #2c3e50;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            color: #7f8c8d;
-            font-size: 1.1rem;
-        }
-        
-        .mode-selector {
+        .header-content {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+        
+        /* Selector de modo de compra */
+        .mode-selector {
+            background-color: #f5e9dc;
+            padding: 15px 0;
+            border-bottom: 2px solid #D2B48C;
+        }
+        
+        .mode-buttons {
+            display: flex;
+            gap: 15px;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
         }
         
         .mode-btn {
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 10px 25px;
             border: none;
-            border-radius: 10px;
+            border-radius: 25px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background-color: #ecf0f1;
-            color: #34495e;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            background-color: #A0522D;
+            color: white;
+            font-size: 1rem;
         }
         
         .mode-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
         
         .mode-btn.active {
-            background-color: #3498db;
-            color: white;
+            background-color: #8B4513;
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
         }
         
         .mode-btn.cuba {
-            background-color: #e74c3c;
-            color: white;
+            background-color: #0066CC;
         }
         
         .mode-btn.cuba.active {
-            background-color: #c0392b;
+            background-color: #004C99;
         }
         
-        .products-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 80px 0;
             margin-bottom: 40px;
         }
         
-        .product-card {
-            background-color: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: #FFD700;
         }
         
-        .product-card:hover {
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #f0f0f0;
+        }
+        
+        /* Catálogo de Libros */
+        .books-section {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            color: #8B4513;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background-color: #A0522D;
+            margin: 10px auto;
+        }
+        
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .book-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #e8d6c3;
+        }
+        
+        .book-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
         
-        .product-image {
+        .book-cover {
             height: 200px;
-            width: 100%;
-            background-color: #f8f9fa;
+            background-color: #f8f1e8;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            color: #bdc3c7;
+            font-size: 4.5rem;
+            color: #8B4513;
+            position: relative;
+            overflow: hidden;
         }
         
-        .product-info {
+        .book-cover:after {
+            content: 'PDF';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .book-info {
             padding: 20px;
         }
         
-        .product-title {
-            font-size: 1.3rem;
-            color: #2c3e50;
+        .book-title {
+            font-size: 1.4rem;
+            color: #8B4513;
             margin-bottom: 10px;
+            font-weight: bold;
         }
         
-        .product-description {
-            color: #7f8c8d;
+        .book-description {
+            color: #666;
             margin-bottom: 15px;
             font-size: 0.95rem;
+            line-height: 1.5;
         }
         
-        .product-price {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .book-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .book-price {
+            font-size: 1.8rem;
             color: #27ae60;
+            font-weight: bold;
             margin-bottom: 15px;
         }
         
         .add-to-cart {
             width: 100%;
             padding: 12px;
-            background-color: #3498db;
+            background-color: #A0522D;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-weight: 600;
+            border-radius: 5px;
+            font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
+            font-size: 1rem;
         }
         
         .add-to-cart:hover {
-            background-color: #2980b9;
+            background-color: #8B4513;
         }
         
+        /* Carrito de Compras */
         .cart-section {
             background-color: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             margin-top: 30px;
+            border: 2px solid #e8d6c3;
         }
         
         .cart-section h2 {
-            color: #2c3e50;
+            color: #8B4513;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #ecf0f1;
+            border-bottom: 2px solid #f0e6db;
+            font-size: 1.8rem;
         }
         
         .cart-items {
@@ -177,7 +285,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
-            border-bottom: 1px solid #ecf0f1;
+            border-bottom: 1px solid #f0e6db;
         }
         
         .cart-item:last-child {
@@ -185,23 +293,24 @@
         }
         
         .cart-item-info h4 {
-            color: #2c3e50;
+            color: #8B4513;
             margin-bottom: 5px;
+            font-size: 1.1rem;
         }
         
         .cart-item-price {
             color: #27ae60;
-            font-weight: 600;
+            font-weight: bold;
         }
         
         .cart-total {
             display: flex;
             justify-content: space-between;
             font-size: 1.5rem;
-            font-weight: 700;
-            color: #2c3e50;
+            font-weight: bold;
+            color: #8B4513;
             padding: 20px 0;
-            border-top: 2px solid #ecf0f1;
+            border-top: 2px solid #f0e6db;
             margin-top: 20px;
         }
         
@@ -211,9 +320,9 @@
             background-color: #27ae60;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 1.2rem;
-            font-weight: 700;
+            font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
             margin-top: 10px;
@@ -223,21 +332,19 @@
             background-color: #219653;
         }
         
-        .hidden {
-            display: none !important;
-        }
-        
+        /* Modal para Cuba */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0,0,0,0.7);
+            background-color: rgba(0,0,0,0.85);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 20px;
         }
         
         .modal {
@@ -246,18 +353,19 @@
             padding: 30px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border: 3px solid #A0522D;
         }
         
         .modal h3 {
-            color: #2c3e50;
+            color: #8B4513;
             margin-bottom: 20px;
             text-align: center;
             font-size: 1.8rem;
         }
         
         .modal p {
-            color: #7f8c8d;
+            color: #666;
             margin-bottom: 25px;
             text-align: center;
             line-height: 1.6;
@@ -273,60 +381,31 @@
             padding: 12px 30px;
             border-radius: 8px;
             border: none;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 1rem;
         }
         
         .modal-btn.primary {
-            background-color: #3498db;
+            background-color: #27ae60;
             color: white;
         }
         
         .modal-btn.primary:hover {
-            background-color: #2980b9;
+            background-color: #219653;
         }
         
         .modal-btn.secondary {
-            background-color: #ecf0f1;
-            color: #34495e;
+            background-color: #e0e0e0;
+            color: #333;
         }
         
         .modal-btn.secondary:hover {
-            background-color: #d5dbdb;
+            background-color: #d0d0d0;
         }
         
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #27ae60;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 1001;
-            animation: slideIn 0.5s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .notification.error {
-            background-color: #e74c3c;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
+        /* Formulario de pago internacional */
         .checkout-form {
             margin-top: 20px;
         }
@@ -338,8 +417,8 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #2c3e50;
-            font-weight: 600;
+            color: #8B4513;
+            font-weight: bold;
         }
         
         .form-group input, .form-group select {
@@ -352,7 +431,7 @@
         }
         
         .form-group input:focus, .form-group select:focus {
-            border-color: #3498db;
+            border-color: #A0522D;
             outline: none;
         }
         
@@ -373,14 +452,15 @@
         }
         
         .payment-method:hover {
-            border-color: #3498db;
+            border-color: #A0522D;
         }
         
         .payment-method.selected {
-            border-color: #3498db;
-            background-color: #f0f8ff;
+            border-color: #A0522D;
+            background-color: #f8f1e8;
         }
         
+        /* Mensaje de confirmación */
         .confirmation-message {
             text-align: center;
             padding: 30px 0;
@@ -402,20 +482,98 @@
             display: inline-block;
             margin-top: 20px;
             padding: 12px 25px;
-            background-color: #3498db;
+            background-color: #A0522D;
             color: white;
             text-decoration: none;
             border-radius: 8px;
-            font-weight: 600;
+            font-weight: bold;
             transition: background-color 0.3s;
         }
         
         .back-to-shop:hover {
-            background-color: #2980b9;
+            background-color: #8B4513;
         }
         
+        /* Footer */
+        .footer {
+            background-color: #8B4513;
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .footer p {
+            max-width: 600px;
+            color: #f0e6db;
+        }
+        
+        /* Clases utilitarias */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Notificaciones */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #27ae60;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1001;
+            animation: slideIn 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 400px;
+        }
+        
+        .notification.error {
+            background-color: #e74c3c;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
-            .mode-selector {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .mode-buttons {
                 flex-direction: column;
                 align-items: center;
             }
@@ -425,119 +583,201 @@
                 max-width: 300px;
             }
             
-            .products-section {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            .payment-methods {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Tienda Online</h1>
-            <p>Selecciona tu modo de compra: Desde Cuba o Internacional</p>
-        </div>
-        
-        <div class="mode-selector">
-            <button id="cubaMode" class="mode-btn cuba active">Compra desde Cuba</button>
-            <button id="internationalMode" class="mode-btn">Compra Internacional</button>
-        </div>
-        
-        <div class="products-section">
-            <div class="product-card">
-                <div class="product-image">
-                    📱
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">📚</div>
+                    <h1>Libros de Cocina en PDF</h1>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">Smartphone X10</h3>
-                    <p class="product-description">Teléfono inteligente con cámara de alta resolución y pantalla AMOLED.</p>
-                    <div class="product-price">$299</div>
-                    <button class="add-to-cart" data-id="1" data-name="Smartphone X10" data-price="299">Añadir al Carrito</button>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-image">
-                    💻
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Laptop Pro</h3>
-                    <p class="product-description">Laptop de alto rendimiento para trabajo y entretenimiento.</p>
-                    <div class="product-price">$899</div>
-                    <button class="add-to-cart" data-id="2" data-name="Laptop Pro" data-price="899">Añadir al Carrito</button>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-image">
-                    🎧
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Audífonos Bluetooth</h3>
-                    <p class="product-description">Audífonos inalámbricos con cancelación de ruido.</p>
-                    <div class="product-price">$129</div>
-                    <button class="add-to-cart" data-id="3" data-name="Audífonos Bluetooth" data-price="129">Añadir al Carrito</button>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-image">
-                    ⌚
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Smartwatch</h3>
-                    <p class="product-description">Reloj inteligente con monitor de actividad y notificaciones.</p>
-                    <div class="product-price">$199</div>
-                    <button class="add-to-cart" data-id="4" data-name="Smartwatch" data-price="199">Añadir al Carrito</button>
-                </div>
+                <nav class="nav-links">
+                    <a href="#libros">Libros</a>
+                    <a href="#carrito">Carrito</a>
+                    <a href="#contacto">Contacto</a>
+                </nav>
             </div>
         </div>
-        
-        <div class="cart-section">
-            <h2>Tu Carrito de Compras</h2>
-            <div class="cart-items" id="cartItems">
-                <!-- Los productos añadidos aparecerán aquí -->
-                <p id="emptyCartMessage">Tu carrito está vacío. Añade productos para continuar.</p>
+    </header>
+
+    <!-- Selector de modo de compra -->
+    <div class="mode-selector">
+        <div class="container">
+            <div class="mode-buttons">
+                <button id="cubaMode" class="mode-btn cuba active">Compra desde Cuba</button>
+                <button id="internationalMode" class="mode-btn">Compra Internacional</button>
             </div>
-            <div class="cart-total">
-                <span>Total:</span>
-                <span id="cartTotal">$0</span>
-            </div>
-            <button id="checkoutBtn" class="checkout-btn hidden">Proceder al Pago</button>
         </div>
     </div>
-    
-    <!-- Modal para confirmación de compra desde Cuba -->
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Descubre el Arte de la Cocina Profesional</h2>
+            <p>Libros de recetas en formato PDF descargables al instante. Desde cocina tradicional hasta técnicas gourmet.</p>
+        </div>
+    </section>
+
+    <!-- Catálogo de Libros -->
+    <section id="libros" class="books-section">
+        <div class="container">
+            <h2 class="section-title">Nuestra Colección de Libros</h2>
+            
+            <div class="books-grid">
+                <!-- Libro 1 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        🍳
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Cocina Tradicional Cubana</h3>
+                        <p class="book-description">Recetas auténticas de la cocina cubana: ropa vieja, congri, tostones y postres tradicionales.</p>
+                        <div class="book-details">
+                            <span>150 páginas</span>
+                            <span>⭐ 4.8/5</span>
+                        </div>
+                        <div class="book-price">$12.99</div>
+                        <button class="add-to-cart" data-id="1" data-name="Cocina Tradicional Cubana" data-price="12.99">Añadir al Carrito</button>
+                    </div>
+                </div>
+                
+                <!-- Libro 2 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        🍝
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Pasta Perfecta</h3>
+                        <p class="book-description">Todo sobre pasta italiana: desde la masa casera hasta salsas tradicionales y técnicas profesionales.</p>
+                        <div class="book-details">
+                            <span>180 páginas</span>
+                            <span>⭐ 4.9/5</span>
+                        </div>
+                        <div class="book-price">$14.99</div>
+                        <button class="add-to-cart" data-id="2" data-name="Pasta Perfecta" data-price="14.99">Añadir al Carrito</button>
+                    </div>
+                </div>
+                
+                <!-- Libro 3 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        🥗
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Cocina Saludable</h3>
+                        <p class="book-description">Recetas nutritivas y deliciosas para una alimentación balanceada. Incluye planes semanales.</p>
+                        <div class="book-details">
+                            <span>200 páginas</span>
+                            <span>⭐ 4.7/5</span>
+                        </div>
+                        <div class="book-price">$16.99</div>
+                        <button class="add-to-cart" data-id="3" data-name="Cocina Saludable" data-price="16.99">Añadir al Carrito</button>
+                    </div>
+                </div>
+                
+                <!-- Libro 4 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        🍰
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Repostería Profesional</h3>
+                        <p class="book-description">Técnicas de pastelería, decoración y recetas de postres que impresionan. Nivel principiante a avanzado.</p>
+                        <div class="book-details">
+                            <span>220 páginas</span>
+                            <span>⭐ 4.9/5</span>
+                        </div>
+                        <div class="book-price">$18.99</div>
+                        <button class="add-to-cart" data-id="4" data-name="Repostería Profesional" data-price="18.99">Añadir al Carrito</button>
+                    </div>
+                </div>
+                
+                <!-- Libro 5 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        🌮
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Cocina Mexicana Auténtica</h3>
+                        <p class="book-description">Recetas tradicionales mexicanas: moles, tacos, enchiladas y salsas secretas familiares.</p>
+                        <div class="book-details">
+                            <span>170 páginas</span>
+                            <span>⭐ 4.8/5</span>
+                        </div>
+                        <div class="book-price">$13.99</div>
+                        <button class="add-to-cart" data-id="5" data-name="Cocina Mexicana Auténtica" data-price="13.99">Añadir al Carrito</button>
+                    </div>
+                </div>
+                
+                <!-- Libro 6 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        🍣
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Sushi y Cocina Japonesa</h3>
+                        <p class="book-description">Domina el arte del sushi, ramen, tempura y otros platos japoneses con técnicas paso a paso.</p>
+                        <div class="book-details">
+                            <span>190 páginas</span>
+                            <span>⭐ 4.9/5</span>
+                        </div>
+                        <div class="book-price">$17.99</div>
+                        <button class="add-to-cart" data-id="6" data-name="Sushi y Cocina Japonesa" data-price="17.99">Añadir al Carrito</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carrito de Compras -->
+            <div id="carrito" class="cart-section">
+                <h2>Tu Carrito de Libros</h2>
+                <div class="cart-items" id="cartItems">
+                    <p id="emptyCartMessage">Tu carrito está vacío. Añade libros para continuar.</p>
+                </div>
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">$0.00</span>
+                </div>
+                <button id="checkoutBtn" class="checkout-btn hidden">Proceder a la Descarga</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para compra desde Cuba -->
     <div id="cubaPurchaseModal" class="modal-overlay hidden">
         <div class="modal">
-            <h3>✅ Compra desde Cuba simulada correctamente!</h3>
-            <p>Tu pedido ha sido procesado exitosamente en modo de simulación para Cuba. Este es un mensaje de confirmación que se cerrará automáticamente.</p>
-            <p>No necesitas retroceder múltiples veces. La página se redirigirá automáticamente.</p>
+            <h3>✅ ¡Descarga desde Cuba exitosa!</h3>
+            <p>Tu pedido de libros en PDF ha sido procesado correctamente en modo simulación para Cuba.</p>
+            <p>Los enlaces de descarga estarán disponibles inmediatamente después del pago confirmado.</p>
+            <p><strong>No necesitas retroceder múltiples veces</strong>. Esta ventana se cerrará automáticamente.</p>
             <div class="modal-buttons">
-                <button id="closeCubaModal" class="modal-btn primary">Aceptar y Continuar</button>
+                <button id="closeCubaModal" class="modal-btn primary">Aceptar y Descargar</button>
             </div>
         </div>
     </div>
-    
-    <!-- Modal para proceso de pago internacional -->
+
+    <!-- Modal para pago internacional -->
     <div id="checkoutModal" class="modal-overlay hidden">
         <div class="modal">
             <div id="checkoutFormContainer">
                 <h3>Completa tu Compra</h3>
+                <p>Introduce tus datos para recibir los libros en PDF por email</p>
+                
                 <div class="checkout-form">
                     <div class="form-group">
                         <label for="fullName">Nombre Completo</label>
-                        <input type="text" id="fullName" placeholder="Ingresa tu nombre completo" required>
+                        <input type="text" id="fullName" placeholder="Tu nombre completo" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="email">Correo Electrónico</label>
-                        <input type="email" id="email" placeholder="tucorreo@ejemplo.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="address">Dirección de Envío</label>
-                        <input type="text" id="address" placeholder="Dirección completa" required>
+                        <input type="email" id="email" placeholder="correo@ejemplo.com" required>
                     </div>
                     
                     <div class="form-group">
@@ -547,7 +787,6 @@
                                 💳 Tarjeta
                             </div>
                             <div class="payment-method" data-method="paypal">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" style="height: 24px; vertical-align: middle;">
                                 PayPal
                             </div>
                             <div class="payment-method" data-method="transferencia">
@@ -557,22 +796,34 @@
                         <input type="hidden" id="paymentMethod" required>
                     </div>
                     
-                    <button id="submitOrder" class="checkout-btn">Realizar Pedido</button>
+                    <button id="submitOrder" class="checkout-btn">Comprar y Descargar</button>
                     <button id="cancelCheckout" class="modal-btn secondary" style="width: 100%; margin-top: 10px;">Cancelar</button>
                 </div>
             </div>
             
             <div id="confirmationMessage" class="confirmation-message hidden">
                 <div class="confirmation-icon">✅</div>
-                <h3>¡Pedido Confirmado!</h3>
-                <p>Tu pedido ha sido procesado exitosamente. Recibirás un correo de confirmación en breve.</p>
-                <p>Número de pedido: <strong id="orderNumber">ORD-#####</strong></p>
+                <h3>¡Compra Confirmada!</h3>
+                <p>Tus libros en PDF han sido procesados. Recibirás los enlaces de descarga en tu email en minutos.</p>
+                <p>Número de pedido: <strong id="orderNumber">PDF-#####</strong></p>
                 <a href="#" id="backToShop" class="back-to-shop">Volver a la Tienda</a>
             </div>
         </div>
     </div>
-    
-    <!-- Notificación temporal -->
+
+    <!-- Footer -->
+    <footer id="contacto" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h3>Libros de Cocina en PDF</h3>
+                <p>Vendemos libros digitales de cocina en formato PDF para descarga inmediata. Soporte técnico disponible 24/7.</p>
+                <p>Email: contacto@libroscocina.com</p>
+                <p>© 2025 Libros de Cocina en PDF. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notificación -->
     <div id="notification" class="notification hidden"></div>
 
     <script>
@@ -633,12 +884,7 @@
                 method.addEventListener('click', selectPaymentMethod);
             });
             
-            // Evitar que el modal se cierre al hacer clic dentro
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', e => e.stopPropagation());
-            });
-            
-            // Cerrar modal al hacer clic fuera
+            // Cerrar modales al hacer clic fuera
             document.querySelectorAll('.modal-overlay').forEach(overlay => {
                 overlay.addEventListener('click', function(e) {
                     if (e.target === this) {
@@ -658,9 +904,9 @@
             
             // Actualizar texto del botón de pago según el modo
             if (mode === 'cuba') {
-                checkoutBtn.textContent = 'Proceder a Compra (Modo Cuba)';
+                checkoutBtn.textContent = 'Proceder a Descarga (Modo Cuba)';
             } else {
-                checkoutBtn.textContent = 'Proceder al Pago Internacional';
+                checkoutBtn.textContent = 'Proceder a Pago Internacional';
             }
             
             // Guardar modo en localStorage
@@ -670,13 +916,13 @@
             showNotification(`Modo ${mode === 'cuba' ? 'Cuba' : 'Internacional'} activado`, 'success');
         }
         
-        // Añadir producto al carrito
+        // Añadir libro al carrito
         function addToCart(e) {
             const productId = e.target.getAttribute('data-id');
             const productName = e.target.getAttribute('data-name');
             const productPrice = parseFloat(e.target.getAttribute('data-price'));
             
-            // Verificar si el producto ya está en el carrito
+            // Verificar si el libro ya está en el carrito
             const existingItem = cart.find(item => item.id === productId);
             
             if (existingItem) {
@@ -695,7 +941,7 @@
             updateCartDisplay();
             
             // Mostrar notificación
-            showNotification(`${productName} añadido al carrito`, 'success');
+            showNotification(`"${productName}" añadido al carrito`, 'success');
         }
         
         // Actualizar visualización del carrito
@@ -707,11 +953,11 @@
                 cartItemsContainer.appendChild(emptyCartMessage);
                 emptyCartMessage.classList.remove('hidden');
                 checkoutBtn.classList.add('hidden');
-                cartTotalElement.textContent = '$0';
+                cartTotalElement.textContent = '$0.00';
                 return;
             }
             
-            // Mostrar productos del carrito
+            // Mostrar libros del carrito
             let total = 0;
             
             cart.forEach(item => {
@@ -722,7 +968,7 @@
                 cartItemElement.innerHTML = `
                     <div class="cart-item-info">
                         <h4>${item.name}</h4>
-                        <div>Cantidad: ${item.quantity}</div>
+                        <div>Cantidad: ${item.quantity} - $${item.price.toFixed(2)} c/u</div>
                     </div>
                     <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
                 `;
@@ -758,25 +1004,23 @@
         function showCubaPurchaseModal() {
             cubaPurchaseModal.classList.remove('hidden');
             
-            // Cerrar automáticamente después de 5 segundos y redirigir
+            // Cerrar automáticamente después de 4 segundos y procesar
             setTimeout(() => {
                 closeCubaModal();
-                // Simular una compra exitosa
-                simulateCubaPurchase();
-            }, 5000);
+                processCubaPurchase();
+            }, 4000);
         }
         
         // Cerrar modal de compra desde Cuba
         function closeCubaModal() {
             cubaPurchaseModal.classList.add('hidden');
             // No hay necesidad de retroceder múltiples veces
-            // Simplemente se cierra el modal y se continúa
         }
         
-        // Simular compra desde Cuba
-        function simulateCubaPurchase() {
+        // Procesar compra desde Cuba
+        function processCubaPurchase() {
             // Generar número de pedido simulado
-            const orderNumber = 'CUB-' + Date.now().toString().substr(-6);
+            const orderNumber = 'CUB-PDF-' + Date.now().toString().substr(-6);
             
             // Mostrar notificación de éxito
             showNotification(`Compra desde Cuba completada. Número de pedido: ${orderNumber}`, 'success');
@@ -786,11 +1030,10 @@
             saveCartToStorage();
             updateCartDisplay();
             
-            // Opcional: redirigir al inicio después de un breve momento
+            // Simular envío de email con enlaces de descarga
             setTimeout(() => {
-                // Aquí podrías redirigir a una página de confirmación si lo deseas
-                // window.location.href = 'confirmacion.html';
-            }, 2000);
+                showNotification('Enlaces de descarga enviados a tu email', 'success');
+            }, 1500);
         }
         
         // Mostrar modal de pago internacional
@@ -802,7 +1045,6 @@
             // Restablecer formulario
             document.getElementById('fullName').value = '';
             document.getElementById('email').value = '';
-            document.getElementById('address').value = '';
             selectedPaymentMethod = '';
             document.querySelectorAll('.payment-method').forEach(m => {
                 m.classList.remove('selected');
@@ -833,9 +1075,8 @@
             // Validar formulario
             const fullName = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
-            const address = document.getElementById('address').value.trim();
             
-            if (!fullName || !email || !address || !selectedPaymentMethod) {
+            if (!fullName || !email || !selectedPaymentMethod) {
                 showNotification('Por favor completa todos los campos del formulario', 'error');
                 return;
             }
@@ -846,7 +1087,7 @@
             }
             
             // Generar número de pedido
-            const orderNumber = 'INT-' + Date.now().toString().substr(-8);
+            const orderNumber = 'PDF-' + Date.now().toString().substr(-8);
             document.getElementById('orderNumber').textContent = orderNumber;
             
             // Mostrar confirmación
@@ -863,11 +1104,15 @@
                 orderNumber,
                 fullName,
                 email,
-                address,
                 paymentMethod: selectedPaymentMethod,
                 date: new Date().toISOString(),
-                items: cart // Nota: esto guardará un carrito vacío, pero podría guardar los items antes de vaciar el carrito
+                items: cart
             }));
+            
+            // Simular envío de email
+            setTimeout(() => {
+                showNotification('Enlaces de descarga enviados a ' + email, 'success');
+            }, 2000);
         }
         
         // Restablecer tienda después de una compra
@@ -878,10 +1123,7 @@
             checkoutModal.classList.add('hidden');
             
             // Mostrar notificación
-            showNotification('¡Gracias por tu compra!', 'success');
-            
-            // Opcional: redirigir al inicio
-            // window.location.href = 'index.html';
+            showNotification('¡Gracias por tu compra! Revisa tu email para descargar los libros.', 'success');
         }
         
         // Mostrar notificación temporal
