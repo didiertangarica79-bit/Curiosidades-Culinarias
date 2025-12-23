@@ -3796,4 +3796,520 @@
             if (sectionId === 'visits') {
                 updateVisitsList();
             }
-       
+               }
+
+        function simulateSale() {
+            const books = [
+                { id: 'LIB001', title: 'Fusión Caribeña con IA', price: 9.99 },
+                { id: 'LIB002', title: 'Cocina Internacional AI', price: 7.99 },
+                { id: 'LIB003', title: 'Postres con Chat GPT', price: 6.99 }
+            ];
+            
+            const randomBook = books[Math.floor(Math.random() * books.length)];
+            const quantity = Math.floor(Math.random() * 2) + 1;
+            
+            const saleData = {
+                products: [{
+                    id: randomBook.id,
+                    title: randomBook.title,
+                    price: randomBook.price,
+                    quantity: quantity
+                }],
+                total: randomBook.price * quantity,
+                paymentMethod: 'simulated',
+                location: 'demo',
+                isDemo: true
+            };
+            
+            database.addSale(saleData);
+            updateVisitCounters();
+            
+            // Actualizar contador público
+            const publicSales = parseInt(document.getElementById('publicSalesToday').textContent) + 1;
+            document.getElementById('publicSalesToday').textContent = publicSales;
+            
+            showNotification(`Venta simulada: ${randomBook.title} x${quantity}`, 'info');
+        }
+
+        function simulateMultipleSales(count) {
+            for (let i = 0; i < count; i++) {
+                simulateSale();
+            }
+            showNotification(`Simuladas ${count} ventas`, 'success');
+        }
+
+        function resetStatistics() {
+            database.resetStats();
+            updateVisitCounters();
+            document.getElementById('publicSalesToday').textContent = '0';
+            showNotification('Estadísticas reiniciadas', 'success');
+        }
+
+        function exportVisitsCSV() {
+            const csv = database.exportVisitsToCSV();
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `visitas_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('CSV exportado correctamente', 'success');
+        }
+
+        function toggleDemoMode() {
+            const settings = database.getSettings();
+            const newDemoMode = !settings.demoMode;
+            
+            database.updateSettings({ demoMode: newDemoMode });
+            
+            const badge = document.getElementById('demoUserBadge');
+            if (newDemoMode) {
+                badge.classList.remove('hidden');
+                isDemoUser = true;
+                showNotification('Modo demostración activado', 'info');
+            } else {
+                badge.classList.add('hidden');
+                isDemoUser = false;
+                showNotification('Modo demostración desactivado', 'info');
+            }
+        }
+
+        // ===== SISTEMA DE RIFA =====
+        let raffleEndTime = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000); // 5 días en el futuro
+
+        function updateRaffleTimer() {
+            const now = new Date();
+            const diff = raffleEndTime - now;
+            
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                const timerString = `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                document.getElementById('raffleCountdown').textContent = timerString;
+                document.getElementById('publicRaffleTimer').textContent = timerString;
+            } else {
+                // El sorteo ha terminado, reiniciar
+                raffleEndTime = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000);
+                document.getElementById('raffleCountdown').textContent = 'SORTEO TERMINADO';
+                document.getElementById('publicRaffleTimer').textContent = '00:00:00:00';
+            }
+        }
+
+        function participateInRaffle() {
+            showNotification('¡Participación registrada en el sorteo!', 'success');
+            
+            // Simular actualización de participantes
+            const participantsElement = document.getElementById('publicSalesToday');
+            const currentParticipants = parseInt(participantsElement.textContent) + 1;
+            participantsElement.textContent = currentParticipants;
+        }
+
+        function saveRaffleSettings() {
+            const prize = document.getElementById('adminRafflePrize').value;
+            const description = document.getElementById('adminRaffleDescription').value;
+            
+            if (prize) {
+                document.getElementById('rafflePrizeName').innerHTML = `🎁 <strong>${prize}</strong>`;
+            }
+            if (description) {
+                document.getElementById('raffleDescription').textContent = description;
+            }
+            
+            showNotification('Configuración del sorteo guardada', 'success');
+        }
+
+        // ===== SISTEMA DE NOTIFICACIONES =====
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // ===== FUNCIONES DE SUBIR ARCHIVOS =====
+        function setupFileUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseFilesBtn');
+            const uploadBtn = document.getElementById('uploadFilesBtn');
+            
+            browseBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    showNotification(`${e.dataTransfer.files.length} archivos listos para subir`, 'info');
+                }
+            });
+            
+            uploadBtn.addEventListener('click', () => {
+                if (!fileInput.files.length) {
+                    showNotification('Selecciona archivos primero', 'error');
+                    return;
+                }
+                
+                const progressBar = document.getElementById('progressBar');
+                const progressText = document.getElementById('progressText');
+                const uploadProgress = document.getElementById('uploadProgress');
+                
+                uploadProgress.style.display = 'block';
+                
+                let uploaded = 0;
+                const totalFiles = fileInput.files.length;
+                
+                const uploadInterval = setInterval(() => {
+                    uploaded++;
+                    const percentage = Math.min((uploaded / totalFiles) * 100, 100);
+                    progressBar.style.width = `${percentage}%`;
+                    progressText.textContent = `${Math.round(percentage)}%`;
+                    
+                    if (uploaded >= totalFiles) {
+                        clearInterval(uploadInterval);
+                        
+                        setTimeout(() => {
+                            showNotification(`${totalFiles} archivos subidos correctamente`, 'success');
+                            uploadProgress.style.display = 'none';
+                            progressBar.style.width = '0%';
+                            progressText.textContent = '0%';
+                            fileInput.value = '';
+                        }, 500);
+                    }
+                }, 300);
+            });
+        }
+
+        // ===== SISTEMA DE COPIA DE ENLACE QR =====
+        function setupCopyLink() {
+            document.getElementById('copyAdminLinkBtn').addEventListener('click', () => {
+                const linkInput = document.getElementById('adminLink');
+                linkInput.select();
+                linkInput.setSelectionRange(0, 99999);
+                
+                navigator.clipboard.writeText(linkInput.value).then(() => {
+                    showNotification('Enlace copiado al portapapeles', 'success');
+                });
+            });
+        }
+
+        // ===== FUNCIONES DE MOSTRAR/OCULTAR =====
+        function toggleMobileMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+
+        function showCartDropdown() {
+            document.getElementById('cartDropdown').classList.add('active');
+        }
+
+        function hideCartDropdown() {
+            document.getElementById('cartDropdown').classList.remove('active');
+        }
+
+        function showCartPage() {
+            updateCartPage();
+            document.getElementById('cartPage').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideCartPage() {
+            document.getElementById('cartPage').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ===== INICIALIZACIÓN DE EVENTOS =====
+        function setupEventListeners() {
+            // Eventos del carrito
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const bookData = {
+                        id: e.currentTarget.dataset.id,
+                        title: e.currentTarget.dataset.book,
+                        price: e.currentTarget.dataset.price,
+                        cupPrice: e.currentTarget.dataset.cup,
+                        image: e.currentTarget.dataset.image,
+                        stock: e.currentTarget.dataset.stock
+                    };
+                    addToCart(bookData);
+                });
+            });
+
+            document.getElementById('cartIcon').addEventListener('click', showCartDropdown);
+            document.getElementById('closeCartDropdown').addEventListener('click', hideCartDropdown);
+            document.getElementById('viewCartBtn').addEventListener('click', showCartPage);
+            document.getElementById('closeCartBtn').addEventListener('click', hideCartPage);
+            
+            // Delegación de eventos para los botones de cantidad del carrito
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('quantity-btn')) {
+                    const id = e.target.dataset.id;
+                    const change = parseInt(e.target.dataset.change);
+                    updateCartItemQuantity(id, change);
+                }
+                
+                if (e.target.classList.contains('remove-item-btn') || e.target.closest('.remove-item-btn')) {
+                    const btn = e.target.classList.contains('remove-item-btn') ? e.target : e.target.closest('.remove-item-btn');
+                    const id = btn.dataset.id;
+                    removeCartItem(id);
+                }
+            });
+
+            document.getElementById('clearCartBtn').addEventListener('click', clearCart);
+            document.getElementById('clearCartPageBtn').addEventListener('click', clearCart);
+
+            // Eventos de pago
+            document.getElementById('checkoutBtn').addEventListener('click', openPaymentModal);
+            document.getElementById('proceedCheckoutBtn')?.addEventListener('click', openPaymentModal);
+
+            // Eventos del modal de pago
+            document.getElementById('closePaymentModal').addEventListener('click', closePaymentModal);
+            
+            document.querySelectorAll('.payment-card[data-location]').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    document.querySelectorAll('.payment-card[data-location]').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    e.currentTarget.classList.add('selected');
+                    selectPaymentLocation(e.currentTarget.dataset.location);
+                });
+            });
+            
+            document.querySelectorAll('.payment-card[data-method]').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    document.querySelectorAll('.payment-card[data-method]').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    e.currentTarget.classList.add('selected');
+                    selectPaymentMethod(e.currentTarget.dataset.method);
+                });
+            });
+
+            document.getElementById('confirmPaymentBtn').addEventListener('click', confirmPayment);
+
+            // Eventos del sistema de efectivo
+            document.getElementById('cashGiven').addEventListener('input', updateCashPayment);
+            document.getElementById('processCashPaymentBtn').addEventListener('click', processCashPayment);
+
+            // Eventos de admin
+            document.getElementById('adminAccessBtn').addEventListener('click', showLogin);
+            document.getElementById('adminAccessBtn2').addEventListener('click', showLogin);
+            document.getElementById('loginBtn').addEventListener('click', login);
+            document.getElementById('cancelLoginBtn').addEventListener('click', hideLogin);
+            document.getElementById('logoutBtn').addEventListener('click', logoutAdmin);
+
+            document.querySelectorAll('.menu-item[data-section]').forEach(item => {
+                item.addEventListener('click', showAdminSection);
+            });
+
+            document.getElementById('simulateSaleBtn').addEventListener('click', simulateSale);
+            document.getElementById('simulate10SalesBtn')?.addEventListener('click', () => simulateMultipleSales(10));
+            document.getElementById('resetStatsBtn')?.addEventListener('click', resetStatistics);
+            document.getElementById('toggleDemoModeBtn')?.addEventListener('click', toggleDemoMode);
+            document.getElementById('exportCSVBtn')?.addEventListener('click', exportVisitsCSV);
+            document.getElementById('clearVisitsBtn')?.addEventListener('click', () => {
+                if (confirm('¿Estás seguro de que quieres borrar todo el historial de visitas?')) {
+                    database.clearVisits();
+                    updateVisitsList();
+                    showNotification('Historial de visitas borrado', 'success');
+                }
+            });
+
+            // Eventos del sistema de rifa
+            document.getElementById('participateBtn').addEventListener('click', participateInRaffle);
+            document.getElementById('saveRaffleBtn')?.addEventListener('click', saveRaffleSettings);
+
+            // Eventos de filtros
+            document.getElementById('visitFilter')?.addEventListener('change', (e) => {
+                updateVisitsList(e.target.value, document.getElementById('visitDateFilter').value);
+            });
+
+            document.getElementById('visitDateFilter')?.addEventListener('change', (e) => {
+                updateVisitsList(document.getElementById('visitFilter').value, e.target.value);
+            });
+
+            // Eventos móviles
+            document.querySelector('.mobile-menu').addEventListener('click', toggleMobileMenu);
+
+            // Cerrar menús al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                const cartIcon = document.getElementById('cartIcon');
+                const cartDropdown = document.getElementById('cartDropdown');
+                
+                if (!cartIcon.contains(e.target) && !cartDropdown.contains(e.target)) {
+                    hideCartDropdown();
+                }
+                
+                const nav = document.querySelector('nav');
+                const mobileMenu = document.querySelector('.mobile-menu');
+                if (window.innerWidth <= 768 && nav.classList.contains('active') && 
+                    !mobileMenu.contains(e.target) && !nav.contains(e.target)) {
+                    nav.classList.remove('active');
+                }
+            });
+
+            // Botón de continuar comprando
+            document.addEventListener('click', (e) => {
+                if (e.target.id === 'continueShoppingBtn' || e.target.closest('#continueShoppingBtn') || 
+                    e.target.id === 'continueShoppingBtnPage' || e.target.closest('#continueShoppingBtnPage')) {
+                    hideCartPage();
+                    document.querySelector('html').scrollTo({
+                        top: document.getElementById('libros').offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+
+            // Navegación suave
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 100,
+                                behavior: 'smooth'
+                            });
+                            
+                            // Cerrar menú móvil si está abierto
+                            if (window.innerWidth <= 768) {
+                                document.querySelector('nav').classList.remove('active');
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+        // ===== INICIALIZACIÓN DEL SISTEMA =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar base de datos y cargar carrito
+            loadCartFromStorage();
+            
+            // Iniciar seguimiento de visita
+            trackVisit();
+            
+            // Configurar eventos
+            setupEventListeners();
+            
+            // Configurar sistema de archivos
+            setupFileUpload();
+            
+            // Configurar sistema de copia
+            setupCopyLink();
+            
+            // Actualizar reloj de Cuba cada segundo
+            updateCubaTime();
+            setInterval(updateCubaTime, 1000);
+            
+            // Actualizar temporizador de sorteo cada segundo
+            updateRaffleTimer();
+            setInterval(updateRaffleTimer, 1000);
+            
+            // Actualizar contadores cada 30 segundos
+            setInterval(updateVisitCounters, 30000);
+            
+            // Actualizar productos vendidos del día
+            updateTopBook();
+            setInterval(updateTopBook, 60000);
+            
+            // Configurar enlaces de WhatsApp
+            document.querySelectorAll('a[href^="https://wa.me/"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (isDemoUser) {
+                        e.preventDefault();
+                        showNotification('Modo demostración: Enlace de WhatsApp simulado', 'info');
+                    }
+                });
+            });
+            
+            // Inicializar modo demo según configuración
+            const settings = database.getSettings();
+            if (settings.demoMode) {
+                toggleDemoMode();
+            }
+            
+            // Simular visitas iniciales
+            setTimeout(() => {
+                simulateMultipleSales(3);
+                simulateMultipleSales(2);
+            }, 2000);
+            
+            console.log('Sistema de Curiosidades Culinarias inicializado correctamente');
+            console.log('Base de datos local activa');
+            console.log('Panel administrativo disponible: admin / admin123');
+        });
+
+        // ===== ACTUALIZAR LIBRO MÁS VENDIDO =====
+        function updateTopBook() {
+            const sales = database.getSales();
+            const today = new Date().toDateString();
+            
+            const todaySales = sales.filter(sale => {
+                const saleDate = new Date(sale.timestamp).toDateString();
+                return saleDate === today;
+            });
+            
+            const bookSales = {};
+            todaySales.forEach(sale => {
+                sale.products?.forEach(product => {
+                    bookSales[product.id] = (bookSales[product.id] || 0) + product.quantity;
+                });
+            });
+            
+            let topBookId = 'LIB001';
+            let maxSales = 0;
+            
+            Object.keys(bookSales).forEach(bookId => {
+                if (bookSales[bookId] > maxSales) {
+                    maxSales = bookSales[bookId];
+                    topBookId = bookId;
+                }
+            });
+            
+            const bookNames = {
+                'LIB001': 'Fusión Caribeña',
+                'LIB002': 'Cocina Internacional',
+                'LIB003': 'Postres con Chat GPT'
+            };
+            
+            document.getElementById('publicTopBook').textContent = topBookId.substring(3);
+            document.getElementById('publicTopBookSales').textContent = bookNames[topBookId] || 'N/A';
+        }
+    </script>
+
+    <!-- ===== FIN DEL SISTEMA ===== -->
+</body>
+</html>
