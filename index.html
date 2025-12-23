@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
     <style>
         /* ===== ESTILOS UNIFICADOS ===== */
         :root {
@@ -755,6 +754,123 @@
             color: var(--gray);
             font-size: 1.2rem;
             margin-right: 5px;
+        }
+        
+        /* ===== SECCIÓN DE RIFA/ANUNCIOS ===== */
+        .raffle-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 60px 0;
+            margin-top: 40px;
+            border-top: 3px solid var(--cuban-blue);
+            border-bottom: 3px solid var(--cuban-red);
+        }
+        
+        .raffle-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--cuban-blue);
+        }
+        
+        .raffle-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .raffle-header h3 {
+            font-size: 2.2rem;
+            color: var(--cuban-blue);
+            margin-bottom: 10px;
+        }
+        
+        .raffle-header h3 i {
+            color: var(--cuban-red);
+        }
+        
+        .raffle-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .raffle-info {
+            padding: 20px;
+        }
+        
+        .raffle-prize {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .raffle-prize h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .raffle-prize p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .raffle-description {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .raffle-description p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .raffle-timer {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .timer-label {
+            font-size: 1.2rem;
+            color: var(--cuban-blue);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .raffle-countdown {
+            font-size: 3rem;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: var(--cuban-red);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .raffle-button {
+            background: linear-gradient(to right, var(--success), #219653);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+        }
+        
+        .raffle-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
         }
         
         /* ===== PANEL DE SEGUIMIENTO ===== */
@@ -1734,6 +1850,10 @@
             .cart-dropdown {
                 width: 300px;
             }
+            
+            .raffle-content {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (max-width: 768px) {
@@ -1829,6 +1949,10 @@
                 width: 60px;
                 height: 60px;
             }
+            
+            .raffle-countdown {
+                font-size: 2.5rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -1846,6 +1970,14 @@
             .cart-item-quantity {
                 width: 100%;
                 justify-content: space-between;
+            }
+            
+            .raffle-countdown {
+                font-size: 2rem;
+            }
+            
+            .raffle-container {
+                padding: 20px;
             }
         }
     </style>
@@ -2070,6 +2202,55 @@
                                 <i class="fas fa-cart-plus"></i> Añadir al Carrito
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECCIÓN DE RIFA/ANUNCIOS ===== -->
+    <section class="raffle-section" id="rifa">
+        <div class="container">
+            <div class="raffle-container">
+                <div class="raffle-header">
+                    <h3><i class="fas fa-gift"></i> ¡SORTEO ESPECIAL!</h3>
+                    <p>Participa y gana increíbles premios</p>
+                </div>
+                
+                <div class="raffle-content">
+                    <div class="raffle-info">
+                        <div class="raffle-prize">
+                            <h4>PREMIOS DEL SORTEO</h4>
+                            <p id="rafflePrizeName">🎁 <strong>Libro "Fusión Caribeña con IA" GRATIS</strong> + Acceso a mi tienda online</p>
+                            <p><small>¡Valor total: $15 USD!</small></p>
+                        </div>
+                        
+                        <div class="raffle-description">
+                            <p><strong>📢 ANUNCIO IMPORTANTE:</strong></p>
+                            <p id="raffleDescription">Visita mi nueva tienda online donde encontrarás productos exclusivos. Participa en este sorteo para ganar un libro GRATIS y descuentos especiales en tu primera compra.</p>
+                            <p style="margin-top: 10px;"><strong>🔗 Enlace directo:</strong> <a href="#" id="raffleLink" style="color: var(--cuban-blue);">https://mitienda.didiert.com</a></p>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <h4><i class="fas fa-info-circle"></i> Cómo participar:</h4>
+                            <ol style="margin-left: 20px; margin-top: 10px;">
+                                <li>Sigue mi canal de YouTube</li>
+                                <li>Comparte este sorteo en tus redes</li>
+                                <li>Envía tu comprobante por WhatsApp</li>
+                                <li>¡Espera el resultado cuando termine el tiempo!</li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div class="raffle-timer">
+                        <div class="timer-label">TIEMPO RESTANTE PARA EL SORTEO:</div>
+                        <div class="raffle-countdown" id="raffleCountdown">05:00:00:00</div>
+                        <button class="raffle-button" id="participateBtn" onclick="participateRaffle()">
+                            <i class="fas fa-ticket-alt"></i> ¡QUIERO PARTICIPAR!
+                        </button>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                            <i class="fas fa-users"></i> <span id="participantsCount">0</span> personas ya participaron
+                        </p>
                     </div>
                 </div>
             </div>
@@ -2391,7 +2572,7 @@
                         <div>
                             <h4>WhatsApp (Cuba)</h4>
                             <p>Contacto directo</p>
-                            <a href="https://wa.me/5352494433" target="_blank" class="whatsapp-button">
+                            <a href="https://wa.me/535xxxxxxxxx" target="_blank" class="whatsapp-button">
                                 <i class="fab fa-whatsapp"></i> Escribir por WhatsApp
                             </a>
                             <p><small>Para confirmar pagos desde Cuba</small></p>
@@ -2467,6 +2648,7 @@
                         <li><a href="#pagos">Métodos de Pago</a></li>
                         <li><a href="#seguimiento">Estadísticas</a></li>
                         <li><a href="#sobre">Sobre Didiert</a></li>
+                        <li><a href="#rifa">¡SORTEO!</a></li>
                     </ul>
                 </div>
                 
@@ -2564,7 +2746,7 @@
                         </ol>
                         
                         <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                            <p><strong>📱 WhatsApp para confirmar pago:</strong> <a href="https://wa.me/5352494433" target="_blank" style="color: var(--cuban-blue);">Haz clic aquí para contactar</a></p>
+                            <p><strong>📱 WhatsApp para confirmar pago:</strong> <a href="https://wa.me/535xxxxxxxxx" target="_blank" style="color: var(--cuban-blue);">Haz clic aquí para contactar</a></p>
                             <p><strong>📧 Email alternativo:</strong> culinariascuriosidades4@gmail.com</p>
                         </div>
                         
@@ -2636,7 +2818,7 @@
             </button>
             
             <p style="margin-top: 15px; font-size: 0.9rem; text-align: center;">
-                ¿Problemas con la compra? <a href="https://wa.me/5352494433" target="_blank" style="color: var(--cuban-red);">Escríbenos por WhatsApp</a>
+                ¿Problemas con la compra? <a href="https://wa.me/535xxxxxxxxx" target="_blank" style="color: var(--cuban-red);">Escríbenos por WhatsApp</a>
             </p>
         </div>
     </div>
@@ -2666,17 +2848,355 @@
         </div>
     </div>
 
+    <!-- ===== PANEL ADMINISTRADOR ===== -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-container">
+            <div class="sidebar">
+                <h2 style="color: white; margin-bottom: 30px;"><i class="fas fa-cog"></i> Panel Admin</h2>
+                <button class="menu-item active" onclick="showAdminSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="menu-item" onclick="showAdminSection('raffle')">
+                    <i class="fas fa-gift"></i> Configurar Sorteo
+                </button>
+                <button class="menu-item" onclick="showAdminSection('sales')">
+                    <i class="fas fa-shopping-cart"></i> Ventas
+                </button>
+                <button class="menu-item" onclick="showAdminSection('products')">
+                    <i class="fas fa-book"></i> Productos
+                </button>
+                <button class="menu-item" onclick="showAdminSection('stats')">
+                    <i class="fas fa-chart-bar"></i> Estadísticas
+                </button>
+                <button class="menu-item" onclick="logoutAdmin()" style="margin-top: 50px; background: var(--cuban-red);">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+            
+            <div class="main-content">
+                <!-- SECCIÓN DASHBOARD -->
+                <div class="admin-section active" id="adminDashboard">
+                    <h2 style="color: white; margin-bottom: 20px;"><i class="fas fa-tachometer-alt"></i> Dashboard Administrativo</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                        <div style="background: var(--tracker-card); padding: 20px; border-radius: 10px; text-align: center;">
+                            <h3 style="color: #94a3b8;">Ventas Totales</h3>
+                            <div style="font-size: 2.5rem; color: var(--tracker-success); font-weight: bold;">$1,245.50</div>
+                        </div>
+                        <div style="background: var(--tracker-card); padding: 20px; border-radius: 10px; text-align: center;">
+                            <h3 style="color: #94a3b8;">Ventas Hoy</h3>
+                            <div style="font-size: 2.5rem; color: var(--tracker-warning); font-weight: bold;">$89.97</div>
+                        </div>
+                        <div style="background: var(--tracker-card); padding: 20px; border-radius: 10px; text-align: center;">
+                            <h3 style="color: #94a3b8;">Libros Vendidos</h3>
+                            <div style="font-size: 2.5rem; color: var(--tracker-primary); font-weight: bold;">45</div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: white; margin-top: 30px;">Acciones Rápidas</h3>
+                    <div style="display: flex; gap: 15px; margin-top: 15px;">
+                        <button class="tracker-btn" onclick="showAdminSection('raffle')">
+                            <i class="fas fa-gift"></i> Configurar Sorteo
+                        </button>
+                        <button class="tracker-btn" onclick="resetSales()">
+                            <i class="fas fa-redo"></i> Reiniciar Estadísticas
+                        </button>
+                        <button class="tracker-btn" onclick="simulateMultipleSales()">
+                            <i class="fas fa-bolt"></i> Simular 10 Ventas
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- SECCIÓN CONFIGURAR SORTEO -->
+                <div class="admin-section" id="adminRaffle">
+                    <h2 style="color: white; margin-bottom: 20px;"><i class="fas fa-gift"></i> Configurar Sorteo/Anuncio</h2>
+                    
+                    <div style="background: var(--tracker-card); padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                        <h3 style="color: #94a3b8; margin-bottom: 20px;">Información del Sorteo</h3>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="color: #94a3b8; display: block; margin-bottom: 8px;">Nombre del Premio:</label>
+                            <input type="text" id="adminRafflePrize" placeholder="Ej: Libro 'Fusión Caribeña con IA' GRATIS" style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white;">
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="color: #94a3b8; display: block; margin-bottom: 8px;">Descripción/Anuncio:</label>
+                            <textarea id="adminRaffleDescription" placeholder="Ej: ¡Visita mi nueva tienda online! Participa y gana este increíble libro gratis." style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white; height: 100px;"></textarea>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="color: #94a3b8; display: block; margin-bottom: 8px;">Enlace (opcional):</label>
+                            <input type="text" id="adminRaffleLink" placeholder="https://mitienda.didiert.com" style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white;">
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="color: #94a3b8; display: block; margin-bottom: 8px;">Tiempo del Sorteo (días:horas:minutos):</label>
+                            <input type="text" id="adminRaffleTime" placeholder="05:00:00" style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white;">
+                            <small style="color: #94a3b8; display: block; margin-top: 5px;">Formato: DD:HH:MM (ej: 05:00:00 = 5 días, 00 horas, 00 minutos)</small>
+                        </div>
+                        
+                        <button class="tracker-btn" style="width: 100%; margin-top: 20px;" onclick="saveRaffleConfig()">
+                            <i class="fas fa-save"></i> Guardar Configuración del Sorteo
+                        </button>
+                    </div>
+                    
+                    <div style="background: var(--tracker-card); padding: 25px; border-radius: 10px;">
+                        <h3 style="color: #94a3b8; margin-bottom: 20px;">Vista Previa</h3>
+                        <div style="background: #1e293b; padding: 20px; border-radius: 8px;">
+                            <h4 style="color: var(--tracker-warning);">PREMIOS DEL SORTEO</h4>
+                            <p style="color: white;" id="previewPrize">🎁 <strong>Libro "Fusión Caribeña con IA" GRATIS</strong> + Acceso a mi tienda online</p>
+                            <p style="color: #94a3b8;"><small>¡Valor total: $15 USD!</small></p>
+                            
+                            <div style="margin-top: 15px; padding: 15px; background: #252f4a; border-radius: 8px;">
+                                <p style="color: white;"><strong>📢 ANUNCIO IMPORTANTE:</strong></p>
+                                <p style="color: #94a3b8;" id="previewDescription">Visita mi nueva tienda online donde encontrarás productos exclusivos. Participa en este sorteo para ganar un libro GRATIS y descuentos especiales en tu primera compra.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- OTRAS SECCIONES DEL ADMIN (se mantienen igual) -->
+                <div class="admin-section" id="adminSales">
+                    <h2 style="color: white; margin-bottom: 20px;"><i class="fas fa-shopping-cart"></i> Gestión de Ventas</h2>
+                    <p style="color: #94a3b8;">Aquí puedes gestionar todas las ventas realizadas.</p>
+                </div>
+                
+                <div class="admin-section" id="adminProducts">
+                    <h2 style="color: white; margin-bottom: 20px;"><i class="fas fa-book"></i> Gestión de Productos</h2>
+                    <p style="color: #94a3b8;">Aquí puedes gestionar los libros y productos.</p>
+                </div>
+                
+                <div class="admin-section" id="adminStats">
+                    <h2 style="color: white; margin-bottom: 20px;"><i class="fas fa-chart-bar"></i> Estadísticas Detalladas</h2>
+                    <p style="color: #94a3b8;">Estadísticas avanzadas del sistema.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== NOTIFICACIONES ===== -->
     <div id="notification" class="notification"></div>
 
-    <!-- ===== JAVASCRIPT DEL SISTEMA DE CARRITO ===== -->
+    <!-- ===== JAVASCRIPT DEL SISTEMA COMPLETO ===== -->
     <script>
         // ===== SISTEMA DE CARRITO =====
         let shoppingCart = [];
         let currentPaymentLocation = null;
         let currentPaymentMethod = null;
         
-        // Cargar carrito del localStorage
+        // ===== SISTEMA DE RELOJ Y SORTEO =====
+        let raffleTime = 5 * 24 * 60 * 60 * 1000; // 5 días en milisegundos
+        let raffleStartTime = Date.now();
+        let participants = 0;
+        let rafflePrize = "🎁 <strong>Libro 'Fusión Caribeña con IA' GRATIS</strong> + Acceso a mi tienda online";
+        let raffleDescription = "Visita mi nueva tienda online donde encontrarás productos exclusivos. Participa en este sorteo para ganar un libro GRATIS y descuentos especiales en tu primera compra.";
+        let raffleLink = "https://mitienda.didiert.com";
+        
+        // ===== FUNCIONES DE RELOJ =====
+        function updateCubaTime() {
+            const now = new Date();
+            // Ajustar a hora de Cuba (UTC-5)
+            const cubaTime = new Date(now.getTime() - (5 * 60 * 60 * 1000));
+            const timeString = cubaTime.toUTCString().split(' ')[4];
+            document.getElementById('cuba-time').textContent = timeString;
+        }
+        
+        function updateRaffleTimer() {
+            const now = Date.now();
+            const timeLeft = raffleStartTime + raffleTime - now;
+            
+            if (timeLeft <= 0) {
+                document.getElementById('raffleCountdown').textContent = "¡SORTEO TERMINADO!";
+                document.getElementById('publicRaffleTimer').textContent = "¡TERMINADO!";
+                return;
+            }
+            
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            const countdownString = `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('raffleCountdown').textContent = countdownString;
+            document.getElementById('publicRaffleTimer').textContent = countdownString;
+            
+            // Actualizar barra de progreso
+            const progress = Math.min(100, Math.max(0, (1 - (timeLeft / raffleTime)) * 100));
+            document.getElementById('raffleColorBar').style.width = `${progress}%`;
+        }
+        
+        function updateRaffleInfo() {
+            document.getElementById('rafflePrizeName').innerHTML = rafflePrize;
+            document.getElementById('raffleDescription').textContent = raffleDescription;
+            document.getElementById('raffleLink').href = raffleLink;
+            document.getElementById('raffleLink').textContent = raffleLink;
+            document.getElementById('participantsCount').textContent = participants;
+            
+            // Actualizar vista previa en admin
+            document.getElementById('previewPrize').innerHTML = rafflePrize;
+            document.getElementById('previewDescription').textContent = raffleDescription;
+        }
+        
+        function participateRaffle() {
+            participants++;
+            document.getElementById('participantsCount').textContent = participants;
+            showNotification('¡Gracias por participar en el sorteo!', 'success');
+            
+            // Simular guardar en localStorage
+            localStorage.setItem('raffle_participants', participants);
+        }
+        
+        // ===== FUNCIONES DE ADMINISTRADOR =====
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'flex';
+        }
+        
+        function hideLogin() {
+            document.getElementById('loginScreen').style.display = 'none';
+        }
+        
+        function login() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+            
+            // Credenciales de prueba (cambia estas en producción)
+            if (user === 'admin' && pass === 'admin123') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                showNotification('Acceso concedido al panel administrativo', 'success');
+            } else {
+                showNotification('Usuario o contraseña incorrectos', 'error');
+            }
+        }
+        
+        function logoutAdmin() {
+            document.getElementById('adminPanel').style.display = 'none';
+            showNotification('Sesión cerrada correctamente', 'success');
+        }
+        
+        function showAdminSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById('admin' + sectionId.charAt(0).toUpperCase() + sectionId.slice(1)).classList.add('active');
+            
+            // Actualizar menú activo
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+        
+        function saveRaffleConfig() {
+            const prize = document.getElementById('adminRafflePrize').value;
+            const description = document.getElementById('adminRaffleDescription').value;
+            const link = document.getElementById('adminRaffleLink').value;
+            const timeInput = document.getElementById('adminRaffleTime').value;
+            
+            if (prize) rafflePrize = prize;
+            if (description) raffleDescription = description;
+            if (link) raffleLink = link;
+            
+            // Procesar tiempo
+            if (timeInput) {
+                const timeParts = timeInput.split(':');
+                if (timeParts.length === 3) {
+                    const days = parseInt(timeParts[0]) || 0;
+                    const hours = parseInt(timeParts[1]) || 0;
+                    const minutes = parseInt(timeParts[2]) || 0;
+                    
+                    raffleTime = (days * 24 * 60 * 60 * 1000) + 
+                                 (hours * 60 * 60 * 1000) + 
+                                 (minutes * 60 * 1000);
+                    raffleStartTime = Date.now();
+                }
+            }
+            
+            updateRaffleInfo();
+            showNotification('Configuración del sorteo guardada correctamente', 'success');
+        }
+        
+        function simulateSale() {
+            // Simular una venta
+            const books = ["Fusión Caribeña con IA", "Cocina Internacional AI", "Postres con Chat GPT"];
+            const locations = ["La Habana", "Miami", "Madrid", "México DF", "Bogotá"];
+            const book = books[Math.floor(Math.random() * books.length)];
+            const location = locations[Math.floor(Math.random() * locations.length)];
+            const isCuba = location === "La Habana";
+            const price = isCuba ? "250 CUP" : "$9.99 USD";
+            
+            // Actualizar contador de ventas
+            const salesToday = parseInt(document.getElementById('publicSalesToday').textContent) + 1;
+            document.getElementById('publicSalesToday').textContent = salesToday;
+            
+            if (isCuba) {
+                const cubaSales = parseInt(document.getElementById('cubaSales').textContent) + 1;
+                document.getElementById('cubaSales').textContent = cubaSales;
+            }
+            
+            // Agregar a la lista de ventas
+            const salesList = document.getElementById('publicSalesList');
+            const saleItem = document.createElement('div');
+            saleItem.className = 'sale-item new';
+            saleItem.innerHTML = `
+                <div>
+                    <strong>"${book}"</strong><br>
+                    <small style="color: #94a3b8;">Comprado desde: ${location} • ${price}</small>
+                </div>
+                <div style="text-align: right;">
+                    <span style="color: ${isCuba ? 'var(--tracker-warning)' : 'var(--tracker-success)'};">${isCuba ? 'Cuba 🇨🇺' : 'Internacional'}</span><br>
+                    <small>Hace unos segundos</small>
+                </div>
+            `;
+            
+            salesList.insertBefore(saleItem, salesList.firstChild);
+            
+            // Limitar a 10 ventas en la lista
+            if (salesList.children.length > 10) {
+                salesList.removeChild(salesList.lastChild);
+            }
+            
+            showNotification(`¡Venta simulada de "${book}" desde ${location}!`, 'success');
+        }
+        
+        function simulateMultipleSales() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => simulateSale(), i * 300);
+            }
+        }
+        
+        function resetSales() {
+            document.getElementById('publicSalesToday').textContent = "0";
+            document.getElementById('cubaSales').textContent = "0";
+            document.getElementById('publicSalesList').innerHTML = `
+                <div class="sale-item">
+                    <div>
+                        <strong>"Fusión Caribeña con IA"</strong><br>
+                        <small style="color: #94a3b8;">Comprado desde: La Habana • 250 CUP</small>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="color: var(--tracker-warning);">Cuba 🇨🇺</span><br>
+                        <small>Hace 15 minutos</small>
+                    </div>
+                </div>
+                <div class="sale-item">
+                    <div>
+                        <strong>"Postres con Chat GPT"</strong><br>
+                        <small style="color: #94a3b8;">Comprado desde: España • $6.99 USD</small>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="color: var(--tracker-success);">Internacional</span><br>
+                        <small>Hace 25 minutos</small>
+                    </div>
+                </div>
+            `;
+            showNotification('Estadísticas reiniciadas correctamente', 'success');
+        }
+        
+        // ===== SISTEMA DE CARRITO (las funciones anteriores se mantienen) =====
         function loadCartFromStorage() {
             const savedCart = localStorage.getItem('curiosidades_carrito');
             if (savedCart) {
@@ -2685,20 +3205,16 @@
             }
         }
         
-        // Guardar carrito en localStorage
         function saveCartToStorage() {
             localStorage.setItem('curiosidades_carrito', JSON.stringify(shoppingCart));
         }
         
-        // Añadir producto al carrito
         function addToCart(book) {
             const existingItemIndex = shoppingCart.findIndex(item => item.id === book.id);
             
             if (existingItemIndex !== -1) {
-                // Incrementar cantidad si ya existe
                 shoppingCart[existingItemIndex].quantity += 1;
             } else {
-                // Añadir nuevo item
                 shoppingCart.push({
                     id: book.id,
                     title: book.title,
@@ -2714,14 +3230,12 @@
             showNotification(`${book.title} añadido al carrito`, 'success');
         }
         
-        // Actualizar cantidad de un item
         function updateCartItemQuantity(id, change) {
             const itemIndex = shoppingCart.findIndex(item => item.id === id);
             
             if (itemIndex !== -1) {
                 shoppingCart[itemIndex].quantity += change;
                 
-                // Si la cantidad llega a 0, eliminar el item
                 if (shoppingCart[itemIndex].quantity <= 0) {
                     shoppingCart.splice(itemIndex, 1);
                 }
@@ -2731,7 +3245,6 @@
             }
         }
         
-        // Eliminar item del carrito
         function removeCartItem(id) {
             shoppingCart = shoppingCart.filter(item => item.id !== id);
             saveCartToStorage();
@@ -2739,44 +3252,36 @@
             showNotification('Producto eliminado del carrito', 'success');
         }
         
-        // Calcular total del carrito
         function calculateCartTotal() {
             return shoppingCart.reduce((total, item) => {
                 return total + (item.price * item.quantity);
             }, 0);
         }
         
-        // Calcular total en CUP
         function calculateCartCupTotal() {
             return shoppingCart.reduce((total, item) => {
                 return total + (item.cupPrice * item.quantity);
             }, 0);
         }
         
-        // Actualizar interfaz del carrito
         function updateCartUI() {
-            // Actualizar contador
             const cartCount = shoppingCart.reduce((count, item) => count + item.quantity, 0);
             document.getElementById('cartCount').textContent = cartCount;
             document.getElementById('cartItemsCount').textContent = `${cartCount} ${cartCount === 1 ? 'item' : 'items'}`;
             
-            // Actualizar subtotal y total
             const subtotal = calculateCartTotal();
-            const total = subtotal; // Por ahora no hay impuestos ni envío
+            const total = subtotal;
             
             document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
             document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
             
-            // Actualizar dropdown del carrito
             updateCartDropdown();
             
-            // Actualizar página del carrito si está abierta
             if (document.getElementById('cartPage').classList.contains('active')) {
                 updateCartPage();
             }
         }
         
-        // Actualizar dropdown del carrito
         function updateCartDropdown() {
             const cartItemsContainer = document.getElementById('cartItems');
             
@@ -2808,7 +3313,6 @@
             `).join('');
         }
         
-        // Actualizar página del carrito
         function updateCartPage() {
             const cartPageContent = document.getElementById('cartPageContent');
             
@@ -2824,7 +3328,6 @@
                     </div>
                 `;
                 
-                // Agregar evento al botón
                 document.getElementById('continueShoppingBtnPage')?.addEventListener('click', function() {
                     document.getElementById('cartPage').classList.remove('active');
                     document.querySelector('#libros').scrollIntoView({ behavior: 'smooth' });
@@ -2906,7 +3409,6 @@
                 </div>
             `;
             
-            // Agregar eventos a los botones
             document.getElementById('continueShoppingBtn')?.addEventListener('click', function() {
                 document.getElementById('cartPage').classList.remove('active');
                 document.querySelector('#libros').scrollIntoView({ behavior: 'smooth' });
@@ -2918,17 +3420,14 @@
             });
         }
         
-        // Abrir modal de pago
         function openPaymentModal() {
             if (shoppingCart.length === 0) {
                 showNotification('Tu carrito está vacío', 'error');
                 return;
             }
             
-            // Actualizar resumen
             updatePaymentSummary();
             
-            // Resetear modal
             document.getElementById('paymentCubaStep').style.display = 'none';
             document.getElementById('paymentInternationalStep').style.display = 'none';
             document.getElementById('paymentDownloadSection').style.display = 'none';
@@ -2937,11 +3436,9 @@
             document.getElementById('internationalPaymentSuccess').style.display = 'none';
             document.getElementById('paymentCustomerEmail').value = '';
             
-            // Mostrar modal
             document.getElementById('paymentModal').style.display = 'flex';
         }
         
-        // Actualizar resumen de pago
         function updatePaymentSummary() {
             const summaryContainer = document.getElementById('paymentSummary');
             const total = calculateCartTotal();
@@ -2968,11 +3465,9 @@
             document.getElementById('finalCupTotal').textContent = `${cupTotal} CUP`;
         }
         
-        // Seleccionar ubicación de pago
         function selectPaymentLocation(location) {
             currentPaymentLocation = location;
             
-            // Resetear selección de método
             document.querySelectorAll('.payment-card').forEach(card => {
                 card.classList.remove('selected');
             });
@@ -2993,7 +3488,6 @@
             }
         }
         
-        // Seleccionar método de pago internacional
         function selectPaymentMethod(method) {
             currentPaymentMethod = method;
             document.querySelectorAll('.payment-card').forEach(card => {
@@ -3002,28 +3496,22 @@
             event.currentTarget.classList.add('selected');
         }
         
-        // Confirmar pago desde Cuba
         function confirmCubaPayment() {
             document.getElementById('confirmPaymentBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
             document.getElementById('confirmPaymentBtn').disabled = true;
             
             setTimeout(() => {
-                // Mostrar mensaje de éxito
                 document.getElementById('cubaPaymentSuccess').style.display = 'block';
                 document.getElementById('confirmPaymentBtn').style.display = 'none';
                 document.getElementById('paymentDownloadSection').style.display = 'block';
                 
-                // Generar lista de libros para descargar
                 generateDownloadList();
-                
-                // Registrar ventas
                 registerCubaSales();
                 
                 showNotification('¡Compra desde Cuba procesada correctamente!', 'success');
             }, 2000);
         }
         
-        // Confirmar pago internacional
         function confirmInternationalPayment() {
             const email = document.getElementById('paymentCustomerEmail').value;
             
@@ -3041,22 +3529,17 @@
             document.getElementById('confirmPaymentBtn').disabled = true;
             
             setTimeout(() => {
-                // Mostrar mensaje de éxito
                 document.getElementById('internationalPaymentSuccess').style.display = 'block';
                 document.getElementById('confirmPaymentBtn').style.display = 'none';
                 document.getElementById('paymentDownloadSection').style.display = 'block';
                 
-                // Generar lista de libros para descargar
                 generateDownloadList();
-                
-                // Registrar ventas
                 registerInternationalSales(email);
                 
                 showNotification('¡Pago internacional procesado correctamente!', 'success');
             }, 2000);
         }
         
-        // Generar lista de descarga
         function generateDownloadList() {
             const downloadList = document.getElementById('downloadBooksList');
             
@@ -3075,7 +3558,6 @@
                 'Los PDFs también han sido enviados a tu email.';
         }
         
-        // Descargar todos los PDFs
         function downloadAllPDFs() {
             shoppingCart.forEach(item => {
                 for (let i = 0; i < item.quantity; i++) {
@@ -3085,18 +3567,15 @@
             
             showNotification('¡Todos los PDFs descargados correctamente!', 'success');
             
-            // Vaciar carrito después de descargar
             shoppingCart = [];
             saveCartToStorage();
             updateCartUI();
             
-            // Cerrar modal después de 2 segundos
             setTimeout(() => {
                 document.getElementById('paymentModal').style.display = 'none';
             }, 2000);
         }
         
-        // Descargar PDF de un libro
         function downloadBookPDF(book) {
             const pdfContent = `
                 =================================
@@ -3116,7 +3595,7 @@
                 como herramienta creativa.
                 
                 Contacto:
-                📱 WhatsApp Cuba: <a href="https://wa.me/5352494433">Haz clic aquí</a>
+                📱 WhatsApp Cuba: <a href="https://wa.me/535xxxxxxxxx">Haz clic aquí</a>
                 📧 Email: ${currentPaymentLocation === 'cuba' ? 'culinariascuriosidades4@gmail.com' : 'didiertangarica79@gmail.com'}
                 
                 =================================
@@ -3135,31 +3614,23 @@
             URL.revokeObjectURL(url);
         }
         
-        // Registrar ventas desde Cuba
         function registerCubaSales() {
             shoppingCart.forEach(item => {
-                // Simular registro de venta
-                // En un sistema real, aquí enviarías los datos a un servidor
                 console.log(`Venta Cuba: ${item.title} - ${item.quantity} x ${item.cupPrice} CUP`);
             });
         }
         
-        // Registrar ventas internacionales
         function registerInternationalSales(email) {
             shoppingCart.forEach(item => {
-                // Simular registro de venta
-                // En un sistema real, aquí enviarías los datos a un servidor
                 console.log(`Venta Internacional: ${item.title} - ${item.quantity} x $${item.price} USD - Email: ${email}`);
             });
         }
         
-        // Validar email
         function validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(email);
         }
         
-        // Mostrar notificación
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             if (!notification) return;
@@ -3179,6 +3650,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Cargar carrito
             loadCartFromStorage();
+            
+            // Iniciar relojes
+            updateCubaTime();
+            updateRaffleTimer();
+            updateRaffleInfo();
+            
+            // Configurar intervalos
+            setInterval(updateCubaTime, 1000);
+            setInterval(updateRaffleTimer, 1000);
+            
+            // Cargar participantes del sorteo
+            const savedParticipants = localStorage.getItem('raffle_participants');
+            if (savedParticipants) {
+                participants = parseInt(savedParticipants);
+                document.getElementById('participantsCount').textContent = participants;
+            }
             
             // Eventos del carrito
             document.getElementById('cartIcon').addEventListener('click', function(e) {
@@ -3201,7 +3688,6 @@
                 document.getElementById('cartPage').classList.remove('active');
             });
             
-            // Cerrar dropdown al hacer clic fuera
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.cart-container')) {
                     document.getElementById('cartDropdown').classList.remove('active');
@@ -3227,7 +3713,6 @@
                 document.getElementById('paymentModal').style.display = 'none';
             });
             
-            // Cerrar modal al hacer clic fuera
             window.addEventListener('click', function(e) {
                 const modal = document.getElementById('paymentModal');
                 if(e.target === modal) {
@@ -3241,15 +3726,21 @@
                 document.querySelector('#libros').scrollIntoView({ behavior: 'smooth' });
             });
             
-            // Inicializar otros sistemas (ya existentes)
-            initOtherSystems();
+            // Botón de acceso admin en header
+            document.getElementById('adminAccessBtn').addEventListener('click', showLogin);
+            
+            // Configurar menú móvil
+            document.querySelector('.mobile-menu').addEventListener('click', function() {
+                document.querySelector('nav').classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer clic en un enlace
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    document.querySelector('nav').classList.remove('active');
+                });
+            });
         });
-        
-        // Función para inicializar otros sistemas (mantener compatibilidad)
-        function initOtherSystems() {
-            // Tu código de inicialización existente aquí
-            // (mantener las funciones que ya tenías)
-        }
     </script>
 </body>
 </html>
