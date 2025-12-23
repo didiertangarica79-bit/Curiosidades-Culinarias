@@ -199,17 +199,21 @@
             position: absolute;
             top: 100%;
             right: 0;
-            width: 420px;
+            width: 450px;
             background: white;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             z-index: 1001;
             margin-top: 10px;
+            animation: fadeIn 0.3s ease;
         }
         
         .cart-dropdown.active {
             display: block;
-            animation: fadeIn 0.3s ease;
+        }
+        
+        .cart-dropdown.keep-open {
+            display: block !important;
         }
         
         @keyframes fadeIn {
@@ -253,6 +257,7 @@
             align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid #eee;
+            position: relative;
         }
         
         .cart-item:last-child {
@@ -374,30 +379,57 @@
             box-shadow: 0 5px 15px rgba(207, 20, 43, 0.3);
         }
         
-        /* BOTONES PARA VACIAR CARRITO */
-        .clear-cart-buttons {
+        /* ===== SECCIÓN DE AGREGAR PEDIDO ===== */
+        .add-order-section {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+        }
+        
+        .add-order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .add-order-header h4 {
+            color: var(--cuban-blue);
+            font-size: 1rem;
+        }
+        
+        .close-add-order {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .add-order-form {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
-            margin-bottom: 15px;
         }
         
-        .clear-cart-btn {
-            background: #f8f9fa;
-            color: var(--cuban-red);
-            border: 1px solid var(--cuban-red);
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
+        .add-order-select {
             flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
         }
         
-        .clear-cart-btn:hover {
-            background: var(--cuban-red);
+        .add-order-btn {
+            padding: 8px 15px;
+            background: linear-gradient(to right, var(--success), #219653);
             color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         /* ===== PÁGINA DEL CARRITO ===== */
@@ -2122,6 +2154,35 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0, 32, 91, 0.3);
         }
+        
+        /* ===== MARCAS DE QR VISIBLES ===== */
+        .qr-marks {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .qr-mark {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: black;
+        }
+        
+        .qr-mark.tl {
+            top: 10px;
+            left: 10px;
+        }
+        
+        .qr-mark.tr {
+            top: 10px;
+            right: 10px;
+        }
+        
+        .qr-mark.bl {
+            bottom: 10px;
+            left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -2153,7 +2214,7 @@
                 </ul>
             </nav>
             
-            <!-- CARRITO DE COMPRAS ACTIVADO -->
+            <!-- CARRITO DE COMPRAS CON AGREGAR PEDIDO -->
             <div class="cart-container">
                 <div class="cart-icon" id="cartIcon">
                     <i class="fas fa-shopping-cart"></i>
@@ -2167,10 +2228,35 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                    
+                    <!-- SECCIÓN PARA AGREGAR NUEVOS PEDIDOS -->
+                    <div class="add-order-section" id="addOrderSection">
+                        <div class="add-order-header">
+                            <h4><i class="fas fa-plus-circle"></i> Agregar Pedido</h4>
+                            <button class="close-add-order" id="closeAddOrder">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="add-order-form">
+                            <select class="add-order-select" id="addOrderSelect">
+                                <option value="">Selecciona un libro</option>
+                                <option value="LIB001">Fusión Caribeña con IA - $9.99</option>
+                                <option value="LIB002">Cocina Internacional AI - $7.99</option>
+                                <option value="LIB003">Postres con Chat GPT - $6.99</option>
+                            </select>
+                            <button class="add-order-btn" id="addOrderBtn">
+                                <i class="fas fa-cart-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="cart-items" id="cartItems">
                         <div class="empty-cart-message" style="text-align: center; padding: 30px; color: #666;">
                             <i class="fas fa-shopping-cart" style="font-size: 2rem; margin-bottom: 15px; display: block; color: #ddd;"></i>
                             <p>Tu carrito está vacío</p>
+                            <button class="cta-button" id="openAddOrderBtn" style="margin-top: 15px; padding: 8px 15px; font-size: 0.9rem;">
+                                <i class="fas fa-plus"></i> Agregar Pedido
+                            </button>
                         </div>
                     </div>
                     <div class="cart-total">
@@ -2323,6 +2409,7 @@
             </div>
             
             <div class="books-grid">
+                <!-- Los libros se mantienen igual -->
                 <div class="book-card">
                     <div class="book-badge">MÁS VENDIDO</div>
                     <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
@@ -2717,9 +2804,12 @@
                             <input type="date" id="visitDateFilter" style="padding: 8px 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white;">
                         </div>
                         
-                        <div style="max-height: 400px; overflow-y: auto;">
+                        <div style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
                             <div id="visitsList">
                                 <!-- Las visitas se cargarán aquí dinámicamente -->
+                                <p style="text-align: center; color: #94a3b8; padding: 20px;">
+                                    Cargando visitas...
+                                </p>
                             </div>
                         </div>
                         
@@ -2757,6 +2847,11 @@
                             </button>
                         </div>
                         
+                        <div id="selectedFiles" style="margin-top: 20px; display: none;">
+                            <h4 style="color: #94a3b8; margin-bottom: 10px;">Archivos seleccionados:</h4>
+                            <div id="fileList"></div>
+                        </div>
+                        
                         <div style="margin-top: 20px;">
                             <label style="color: #94a3b8; display: block; margin-bottom: 8px;">Categoría:</label>
                             <select id="fileCategory" style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white;">
@@ -2785,6 +2880,11 @@
                                 <div id="progressBar" style="height: 100%; width: 0%; background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red)); border-radius: 4px;"></div>
                             </div>
                         </div>
+                        
+                        <div id="uploadedFilesList" style="margin-top: 30px; display: none;">
+                            <h4 style="color: #94a3b8; margin-bottom: 15px;">Archivos subidos recientemente:</h4>
+                            <div id="uploadedFiles" style="max-height: 200px; overflow-y: auto; padding-right: 10px;"></div>
+                        </div>
                     </div>
                 </div>
                 
@@ -2797,12 +2897,17 @@
                         
                         <div style="margin-bottom: 20px;">
                             <label style="color: #94a3b8; display: block; margin-bottom: 8px;">Nombre del Premio:</label>
-                            <input type="text" id="adminRafflePrize" placeholder="Ej: Libro 'Fusión Caribeña con IA' GRATIS" style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white;">
+                            <input type="text" id="adminRafflePrize" placeholder="Ej: Libro 'Fusión Caribeña con IA' GRATIS" style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white;" value="Libro 'Fusión Caribeña con IA' GRATIS">
                         </div>
                         
                         <div style="margin-bottom: 20px;">
                             <label style="color: #94a3b8; display: block; margin-bottom: 8px;">Descripción/Anuncio:</label>
-                            <textarea id="adminRaffleDescription" placeholder="Ej: ¡Visita mi nueva tienda online! Participa y gana este increíble libro gratis." style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white; height: 100px;"></textarea>
+                            <textarea id="adminRaffleDescription" placeholder="Ej: ¡Visita mi nueva tienda online! Participa y gana este increíble libro gratis." style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white; height: 100px;">Visita mi nueva tienda online donde encontrarás productos exclusivos. Participa en este sorteo para ganar un libro GRATIS y descuentos especiales en tu primera compra.</textarea>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="color: #94a3b8; display: block; margin-bottom: 8px;">Días para el sorteo:</label>
+                            <input type="number" id="adminRaffleDays" min="1" max="30" value="5" style="width: 100%; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 8px; color: white;">
                         </div>
                         
                         <button class="tracker-btn" style="width: 100%; margin-top: 20px;" id="saveRaffleBtn">
@@ -2820,7 +2925,22 @@
                         <p style="color: #666; margin-bottom: 20px;">Usa este código QR para acceder al panel de administración desde cualquier dispositivo móvil:</p>
                         
                         <div class="qr-code" id="qrCodeDisplay">
-                            ADMIN-PANEL
+                            <div class="qr-marks">
+                                <div class="qr-mark tl"></div>
+                                <div class="qr-mark tr"></div>
+                                <div class="qr-mark bl"></div>
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                                    <div style="font-size: 2rem; color: var(--cuban-blue); margin-bottom: 10px;">
+                                        <i class="fas fa-user-cog"></i>
+                                    </div>
+                                    <div style="font-size: 1rem; color: var(--cuban-red); font-weight: bold;">
+                                        ADMIN PANEL
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                                        curiosidadesculinarias.com/admin
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
                         <p style="color: #666; margin-top: 15px; font-size: 0.9rem;">
@@ -2829,7 +2949,7 @@
                         
                         <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
                             <h4 style="color: var(--cuban-blue); margin-bottom: 10px;">Enlace directo:</h4>
-                            <input type="text" id="adminLink" value="curiosidadesculinarias.com/admin" readonly style="width: 100%; padding: 10px; background: white; border: 1px solid #ddd; border-radius: 5px; text-align: center; font-family: monospace;">
+                            <input type="text" id="adminLink" value="https://curiosidadesculinarias.com/admin" readonly style="width: 100%; padding: 10px; background: white; border: 1px solid #ddd; border-radius: 5px; text-align: center; font-family: monospace;">
                             <button class="export-btn" id="copyAdminLinkBtn" style="width: 100%; margin-top: 10px;">
                                 <i class="fas fa-copy"></i> Copiar Enlace
                             </button>
@@ -2950,7 +3070,7 @@
     <!-- ===== NOTIFICACIONES ===== -->
     <div id="notification" class="notification"></div>
 
-    <!-- ===== JAVASCRIPT COMPLETO ===== -->
+    <!-- ===== JAVASCRIPT CORREGIDO ===== -->
     <script>
         // ===== SISTEMA DE BASE DE DATOS LOCAL =====
         class LocalDatabase {
@@ -2960,19 +3080,24 @@
             }
             
             initDatabase() {
-                // Inicializar localStorage si no existe
                 if (!localStorage.getItem(this.dbName)) {
                     const initialData = {
                         visits: [],
                         sales: [],
                         products: {
-                            'LIB001': { stock: 15, sold: 0 },
-                            'LIB002': { stock: 3, sold: 0 },
-                            'LIB003': { stock: 22, sold: 0 }
+                            'LIB001': { stock: 15, sold: 0, title: 'Fusión Caribeña con IA', price: 9.99, cupPrice: 250 },
+                            'LIB002': { stock: 3, sold: 0, title: 'Cocina Internacional AI', price: 7.99, cupPrice: 200 },
+                            'LIB003': { stock: 22, sold: 0, title: 'Postres con Chat GPT', price: 6.99, cupPrice: 175 }
                         },
                         settings: {
                             demoMode: false,
-                            lastReset: new Date().toISOString()
+                            lastReset: new Date().toISOString(),
+                            raffle: {
+                                prize: "Libro 'Fusión Caribeña con IA' GRATIS + Acceso a mi tienda online",
+                                description: "Visita mi nueva tienda online donde encontrarás productos exclusivos. Participa en este sorteo para ganar un libro GRATIS y descuentos especiales en tu primera compra.",
+                                endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString()
+                            },
+                            uploadedFiles: []
                         }
                     };
                     localStorage.setItem(this.dbName, JSON.stringify(initialData));
@@ -2994,7 +3119,6 @@
                 visitData.timestamp = new Date().toISOString();
                 db.visits.unshift(visitData);
                 
-                // Mantener solo las últimas 1000 visitas
                 if (db.visits.length > 1000) {
                     db.visits = db.visits.slice(0, 1000);
                 }
@@ -3007,7 +3131,6 @@
                 const db = this.getDatabase();
                 let visits = [...db.visits];
                 
-                // Aplicar filtros
                 if (filter === 'purchased') {
                     visits = visits.filter(v => v.purchased);
                 } else if (filter === 'not-purchased') {
@@ -3025,7 +3148,6 @@
                     visits = visits.filter(v => new Date(v.timestamp) > monthAgo);
                 }
                 
-                // Filtrar por fecha específica
                 if (date) {
                     const filterDate = new Date(date).toDateString();
                     visits = visits.filter(v => new Date(v.timestamp).toDateString() === filterDate);
@@ -3084,7 +3206,6 @@
                 saleData.timestamp = new Date().toISOString();
                 db.sales.unshift(saleData);
                 
-                // Actualizar stock
                 if (saleData.products) {
                     saleData.products.forEach(product => {
                         if (db.products[product.id]) {
@@ -3094,7 +3215,6 @@
                     });
                 }
                 
-                // Actualizar visita correspondiente
                 if (saleData.visitId) {
                     const visitIndex = db.visits.findIndex(v => v.id === saleData.visitId);
                     if (visitIndex !== -1) {
@@ -3136,6 +3256,29 @@
                 this.updateDatabase(db);
             }
             
+            updateRaffleSettings(raffleSettings) {
+                const db = this.getDatabase();
+                db.settings.raffle = { ...db.settings.raffle, ...raffleSettings };
+                this.updateDatabase(db);
+            }
+            
+            addUploadedFile(fileData) {
+                const db = this.getDatabase();
+                if (!db.settings.uploadedFiles) {
+                    db.settings.uploadedFiles = [];
+                }
+                fileData.id = Date.now();
+                fileData.timestamp = new Date().toISOString();
+                db.settings.uploadedFiles.unshift(fileData);
+                this.updateDatabase(db);
+                return fileData;
+            }
+            
+            getUploadedFiles() {
+                const db = this.getDatabase();
+                return db.settings.uploadedFiles || [];
+            }
+            
             resetStats() {
                 const db = this.getDatabase();
                 db.sales = [];
@@ -3153,6 +3296,8 @@
         let currentVisitId = null;
         let isDemoUser = false;
         let isAdminMode = false;
+        let cartOpenByUser = false;
+        let cartShouldStayOpen = false;
         
         // ===== SISTEMA DE VISITAS =====
         function trackVisit() {
@@ -3160,7 +3305,6 @@
             let device = 'Desktop';
             let browser = 'Unknown';
             
-            // Detectar dispositivo
             if (/Android/i.test(userAgent)) {
                 device = 'Android';
             } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
@@ -3175,7 +3319,6 @@
                 device = 'Linux';
             }
             
-            // Detectar navegador
             if (/Chrome/i.test(userAgent) && !/Edge/i.test(userAgent)) {
                 browser = 'Chrome';
             } else if (/Firefox/i.test(userAgent)) {
@@ -3200,7 +3343,6 @@
             const visit = database.addVisit(visitData);
             currentVisitId = visit.id;
             
-            // Actualizar contadores en tiempo real
             updateVisitCounters();
             
             return visit.id;
@@ -3209,10 +3351,8 @@
         function updateVisitCounters() {
             const stats = database.getVisitStats();
             
-            // Actualizar en panel público
             document.getElementById('visitsToday').textContent = stats.today;
             
-            // Actualizar en panel admin si está activo
             if (document.getElementById('adminPanel').style.display === 'block') {
                 document.getElementById('adminTotalVisits').textContent = stats.total;
                 document.getElementById('adminTodayPurchases').textContent = stats.purchased;
@@ -3229,56 +3369,54 @@
             
             if (visits.length === 0) {
                 visitsList.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 20px;">No hay visitas registradas</p>';
-                return;
+            } else {
+                visits.forEach(visit => {
+                    const date = new Date(visit.timestamp);
+                    const timeStr = date.toLocaleTimeString('es-CU', { hour: '2-digit', minute: '2-digit' });
+                    const dateStr = date.toLocaleDateString('es-CU', { 
+                        weekday: 'short', 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    });
+                    
+                    const visitItem = document.createElement('div');
+                    visitItem.className = 'visit-item';
+                    
+                    if (visit.purchased) {
+                        visitItem.classList.add('purchase');
+                    } else if (visit.isDemo) {
+                        visitItem.classList.add('demo');
+                    } else {
+                        visitItem.classList.add('no-purchase');
+                    }
+                    
+                    visitItem.innerHTML = `
+                        <div>
+                            <div style="font-weight: bold;">${visit.device} - ${visit.browser}</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">
+                                ${dateStr} ${timeStr}
+                                ${visit.products ? ' • Compró: ' + visit.products.join(', ') : ''}
+                                ${visit.total ? ' • Total: $' + visit.total : ''}
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="color: ${visit.purchased ? 'var(--tracker-success)' : visit.isDemo ? 'var(--tracker-danger)' : 'var(--tracker-warning)'}; font-size: 0.9rem;">
+                                ${visit.purchased ? 'COMPRÓ' : visit.isDemo ? 'DEMO' : 'VISITÓ'}
+                            </span>
+                        </div>
+                    `;
+                    
+                    visitsList.appendChild(visitItem);
+                });
             }
             
-            visits.forEach(visit => {
-                const date = new Date(visit.timestamp);
-                const timeStr = date.toLocaleTimeString('es-CU', { hour: '2-digit', minute: '2-digit' });
-                const dateStr = date.toLocaleDateString('es-CU', { 
-                    weekday: 'short', 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric' 
-                });
-                
-                const visitItem = document.createElement('div');
-                visitItem.className = 'visit-item';
-                
-                if (visit.purchased) {
-                    visitItem.classList.add('purchase');
-                } else if (visit.isDemo) {
-                    visitItem.classList.add('demo');
-                } else {
-                    visitItem.classList.add('no-purchase');
-                }
-                
-                visitItem.innerHTML = `
-                    <div>
-                        <div style="font-weight: bold;">${visit.device} - ${visit.browser}</div>
-                        <div style="font-size: 0.8rem; color: #94a3b8;">
-                            ${dateStr} ${timeStr}
-                            ${visit.products ? ' • Compró: ' + visit.products.join(', ') : ''}
-                            ${visit.total ? ' • Total: $' + visit.total : ''}
-                        </div>
-                    </div>
-                    <div style="text-align: right;">
-                        <span style="color: ${visit.purchased ? 'var(--tracker-success)' : visit.isDemo ? 'var(--tracker-danger)' : 'var(--tracker-warning)'}; font-size: 0.9rem;">
-                            ${visit.purchased ? 'COMPRÓ' : visit.isDemo ? 'DEMO' : 'VISITÓ'}
-                        </span>
-                    </div>
-                `;
-                
-                visitsList.appendChild(visitItem);
-            });
-            
-            // Actualizar contadores
             document.getElementById('totalVisitsCount').textContent = stats.total;
             document.getElementById('purchasedVisitsCount').textContent = stats.purchased;
             document.getElementById('conversionRateDisplay').textContent = `${stats.conversionRate}%`;
         }
         
-        // ===== SISTEMA DE CARRITO =====
+        // ===== SISTEMA DE CARRITO MEJORADO =====
         function loadCartFromStorage() {
             const savedCart = localStorage.getItem('curiosidades_carrito');
             if (savedCart) {
@@ -3323,8 +3461,12 @@
             updateCartUI();
             showNotification(`${book.title} añadido al carrito`, 'success');
             
-            // Mostrar el dropdown del carrito
-            document.getElementById('cartDropdown').classList.add('active');
+            // Mantener el carrito abierto
+            cartShouldStayOpen = true;
+            showCartDropdown();
+            setTimeout(() => {
+                cartShouldStayOpen = false;
+            }, 3000);
         }
         
         function updateCartItemQuantity(id, change) {
@@ -3361,7 +3503,6 @@
             updateCartUI();
             showNotification('Carrito vaciado', 'info');
             
-            // Cerrar la página del carrito si está abierta
             document.getElementById('cartPage').classList.remove('active');
         }
         
@@ -3391,42 +3532,47 @@
         
         function updateCartDropdown() {
             const cartItemsContainer = document.getElementById('cartItems');
+            const addOrderSection = document.getElementById('addOrderSection');
             
             if (shoppingCart.length === 0) {
+                addOrderSection.style.display = 'block';
                 cartItemsContainer.innerHTML = `
                     <div class="empty-cart-message" style="text-align: center; padding: 30px; color: #666;">
                         <i class="fas fa-shopping-cart" style="font-size: 2rem; margin-bottom: 15px; display: block; color: #ddd;"></i>
                         <p>Tu carrito está vacío</p>
+                        <button class="cta-button" id="openAddOrderBtn" style="margin-top: 15px; padding: 8px 15px; font-size: 0.9rem;">
+                            <i class="fas fa-plus"></i> Agregar Pedido
+                        </button>
                     </div>
                 `;
-                return;
-            }
-            
-            cartItemsContainer.innerHTML = shoppingCart.map(item => {
-                const currentStock = database.getProductStock(item.id);
-                const stockStatus = currentStock <= 3 ? 'stock-low' : 'stock-ok';
-                const stockText = currentStock <= 3 ? 'Stock bajo' : 'Disponible';
-                
-                return `
-                    <div class="cart-item" data-id="${item.id}">
-                        <div class="cart-item-info">
-                            <h4>${item.title}</h4>
-                            <p>$${item.price.toFixed(2)} USD</p>
-                            <div class="cart-item-stock ${stockStatus}">
-                                <i class="fas fa-box"></i> ${stockText} (${currentStock} restantes)
+            } else {
+                addOrderSection.style.display = 'block';
+                cartItemsContainer.innerHTML = shoppingCart.map(item => {
+                    const currentStock = database.getProductStock(item.id);
+                    const stockStatus = currentStock <= 3 ? 'stock-low' : 'stock-ok';
+                    const stockText = currentStock <= 3 ? 'Stock bajo' : 'Disponible';
+                    
+                    return `
+                        <div class="cart-item" data-id="${item.id}">
+                            <div class="cart-item-info">
+                                <h4>${item.title}</h4>
+                                <p>$${item.price.toFixed(2)} USD</p>
+                                <div class="cart-item-stock ${stockStatus}">
+                                    <i class="fas fa-box"></i> ${stockText} (${currentStock} restantes)
+                                </div>
+                            </div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn" data-id="${item.id}" data-change="-1" ${item.quantity <= 1 ? 'disabled' : ''}>-</button>
+                                <span class="quantity-number">${item.quantity}</span>
+                                <button class="quantity-btn" data-id="${item.id}" data-change="1" ${item.quantity >= currentStock ? 'disabled' : ''}>+</button>
+                            </div>
+                            <div class="cart-item-price">
+                                $${(item.price * item.quantity).toFixed(2)}
                             </div>
                         </div>
-                        <div class="cart-item-quantity">
-                            <button class="quantity-btn" data-id="${item.id}" data-change="-1" ${item.quantity <= 1 ? 'disabled' : ''}>-</button>
-                            <span class="quantity-number">${item.quantity}</span>
-                            <button class="quantity-btn" data-id="${item.id}" data-change="1" ${item.quantity >= currentStock ? 'disabled' : ''}>+</button>
-                        </div>
-                        <div class="cart-item-price">
-                            $${(item.price * item.quantity).toFixed(2)}
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
+            }
         }
         
         function updateCartPage() {
@@ -3533,6 +3679,87 @@
             updateCashPayment();
         }
         
+        // ===== FUNCIONES DEL CARRITO MEJORADO =====
+        function showCartDropdown() {
+            cartOpenByUser = true;
+            document.getElementById('cartDropdown').classList.add('active');
+            document.getElementById('cartDropdown').classList.add('keep-open');
+        }
+        
+        function hideCartDropdown() {
+            if (!cartShouldStayOpen) {
+                document.getElementById('cartDropdown').classList.remove('active');
+                document.getElementById('cartDropdown').classList.remove('keep-open');
+            }
+        }
+        
+        function showCartPage() {
+            updateCartPage();
+            document.getElementById('cartPage').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function hideCartPage() {
+            document.getElementById('cartPage').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // ===== AGREGAR PEDIDOS DESDE EL DROPDOWN =====
+        function setupAddOrderFromDropdown() {
+            const addOrderSelect = document.getElementById('addOrderSelect');
+            const addOrderBtn = document.getElementById('addOrderBtn');
+            const openAddOrderBtn = document.getElementById('openAddOrderBtn');
+            const closeAddOrderBtn = document.getElementById('closeAddOrder');
+            const addOrderSection = document.getElementById('addOrderSection');
+            
+            const bookOptions = {
+                'LIB001': { 
+                    title: 'Fusión Caribeña con IA', 
+                    price: 9.99, 
+                    cupPrice: 250,
+                    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+                    stock: 15
+                },
+                'LIB002': { 
+                    title: 'Cocina Internacional AI', 
+                    price: 7.99, 
+                    cupPrice: 200,
+                    image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80',
+                    stock: 3
+                },
+                'LIB003': { 
+                    title: 'Postres con Chat GPT', 
+                    price: 6.99, 
+                    cupPrice: 175,
+                    image: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+                    stock: 22
+                }
+            };
+            
+            addOrderBtn.addEventListener('click', () => {
+                const selectedBookId = addOrderSelect.value;
+                if (selectedBookId && bookOptions[selectedBookId]) {
+                    const book = bookOptions[selectedBookId];
+                    book.id = selectedBookId;
+                    addToCart(book);
+                    addOrderSelect.value = '';
+                } else {
+                    showNotification('Por favor selecciona un libro', 'error');
+                }
+            });
+            
+            if (openAddOrderBtn) {
+                openAddOrderBtn.addEventListener('click', () => {
+                    addOrderSection.style.display = 'block';
+                    showCartDropdown();
+                });
+            }
+            
+            closeAddOrderBtn.addEventListener('click', () => {
+                addOrderSection.style.display = 'none';
+            });
+        }
+        
         // ===== SISTEMA DE PAGO =====
         function updateCashPayment() {
             const total = calculateCartTotal();
@@ -3579,7 +3806,6 @@
             const change = cashGiven - total;
             
             if (change >= 0) {
-                // Registrar venta en la base de datos
                 const saleData = {
                     visitId: currentVisitId,
                     products: shoppingCart.map(item => ({
@@ -3598,12 +3824,9 @@
                 
                 showNotification('¡Pago en efectivo procesado correctamente!', 'success');
                 
-                // Vaciar carrito
                 shoppingCart = [];
                 saveCartToStorage();
                 updateCartUI();
-                
-                // Actualizar visitas
                 updateVisitCounters();
                 
                 document.getElementById('cashStatus').textContent = 'Pago completado';
@@ -3627,7 +3850,6 @@
             document.getElementById('paymentModal').style.display = 'flex';
             document.getElementById('paymentSuccess').style.display = 'none';
             
-            // Resetear selecciones
             document.querySelectorAll('.payment-card').forEach(card => {
                 card.classList.remove('selected');
             });
@@ -3701,7 +3923,6 @@
             showNotification('Procesando pago...', 'info');
             
             setTimeout(() => {
-                // Registrar venta
                 const saleData = {
                     visitId: currentVisitId,
                     products: shoppingCart.map(item => ({
@@ -3718,18 +3939,12 @@
                 
                 database.addSale(saleData);
                 
-                // Mostrar éxito
                 document.getElementById('paymentSuccess').style.display = 'block';
                 
-                // Vaciar carrito
                 shoppingCart = [];
                 saveCartToStorage();
                 updateCartUI();
-                
-                // Actualizar visitas
                 updateVisitCounters();
-                
-                // Cerrar página del carrito si está abierta
                 document.getElementById('cartPage').classList.remove('active');
                 
                 showNotification('¡Pago confirmado correctamente!', 'success');
@@ -3744,7 +3959,41 @@
             document.getElementById('cuba-time').textContent = timeString;
         }
         
-        // ===== FUNCIONES DE ADMINISTRADOR =====
+        let raffleEndTime = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000);
+        
+        function updateRaffleTimer() {
+            const settings = database.getSettings();
+            raffleEndTime = new Date(settings.raffle.endDate);
+            
+            const now = new Date();
+            const diff = raffleEndTime - now;
+            
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                const timerString = `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                document.getElementById('raffleCountdown').textContent = timerString;
+                document.getElementById('publicRaffleTimer').textContent = timerString;
+            } else {
+                raffleEndTime = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000);
+                document.getElementById('raffleCountdown').textContent = 'SORTEO TERMINADO';
+                document.getElementById('publicRaffleTimer').textContent = '00:00:00:00';
+            }
+        }
+        
+        function participateInRaffle() {
+            showNotification('¡Participación registrada en el sorteo!', 'success');
+            
+            const participantsElement = document.getElementById('publicSalesToday');
+            const currentParticipants = parseInt(participantsElement.textContent) + 1;
+            participantsElement.textContent = currentParticipants;
+        }
+        
+        // ===== FUNCIONES DE ADMINISTRADOR CORREGIDAS =====
         function showLogin() {
             document.getElementById('loginScreen').style.display = 'flex';
         }
@@ -3757,16 +4006,16 @@
             const user = document.getElementById('adminUser').value;
             const pass = document.getElementById('adminPass').value;
             
-            // Credenciales de administrador
             if (user === 'admin' && pass === 'admin123') {
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 isAdminMode = true;
                 showNotification('Acceso concedido al panel administrativo', 'success');
                 
-                // Cargar datos iniciales
                 updateVisitCounters();
                 updateVisitsList();
+                loadRaffleSettings();
+                updateUploadedFilesList();
             } else {
                 showNotification('Usuario o contraseña incorrectos', 'error');
             }
@@ -3782,22 +4031,27 @@
             document.querySelectorAll('.admin-section').forEach(section => {
                 section.classList.remove('active');
             });
-            const sectionElement = document.getElementById('admin' + sectionId.charAt(0).toUpperCase() + sectionId.slice(1));
-            if (sectionElement) {
-                sectionElement.classList.add('active');
-            }
             
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.classList.remove('active');
             });
+            
             event.currentTarget.classList.add('active');
             
-            // Si es la sección de visitas, actualizar la lista
-            if (sectionId === 'visits') {
-                updateVisitsList();
+            const sectionElement = document.getElementById('admin' + sectionId.charAt(0).toUpperCase() + sectionId.slice(1));
+            if (sectionElement) {
+                sectionElement.classList.add('active');
+                
+                if (sectionId === 'visits') {
+                    updateVisitsList();
+                } else if (sectionId === 'files') {
+                    updateUploadedFilesList();
+                } else if (sectionId === 'raffle') {
+                    loadRaffleSettings();
+                }
             }
-               }
-
+        }
+        
         function simulateSale() {
             const books = [
                 { id: 'LIB001', title: 'Fusión Caribeña con IA', price: 9.99 },
@@ -3824,27 +4078,26 @@
             database.addSale(saleData);
             updateVisitCounters();
             
-            // Actualizar contador público
             const publicSales = parseInt(document.getElementById('publicSalesToday').textContent) + 1;
             document.getElementById('publicSalesToday').textContent = publicSales;
             
             showNotification(`Venta simulada: ${randomBook.title} x${quantity}`, 'info');
         }
-
+        
         function simulateMultipleSales(count) {
             for (let i = 0; i < count; i++) {
                 simulateSale();
             }
             showNotification(`Simuladas ${count} ventas`, 'success');
         }
-
+        
         function resetStatistics() {
             database.resetStats();
             updateVisitCounters();
             document.getElementById('publicSalesToday').textContent = '0';
             showNotification('Estadísticas reiniciadas', 'success');
         }
-
+        
         function exportVisitsCSV() {
             const csv = database.exportVisitsToCSV();
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -3860,7 +4113,7 @@
             
             showNotification('CSV exportado correctamente', 'success');
         }
-
+        
         function toggleDemoMode() {
             const settings = database.getSettings();
             const newDemoMode = !settings.demoMode;
@@ -3878,73 +4131,17 @@
                 showNotification('Modo demostración desactivado', 'info');
             }
         }
-
-        // ===== SISTEMA DE RIFA =====
-        let raffleEndTime = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000); // 5 días en el futuro
-
-        function updateRaffleTimer() {
-            const now = new Date();
-            const diff = raffleEndTime - now;
-            
-            if (diff > 0) {
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                
-                const timerString = `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
-                document.getElementById('raffleCountdown').textContent = timerString;
-                document.getElementById('publicRaffleTimer').textContent = timerString;
-            } else {
-                // El sorteo ha terminado, reiniciar
-                raffleEndTime = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000);
-                document.getElementById('raffleCountdown').textContent = 'SORTEO TERMINADO';
-                document.getElementById('publicRaffleTimer').textContent = '00:00:00:00';
-            }
-        }
-
-        function participateInRaffle() {
-            showNotification('¡Participación registrada en el sorteo!', 'success');
-            
-            // Simular actualización de participantes
-            const participantsElement = document.getElementById('publicSalesToday');
-            const currentParticipants = parseInt(participantsElement.textContent) + 1;
-            participantsElement.textContent = currentParticipants;
-        }
-
-        function saveRaffleSettings() {
-            const prize = document.getElementById('adminRafflePrize').value;
-            const description = document.getElementById('adminRaffleDescription').value;
-            
-            if (prize) {
-                document.getElementById('rafflePrizeName').innerHTML = `🎁 <strong>${prize}</strong>`;
-            }
-            if (description) {
-                document.getElementById('raffleDescription').textContent = description;
-            }
-            
-            showNotification('Configuración del sorteo guardada', 'success');
-        }
-
-        // ===== SISTEMA DE NOTIFICACIONES =====
-        function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // ===== FUNCIONES DE SUBIR ARCHIVOS =====
+        
+        // ===== SISTEMA DE SUBIR ARCHIVOS CORREGIDO =====
         function setupFileUpload() {
             const uploadArea = document.getElementById('uploadArea');
             const fileInput = document.getElementById('fileInput');
             const browseBtn = document.getElementById('browseFilesBtn');
             const uploadBtn = document.getElementById('uploadFilesBtn');
+            const selectedFilesDiv = document.getElementById('selectedFiles');
+            const fileListDiv = document.getElementById('fileList');
+            
+            let selectedFiles = [];
             
             browseBtn.addEventListener('click', () => {
                 fileInput.click();
@@ -3968,16 +4165,79 @@
                 uploadArea.classList.remove('dragover');
                 
                 if (e.dataTransfer.files.length) {
-                    fileInput.files = e.dataTransfer.files;
-                    showNotification(`${e.dataTransfer.files.length} archivos listos para subir`, 'info');
+                    handleSelectedFiles(e.dataTransfer.files);
                 }
             });
             
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleSelectedFiles(e.target.files);
+                }
+            });
+            
+            function handleSelectedFiles(files) {
+                selectedFiles = Array.from(files);
+                updateFileList();
+                selectedFilesDiv.style.display = 'block';
+                showNotification(`${selectedFiles.length} archivo(s) seleccionado(s)`, 'info');
+            }
+            
+            function updateFileList() {
+                fileListDiv.innerHTML = '';
+                selectedFiles.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.style.cssText = `
+                        padding: 10px;
+                        background: #252f4a;
+                        border-radius: 6px;
+                        margin-bottom: 8px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    `;
+                    
+                    fileItem.innerHTML = `
+                        <div>
+                            <i class="fas fa-file" style="margin-right: 10px;"></i>
+                            ${file.name} (${formatFileSize(file.size)})
+                        </div>
+                        <button class="remove-file-btn" data-index="${index}" style="background: none; border: none; color: var(--cuban-red); cursor: pointer;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    fileListDiv.appendChild(fileItem);
+                });
+                
+                // Añadir event listeners a los botones de eliminar
+                document.querySelectorAll('.remove-file-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.closest('.remove-file-btn').dataset.index);
+                        selectedFiles.splice(index, 1);
+                        updateFileList();
+                        if (selectedFiles.length === 0) {
+                            selectedFilesDiv.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
             uploadBtn.addEventListener('click', () => {
-                if (!fileInput.files.length) {
+                if (selectedFiles.length === 0) {
                     showNotification('Selecciona archivos primero', 'error');
                     return;
                 }
+                
+                const category = document.getElementById('fileCategory').value;
+                const description = document.getElementById('fileDescription').value || 'Sin descripción';
                 
                 const progressBar = document.getElementById('progressBar');
                 const progressText = document.getElementById('progressText');
@@ -3986,29 +4246,156 @@
                 uploadProgress.style.display = 'block';
                 
                 let uploaded = 0;
-                const totalFiles = fileInput.files.length;
+                const totalFiles = selectedFiles.length;
                 
-                const uploadInterval = setInterval(() => {
-                    uploaded++;
-                    const percentage = Math.min((uploaded / totalFiles) * 100, 100);
-                    progressBar.style.width = `${percentage}%`;
-                    progressText.textContent = `${Math.round(percentage)}%`;
-                    
-                    if (uploaded >= totalFiles) {
-                        clearInterval(uploadInterval);
+                selectedFiles.forEach((file, index) => {
+                    setTimeout(() => {
+                        const fileData = {
+                            name: file.name,
+                            size: file.size,
+                            type: file.type,
+                            category: category,
+                            description: description,
+                            lastModified: file.lastModified
+                        };
                         
-                        setTimeout(() => {
-                            showNotification(`${totalFiles} archivos subidos correctamente`, 'success');
-                            uploadProgress.style.display = 'none';
-                            progressBar.style.width = '0%';
-                            progressText.textContent = '0%';
-                            fileInput.value = '';
-                        }, 500);
-                    }
-                }, 300);
+                        database.addUploadedFile(fileData);
+                        
+                        uploaded++;
+                        const percentage = Math.min((uploaded / totalFiles) * 100, 100);
+                        progressBar.style.width = `${percentage}%`;
+                        progressText.textContent = `${Math.round(percentage)}%`;
+                        
+                        if (uploaded >= totalFiles) {
+                            setTimeout(() => {
+                                showNotification(`${totalFiles} archivo(s) subido(s) correctamente`, 'success');
+                                uploadProgress.style.display = 'none';
+                                progressBar.style.width = '0%';
+                                progressText.textContent = '0%';
+                                
+                                // Limpiar selección
+                                selectedFiles = [];
+                                fileInput.value = '';
+                                selectedFilesDiv.style.display = 'none';
+                                document.getElementById('fileDescription').value = '';
+                                
+                                // Actualizar lista de archivos subidos
+                                updateUploadedFilesList();
+                            }, 500);
+                        }
+                    }, index * 300);
+                });
             });
         }
-
+        
+        function updateUploadedFilesList() {
+            const uploadedFiles = database.getUploadedFiles();
+            const uploadedFilesList = document.getElementById('uploadedFiles');
+            const uploadedFilesSection = document.getElementById('uploadedFilesList');
+            
+            if (uploadedFiles.length === 0) {
+                uploadedFilesSection.style.display = 'none';
+                return;
+            }
+            
+            uploadedFilesSection.style.display = 'block';
+            uploadedFilesList.innerHTML = '';
+            
+            uploadedFiles.slice(0, 10).forEach(file => {
+                const fileDate = new Date(file.timestamp);
+                const dateStr = fileDate.toLocaleDateString('es-CU');
+                
+                const fileItem = document.createElement('div');
+                fileItem.style.cssText = `
+                    padding: 10px;
+                    background: rgba(255, 255, 255, 0.05);
+                    border-radius: 6px;
+                    margin-bottom: 8px;
+                    font-size: 0.9rem;
+                `;
+                
+                fileItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <i class="fas fa-file" style="margin-right: 8px; color: var(--cuban-blue);"></i>
+                            <strong>${file.name}</strong>
+                        </div>
+                        <span style="color: #94a3b8; font-size: 0.8rem;">${dateStr}</span>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 0.8rem; margin-top: 5px;">
+                        ${file.category} • ${file.description}
+                    </div>
+                `;
+                
+                uploadedFilesList.appendChild(fileItem);
+            });
+            
+            if (uploadedFiles.length > 10) {
+                const moreFiles = document.createElement('div');
+                moreFiles.style.cssText = `
+                    text-align: center;
+                    color: #94a3b8;
+                    font-size: 0.9rem;
+                    margin-top: 10px;
+                `;
+                moreFiles.textContent = `...y ${uploadedFiles.length - 10} archivo(s) más`;
+                uploadedFilesList.appendChild(moreFiles);
+            }
+        }
+        
+        // ===== SISTEMA DE RIFA CORREGIDO =====
+        function loadRaffleSettings() {
+            const settings = database.getSettings();
+            const raffle = settings.raffle;
+            
+            document.getElementById('adminRafflePrize').value = raffle.prize;
+            document.getElementById('adminRaffleDescription').value = raffle.description;
+            
+            const endDate = new Date(raffle.endDate);
+            const now = new Date();
+            const diffDays = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+            document.getElementById('adminRaffleDays').value = diffDays > 0 ? diffDays : 5;
+            
+            document.getElementById('rafflePrizeName').innerHTML = `🎁 <strong>${raffle.prize}</strong>`;
+            document.getElementById('raffleDescription').textContent = raffle.description;
+        }
+        
+        function saveRaffleSettings() {
+            const prize = document.getElementById('adminRafflePrize').value;
+            const description = document.getElementById('adminRaffleDescription').value;
+            const days = parseInt(document.getElementById('adminRaffleDays').value) || 5;
+            
+            if (!prize.trim()) {
+                showNotification('Por favor ingresa el nombre del premio', 'error');
+                return;
+            }
+            
+            const endDate = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+            
+            database.updateRaffleSettings({
+                prize: prize,
+                description: description,
+                endDate: endDate.toISOString()
+            });
+            
+            document.getElementById('rafflePrizeName').innerHTML = `🎁 <strong>${prize}</strong>`;
+            document.getElementById('raffleDescription').textContent = description;
+            
+            showNotification('Configuración del sorteo guardada', 'success');
+        }
+        
+        // ===== SISTEMA DE NOTIFICACIONES =====
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
         // ===== SISTEMA DE COPIA DE ENLACE QR =====
         function setupCopyLink() {
             document.getElementById('copyAdminLinkBtn').addEventListener('click', () => {
@@ -4018,38 +4405,23 @@
                 
                 navigator.clipboard.writeText(linkInput.value).then(() => {
                     showNotification('Enlace copiado al portapapeles', 'success');
+                }).catch(err => {
+                    linkInput.select();
+                    document.execCommand('copy');
+                    showNotification('Enlace copiado al portapapeles', 'success');
                 });
             });
         }
-
+        
         // ===== FUNCIONES DE MOSTRAR/OCULTAR =====
         function toggleMobileMenu() {
             const nav = document.querySelector('nav');
             nav.classList.toggle('active');
         }
-
-        function showCartDropdown() {
-            document.getElementById('cartDropdown').classList.add('active');
-        }
-
-        function hideCartDropdown() {
-            document.getElementById('cartDropdown').classList.remove('active');
-        }
-
-        function showCartPage() {
-            updateCartPage();
-            document.getElementById('cartPage').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function hideCartPage() {
-            document.getElementById('cartPage').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
+        
         // ===== INICIALIZACIÓN DE EVENTOS =====
         function setupEventListeners() {
-            // Eventos del carrito
+            // Eventos del carrito mejorado
             document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const bookData = {
@@ -4064,8 +4436,16 @@
                 });
             });
 
-            document.getElementById('cartIcon').addEventListener('click', showCartDropdown);
-            document.getElementById('closeCartDropdown').addEventListener('click', hideCartDropdown);
+            document.getElementById('cartIcon').addEventListener('click', () => {
+                cartOpenByUser = true;
+                showCartDropdown();
+            });
+            
+            document.getElementById('closeCartDropdown').addEventListener('click', () => {
+                cartShouldStayOpen = false;
+                hideCartDropdown();
+            });
+            
             document.getElementById('viewCartBtn').addEventListener('click', showCartPage);
             document.getElementById('closeCartBtn').addEventListener('click', hideCartPage);
             
@@ -4089,8 +4469,7 @@
 
             // Eventos de pago
             document.getElementById('checkoutBtn').addEventListener('click', openPaymentModal);
-            document.getElementById('proceedCheckoutBtn')?.addEventListener('click', openPaymentModal);
-
+            
             // Eventos del modal de pago
             document.getElementById('closePaymentModal').addEventListener('click', closePaymentModal);
             
@@ -4132,30 +4511,60 @@
             });
 
             document.getElementById('simulateSaleBtn').addEventListener('click', simulateSale);
-            document.getElementById('simulate10SalesBtn')?.addEventListener('click', () => simulateMultipleSales(10));
-            document.getElementById('resetStatsBtn')?.addEventListener('click', resetStatistics);
-            document.getElementById('toggleDemoModeBtn')?.addEventListener('click', toggleDemoMode);
-            document.getElementById('exportCSVBtn')?.addEventListener('click', exportVisitsCSV);
-            document.getElementById('clearVisitsBtn')?.addEventListener('click', () => {
-                if (confirm('¿Estás seguro de que quieres borrar todo el historial de visitas?')) {
-                    database.clearVisits();
-                    updateVisitsList();
-                    showNotification('Historial de visitas borrado', 'success');
-                }
-            });
+            
+            const simulate10SalesBtn = document.getElementById('simulate10SalesBtn');
+            if (simulate10SalesBtn) {
+                simulate10SalesBtn.addEventListener('click', () => simulateMultipleSales(10));
+            }
+            
+            const resetStatsBtn = document.getElementById('resetStatsBtn');
+            if (resetStatsBtn) {
+                resetStatsBtn.addEventListener('click', resetStatistics);
+            }
+            
+            const toggleDemoModeBtn = document.getElementById('toggleDemoModeBtn');
+            if (toggleDemoModeBtn) {
+                toggleDemoModeBtn.addEventListener('click', toggleDemoMode);
+            }
+            
+            const exportCSVBtn = document.getElementById('exportCSVBtn');
+            if (exportCSVBtn) {
+                exportCSVBtn.addEventListener('click', exportVisitsCSV);
+            }
+            
+            const clearVisitsBtn = document.getElementById('clearVisitsBtn');
+            if (clearVisitsBtn) {
+                clearVisitsBtn.addEventListener('click', () => {
+                    if (confirm('¿Estás seguro de que quieres borrar todo el historial de visitas?')) {
+                        database.clearVisits();
+                        updateVisitsList();
+                        showNotification('Historial de visitas borrado', 'success');
+                    }
+                });
+            }
 
             // Eventos del sistema de rifa
             document.getElementById('participateBtn').addEventListener('click', participateInRaffle);
-            document.getElementById('saveRaffleBtn')?.addEventListener('click', saveRaffleSettings);
+            
+            const saveRaffleBtn = document.getElementById('saveRaffleBtn');
+            if (saveRaffleBtn) {
+                saveRaffleBtn.addEventListener('click', saveRaffleSettings);
+            }
 
             // Eventos de filtros
-            document.getElementById('visitFilter')?.addEventListener('change', (e) => {
-                updateVisitsList(e.target.value, document.getElementById('visitDateFilter').value);
-            });
-
-            document.getElementById('visitDateFilter')?.addEventListener('change', (e) => {
-                updateVisitsList(document.getElementById('visitFilter').value, e.target.value);
-            });
+            const visitFilter = document.getElementById('visitFilter');
+            if (visitFilter) {
+                visitFilter.addEventListener('change', (e) => {
+                    updateVisitsList(e.target.value, document.getElementById('visitDateFilter').value);
+                });
+            }
+            
+            const visitDateFilter = document.getElementById('visitDateFilter');
+            if (visitDateFilter) {
+                visitDateFilter.addEventListener('change', (e) => {
+                    updateVisitsList(document.getElementById('visitFilter').value, e.target.value);
+                });
+            }
 
             // Eventos móviles
             document.querySelector('.mobile-menu').addEventListener('click', toggleMobileMenu);
@@ -4165,7 +4574,7 @@
                 const cartIcon = document.getElementById('cartIcon');
                 const cartDropdown = document.getElementById('cartDropdown');
                 
-                if (!cartIcon.contains(e.target) && !cartDropdown.contains(e.target)) {
+                if (!cartIcon.contains(e.target) && !cartDropdown.contains(e.target) && !cartOpenByUser) {
                     hideCartDropdown();
                 }
                 
@@ -4182,6 +4591,7 @@
                 if (e.target.id === 'continueShoppingBtn' || e.target.closest('#continueShoppingBtn') || 
                     e.target.id === 'continueShoppingBtnPage' || e.target.closest('#continueShoppingBtnPage')) {
                     hideCartPage();
+                    hideCartDropdown();
                     document.querySelector('html').scrollTo({
                         top: document.getElementById('libros').offsetTop - 100,
                         behavior: 'smooth'
@@ -4203,7 +4613,6 @@
                                 behavior: 'smooth'
                             });
                             
-                            // Cerrar menú móvil si está abierto
                             if (window.innerWidth <= 768) {
                                 document.querySelector('nav').classList.remove('active');
                             }
@@ -4215,37 +4624,24 @@
 
         // ===== INICIALIZACIÓN DEL SISTEMA =====
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar base de datos y cargar carrito
             loadCartFromStorage();
-            
-            // Iniciar seguimiento de visita
             trackVisit();
-            
-            // Configurar eventos
             setupEventListeners();
-            
-            // Configurar sistema de archivos
             setupFileUpload();
-            
-            // Configurar sistema de copia
             setupCopyLink();
+            setupAddOrderFromDropdown();
             
-            // Actualizar reloj de Cuba cada segundo
             updateCubaTime();
             setInterval(updateCubaTime, 1000);
             
-            // Actualizar temporizador de sorteo cada segundo
             updateRaffleTimer();
             setInterval(updateRaffleTimer, 1000);
             
-            // Actualizar contadores cada 30 segundos
             setInterval(updateVisitCounters, 30000);
             
-            // Actualizar productos vendidos del día
             updateTopBook();
             setInterval(updateTopBook, 60000);
             
-            // Configurar enlaces de WhatsApp
             document.querySelectorAll('a[href^="https://wa.me/"]').forEach(link => {
                 link.addEventListener('click', (e) => {
                     if (isDemoUser) {
@@ -4255,13 +4651,11 @@
                 });
             });
             
-            // Inicializar modo demo según configuración
             const settings = database.getSettings();
             if (settings.demoMode) {
                 toggleDemoMode();
             }
             
-            // Simular visitas iniciales
             setTimeout(() => {
                 simulateMultipleSales(3);
                 simulateMultipleSales(2);
