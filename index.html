@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curiosidades Culinarias - Libros de Cocina en PDF</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== ESTILOS UNIFICADOS ===== */
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #f39c12;
+            --light: #fdf2e9;
+            --dark: #2c3e50;
+            --text: #333;
+            --gray: #95a5a6;
+            --success: #27ae60;
+            --info: #3498db;
+            --cuban-blue: #00205b;
+            --cuban-red: #cf142b;
+            --tracker-bg: #0f172a;
+            --tracker-card: #1e293b;
+            --tracker-primary: #3b82f6;
+            --tracker-success: #10b981;
+            --tracker-warning: #f59e0b;
+            --tracker-danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* ===== BANDERA CUBA ===== */
+        .cuba-flag {
+            background: linear-gradient(to bottom, 
+                #00205b 33%, 
+                white 33%, 67%,
+                #00205b 67%);
+            height: 6px;
+            width: 100%;
+            position: relative;
+            margin-bottom: 5px;
+        }
+        
+        .cuba-flag::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            background: #00205b;
+            border-right: 1px solid white;
+        }
+        
+        .cuba-flag::after {
+            content: '★';
+            position: absolute;
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 12px;
+        }
+        
+        /* ===== HEADER ===== */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--cuban-blue);
+        }
+        
+        .logo h1 span {
+            color: var(--cuban-red);
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .
