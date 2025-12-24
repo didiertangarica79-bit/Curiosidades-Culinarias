@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Rifas - Navidad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E63946;
+            --secondary: #1D3557;
+            --accent: #F4A261;
+            --success: #2A9D8F;
+            --light: #F1FAEE;
+            --dark: #121212;
+            --gray: #8D99AE;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.7)), url('https://images.unsplash.com/photo-1546387903-6d82d96ccca6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            padding: 20px 0;
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1512389142860-9c449e58a543?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=20');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            background-color: white;
+            color: var(--primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo-text h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 28px;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, white, #FFD166);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Countdown Timer */
+        .countdown-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: var(--radius);
+            padding: 15px 25px;
+            text-align: center;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 2px solid var(--accent);
+        }
+
+        .countdown-title {
+            color: var(--accent);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .countdown-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px 10px;
+            min-width: 90px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .countdown-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Login/Register Panel */
+        .auth-panel {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .panel-title {
+            font-size: 24px;
+            color: var(--secondary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-title i {
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary), #ff6b6b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(230, 57, 70, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to right, var(--secondary), #2a4365);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 7px 15px rgba(29, 53, 87, 0.3);
+        }
+
+        .auth-links {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .auth-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border-top: 5px solid var(--primary);
+        }
+
+        .stat-card:nth-child(2) {
+            border-top-color: var(--success);
+        }
+
+        .stat-card:nth-child(3) {
+            border-top-color: var(--accent);
+        }
+
+        .stat-card:nth-child(4) {
+            border-top-color: var(--secondary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            color: var(--success);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            color: var(--accent);
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            color: var(--secondary);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--secondary);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        /* Tables Section */
+        .tables-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .tables-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .table-title {
+            font-size: 20px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: var(--secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* File Upload */
+        .upload-container {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            text-align: center;
+            border: 3px dashed #ddd;
+            transition: var(--transition);
+        }
+
+        .upload-container:hover {
+            border-color: var(--primary);
+        }
+
+        .upload-icon {
+            font-size: 60px;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .upload-text h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .upload-text p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: var(--radius) var(--radius) 0 0;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Date Display */
+        .date-display {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--success);
+        }
+
+        .current-date {
+            font-size: 20px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .current-time {
+            font-size: 28px;
+            color: var(--primary);
+            font-weight: 800;
+            margin-top: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .countdown {
+                flex-wrap: wrap;
+            }
+            
+            .countdown-item {
+                min-width: 70px;
+                padding: 10px 5px;
+            }
+            
+            .countdown-value {
+                font-size: 24px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-links a {
+                margin: 0 10px;
+            }
+        }
+
+        /* Animation for countdown */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .countdown-value.animate {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Sistema de Rifas Navidad</h1>
+                        <p>¡Gana increíbles premios esta temporada!</p>
+                    </div>
+                </div>
+                
+                <div class="date-display">
+                    <div id="current-date" class="current-date">Cargando fecha...</div>
+                    <div id="current-time" class="current-time">Cargando hora...</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Countdown Timer -->
+        <div class="countdown-container">
+            <div class="countdown-title">
+                <i class="fas fa-hourglass-half"></i>
+                <span>CUENTA REGRESIVA PARA EL SORTEO NAVIDEÑO</span>
+            </div>
+            <div class="countdown">
+                <div class="countdown-item">
+                    <div id="days" class="countdown-value">00</div>
+                    <div class="countdown-label">Días</div>
+                </div>
+                <div class="countdown-item">
+                    <div id="hours" class="countdown-value">00</div>
+                    <div class="countdown-label">Horas</div>
+                </div>
+                <div class="countdown-item">
+                    <div id="minutes" class="countdown-value">00</div>
+                    <div class="countdown-label">Minutos</div>
+                </div>
+                <div class="countdown-item">
+                    <div id="seconds" class="countdown-value">00</div>
+                    <div class="countdown-label">Segundos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Login/Register Panel -->
+            <div class="auth-panel">
+                <h2 class="panel-title"><i class="fas fa-user-plus"></i> Crea tu Cuenta</h2>
+                
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" class="form-control" placeholder="admin" value="admin">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" class="form-control" placeholder="******" value="www">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password">Confirmar Contraseña</label>
+                        <input type="password" id="confirm-password" class="form-control" placeholder="******" value="www">
+                    </div>
+                    
+                    <button type="submit" class="btn">Registrarse</button>
+                    
+                    <div class="auth-links">
+                        <p>¿Ya tienes cuenta? <a href="#" id="login-link">Inicia sesión aquí</a></p>
+                        <p><a href="#"><i class="fas fa-home"></i> Volver al inicio</a></p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stats Panel -->
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-value" id="tickets-sold">0</div>
+                    <div class="stat-label">Boletos Vendidos</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-value" id="total-raised">$0.00</div>
+                    <div class="stat-label">Recaudación Total</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value" id="registered-users">0</div>
+                    <div class="stat-label">Usuarios Registrados</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-value" id="prizes-delivered">0</div>
+                    <div class="stat-label">Premios Entregados</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Section -->
+        <div class="tables-section">
+            <!-- Purchases History -->
+            <div class="table-container">
+                <h3 class="table-title"><i class="fas fa-shopping-cart"></i> Compras</h3>
+                <p style="margin-bottom: 15px; color: var(--gray);">Historia de tus compras</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Boleto</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--gray);">No hay compras registradas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Previous Winners -->
+            <div class="table-container">
+                <h3 class="table-title"><i class="fas fa-award"></i> Resultados</h3>
+                <p style="margin-bottom: 15px; color: var(--gray);">Ganadores de sorteos anteriores</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hora del Sorteo</th>
+                            <th>Ganador</th>
+                            <th>Premio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>25/12/2023 20:00</td>
+                            <td>Juan Pérez</td>
+                            <td>iPhone 15 Pro</td>
+                        </tr>
+                        <tr>
+                            <td>24/12/2023 18:00</td>
+                            <td>María González</td>
+                            <td>TV LED 55"</td>
+                        </tr>
+                        <tr>
+                            <td>23/12/2023 16:00</td>
+                            <td>Carlos López</td>
+                            <td>Consola PlayStation 5</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- File Upload -->
+        <div class="upload-container">
+            <div class="upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="upload-text">
+                <h3>Configuración del Sistema</h3>
+                <p>Arrastra y suelta archivos aquí o haz clic para seleccionar</p>
+                <p><small>Esta área es solo para administradores</small></p>
+            </div>
+            <button class="btn btn-secondary" style="width: auto; padding: 12px 30px;">
+                <i class="fas fa-upload"></i> Subir Archivo
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="copyright">
+                    <p>Sistema de Rifas Navidad © 2023 - Todos los derechos reservados</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>
+                    <a href="#"><i class="fas fa-shield-alt"></i> Privacidad</a>
+                    <a href="#"><i class="fas fa-envelope"></i> Contacto</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Actualizar fecha y hora en tiempo real
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Formatear fecha en español
+            const optionsDate = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const formattedDate = now.toLocaleDateString('es-ES', optionsDate);
+            
+            // Formatear hora
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const formattedTime = `${hours}:${minutes}:${seconds}`;
+            
+            document.getElementById('current-date').textContent = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+            document.getElementById('current-time').textContent = formattedTime;
+            
+            // Animación para el segundo actual
+            const secondsElement = document.getElementById('seconds');
+            secondsElement.classList.remove('animate');
+            void secondsElement.offsetWidth; // Trigger reflow
+            secondsElement.classList.add('animate');
+        }
+        
+        // Inicializar fecha y hora
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        
+        // Configurar cuenta regresiva para Navidad (25 de diciembre)
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            let christmas = new Date(currentYear, 11, 25); // 25 de diciembre
+            
+            // Si ya pasó la Navidad de este año, apuntar a la del próximo año
+            if (now > christmas) {
+                christmas = new Date(currentYear + 1, 11, 25);
+            }
+            
+            const diff = christmas - now;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // Inicializar cuenta regresiva
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Simular estadísticas en tiempo real
+        function simulateLiveStats() {
+            // Incrementar boletos vendidos aleatoriamente
+            const ticketsSold = document.getElementById('tickets-sold');
+            const currentTickets = parseInt(ticketsSold.textContent);
+            if (Math.random() > 0.7 && currentTickets < 1000) {
+                ticketsSold.textContent = currentTickets + Math.floor(Math.random() * 5) + 1;
+                
+                // Actualizar recaudación total (suponiendo $10 por boleto)
+                const totalRaised = document.getElementById('total-raised');
+                const currentRaised = parseFloat(totalRaised.textContent.replace('$', '').replace(',', ''));
+                const newTickets = parseInt(ticketsSold.textContent) - currentTickets;
+                totalRaised.textContent = '$' + (currentRaised + (newTickets * 10)).toFixed(2);
+                
+                // Incrementar usuarios registrados ocasionalmente
+                if (Math.random() > 0.8) {
+                    const registeredUsers = document.getElementById('registered-users');
+                    registeredUsers.textContent = parseInt(registeredUsers.textContent) + 1;
+                }
+            }
+            
+            // Incrementar premios entregados ocasionalmente
+            if (Math.random() > 0.95) {
+                const prizesDelivered = document.getElementById('prizes-delivered');
+                prizesDelivered.textContent = parseInt(prizesDelivered.textContent) + 1;
+            }
+        }
+        
+        // Inicializar estadísticas simuladas
+        setInterval(simulateLiveStats, 3000);
+        
+        // Manejar envío del formulario
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
+                return;
+            }
+            
+            // Simular registro exitoso
+            alert('¡Registro exitoso! Bienvenido al sistema de rifas.');
+            
+            // Incrementar contador de usuarios registrados
+            const registeredUsers = document.getElementById('registered-users');
+            registeredUsers.textContent = parseInt(registeredUsers.textContent) + 1;
+            
+            // Resetear formulario
+            document.getElementById('register-form').reset();
+            document.getElementById('username').value = 'admin';
+        });
+        
+        // Manejar cambio a login
+        document.getElementById('login-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de inicio de sesión activada. En una implementación real, esto redirigiría a la página de login.');
+        });
+        
+        // Inicializar algunos datos
+        document.getElementById('tickets-sold').textContent = '142';
+        document.getElementById('total-raised').textContent = '$1,420.00';
+        document.getElementById('registered-users').textContent = '89';
+        document.getElementById('prizes-delivered').textContent = '3';
+    </script>
+</body>
+</html>
