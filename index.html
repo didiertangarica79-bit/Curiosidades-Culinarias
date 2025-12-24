@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Didiert Angarica | Cocina y Ventas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos de FontAwesome para Redes Sociales -->
+    <link rel="stylesheet" href="cdnjs.cloudflare.com">
+</head>
+<body class="bg-slate-50 font-sans">
+
+    <!-- Barra Superior con Reloj de Cuba -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50 p-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold text-orange-600">Didiert Angarica</h1>
+                <p class="text-xs text-gray-500 flex items-center gap-1">
+                    <i class="fa-regular fa-clock"></i> Hora en Cuba: <span id="reloj-cuba" class="font-mono font-bold text-slate-800">00:00:00</span>
+                </p>
+            </div>
+            
+            <div class="flex gap-4 items-center">
+                <button onclick="toggleAdmin()" class="bg-slate-800 text-white px-3 py-1 rounded text-xs uppercase tracking-widest hover:bg-black">Admin</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sección de Soporte y Contacto (Ubicación EUA) -->
+    <section class="max-w-6xl mx-auto mt-8 px-4">
+        <div class="bg-orange-50 border border-orange-200 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <h2 class="text-xl font-bold text-slate-800">Centro de Soporte y Ventas</h2>
+                <p class="text-gray-600">Ubicación principal: <span class="font-semibold text-blue-700">Estados Unidos 🇺🇸</span></p>
+            </div>
+            
+            <div class="flex flex-wrap gap-4 justify-center">
+                <!-- Botón WhatsApp (Número oculto) -->
+                <a href="52494433" target="_blank" 
+                   class="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition shadow-lg shadow-green-200">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>Soporte WhatsApp</span>
+                </a>
+
+                <!-- Botón Email (Visible pero funcional) -->
+                <a href="mailto:tu-didiertangarica79@gmail.com" 
+                   class="flex items-center gap-2 bg-slate-800 text-white px-5 py-2 rounded-full hover:bg-slate-900 transition shadow-lg shadow-slate-200">
+                    <i class="fa-regular fa-envelope text-xl"></i>
+                    <span>tu-culinariascuriosidades4@gmail.com</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grid de Libros (Portadas) -->
+    <main class="max-w-6xl mx-auto p-8 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Carpeta/Libro 1 -->
+        <div class="group bg-white rounded-3xl shadow-xl overflow-hidden hover:scale-105 transition duration-300">
+            <div class="h-80 bg-slate-200 relative">
+                <!-- Imagen de Portada -->
+                <img src="images.unsplash.com" alt="Recetario" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                    <span class="text-white font-bold border-2 border-white p-2">VER PREVIA</span>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="text-xs font-bold text-orange-500 uppercase mb-2">PDF Interactivo</div>
+                <h3 class="text-xl font-bold mb-3 italic">"Recetas de mi Canal Vol. 1"</h3>
+                <button class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700">Confirmar Pago $15.00</button>
+            </div>
+        </div>
+
+        <!-- Repetir para más libros... -->
+
+    </main>
+
+    <!-- Panel Admin Oculto -->
+    <div id="admin-panel" class="hidden max-w-4xl mx-auto p-10 border-4 border-dashed border-slate-300 rounded-3xl my-10 bg-white">
+        <h2 class="text-2xl font-black mb-4 uppercase">🛡 Dashboard Didiert</h2>
+        <p class="mb-6 text-gray-500 italic font-serif">"Desde aquí gestionas el imperio del sabor."</p>
+        <div class="grid grid-cols-2 gap-4">
+            <a href="#" class="p-4 bg-blue-50 text-blue-700 rounded-xl font-bold">Ver Pagos Recibidos</a>
+            <a href="#" class="p-4 bg-red-50 text-red-700 rounded-xl font-bold">Consola YouTube</a>
+        </div>
+    </div>
+
+    <script>
+        // Lógica del Reloj de Cuba (UTC -5)
+        function actualizarReloj() {
+            const now = new Date();
+            // Ajuste automático para zona horaria de Cuba (en 2025)
+            const opciones = { timeZone: 'America/Havana', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const horaCuba = now.toLocaleTimeString('en-US', opciones);
+            document.getElementById('reloj-cuba').innerText = horaCuba;
+        }
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+
+        function toggleAdmin() {
+            const p = document.getElementById('admin-panel');
+            p.classList.toggle('hidden');
+        }
+    </script>
+
+</body>
+</html>
