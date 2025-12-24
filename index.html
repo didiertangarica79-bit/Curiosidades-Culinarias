@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curiosidades Culinarias - Tienda Completa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css">
+    <style>
+        /* ===== ESTILOS UNIFICADOS - CONFIGURACIÓN COMPLETA ===== */
+        :root {
+            /* Colores principales */
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #f39c12;
+            --light: #fdf2e9;
+            --dark: #2c3e50;
+            --text: #333;
+            --gray: #95a5a6;
+            --success: #27ae60;
+            --info: #3498db;
+            
+            /* Colores Cuba */
+            --cuban-blue: #00205b;
+            --cuban-red: #cf142b;
+            
+            /* Tracker/Admin */
+            --tracker-bg: #0f172a;
+            --tracker-card: #1e293b;
+            --tracker-primary: #3b82f6;
+            --tracker-success: #10b981;
+            --tracker-warning: #f59e0b;
+            --tracker-danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #fff;
+            padding-top: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* ===== HEADER MEJORADO ===== */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--cuban-blue);
+        }
+
+        .logo h1 span {
+            color: var(--cuban-red);
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .logo-icon {
+            color: var(--cuban-blue);
+            font-size: 2.2rem;
+        }
+
+        .country-badge {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--cuban-red);
+        }
+
+        /* ===== BOTONES MEJORADOS ===== */
+        .cta-button {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(207, 20, 43, 0.3);
+        }
+
+        .admin-toggle-btn {
+            background: linear-gradient(to right, #27ae60, #219653);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        /* ===== CARRITO MEJORADO ===== */
+        .cart-container {
+            position: relative;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--cuban-blue);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--cuban-red);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .cart-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 380px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 1001;
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .cart-dropdown.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cart-header {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-items {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-info h4 {
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .cart-item-info p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: var(--cuban-blue);
+            color: white;
+            border-color: var(--cuban-blue);
+        }
+
+        .cart-item-price {
+            font-weight: 600;
+            color: var(--cuban-red);
+        }
+
+        .cart-total {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 0 0 10px 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .cart-total-row.total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--cuban-blue);
+        }
+
+        .cart-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(rgba(0, 32, 91, 0.85), rgba(207, 20, 43, 0.85)), url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .secondary-button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .secondary-button:hover {
+            background-color: white;
+            color: var(--cuban-blue);
+            transform: translateY(-2px);
+        }
+
+        /* ===== SECCIONES GENERALES ===== */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--cuban-blue);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 15px auto 0;
+        }
+
+        /* ===== LIBROS ===== */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .book-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 32, 91, 0.15);
+        }
+
+        .book-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .book-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .book-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 70%, rgba(0, 32, 91, 0.3));
+        }
+
+        .book-content {
+            padding: 25px;
+        }
+
+        .book-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--cuban-blue);
+        }
+
+        .book-content p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .book-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .book-feature {
+            background-color: rgba(0, 32, 91, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--cuban-blue);
+        }
+
+        .book-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cuban-red);
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+
+        /* ===== CALENDARIO ===== */
+        .calendar-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .calendar-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        #calendar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .event-details {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* ===== SORTEO ===== */
+        .raffle-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .raffle-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .raffle-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .raffle-countdown {
+            font-size: 2.5rem;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: var(--cuban-red);
+            margin: 20px 0;
+        }
+
+        /* ===== PANEL DE SEGUIMIENTO ===== */
+        .tracker-section {
+            background: linear-gradient(135deg, var(--tracker-bg) 0%, #1e293b 100%);
+            color: white;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tracker-card {
+            background: var(--tracker-card);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-left: 5px solid var(--cuban-blue);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--tracker-success);
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        /* ===== SOBRE DIDIERT ===== */
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-img {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 32, 91, 0.1);
+        }
+
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ===== CONTACTO ===== */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: linear-gradient(to bottom, var(--cuban-blue), #001942);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* ===== PANEL ADMINISTRADOR ===== */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--tracker-bg);
+            z-index: 3000;
+            overflow-y: auto;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #1a2238;
+            padding: 25px 20px;
+            border-right: 2px solid var(--cuban-blue);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .calendar-container,
+            .raffle-content,
+            .about-container,
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .admin-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu {
+                display: block;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: var(--dark);
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-dropdown {
+                width: 320px;
+                right: -30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-utensils logo-icon"></i>
+                <div>
+                    <h1>Curiosidades <span>Culinarias</span></h1>
+                    <div class="country-badge">
+                        <i class="fas fa-flag"></i> Cocina Cubana & Internacional
+                    </div>
+                </div>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#libros">Libros</a></li>
+                    <li><a href="#rifa">Rifa</a></li>
+                    <li><a href="#calendario">Calendario</a></li>
+                    <li><a href="#sobre">Sobre Didier</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <!-- Botón de Admin -->
+            <button class="admin-toggle-btn" id="adminToggleBtn">
+                <i class="fas fa-user-cog"></i> Admin
+            </button>
+
+            <!-- Carrito de Compras -->
+            <div class="cart-container">
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                
+                <!-- Dropdown del Carrito -->
+                <div class="cart-dropdown" id="cartDropdown">
+                    <div class="cart-header">
+                        <h3><i class="fas fa-shopping-cart"></i> Tu Carrito</h3>
+                        <button class="close-cart-dropdown" id="closeCartDropdown">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="cart-items" id="cartItems">
+                        <!-- Los items del carrito se insertan aquí -->
+                    </div>
+                    
+                    <div class="cart-total">
+                        <div class="cart-total-row">
+                            <span>Total:</span>
+                            <span id="cartTotal">$0.00</span>
+                        </div>
+                        
+                        <div class="cart-buttons">
+                            <button class="cta-button" id="checkoutBtn">
+                                <i class="fas fa-check"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Panel de Administración -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-container">
+            <div class="sidebar">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="color: white; font-size: 1.5rem;">
+                        <i class="fas fa-user-cog"></i> Panel de Control
+                    </h2>
+                </div>
+                
+                <button class="menu-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                
+                <button class="menu-item" data-section="uploadFiles">
+                    <i class="fas fa-upload"></i> Subir Archivos
+                </button>
+                
+                <button class="menu-item" data-section="raffleConfig">
+                    <i class="fas fa-gift"></i> Configurar Sorteo
+                </button>
+                
+                <button class="menu-item" data-section="calendarConfig">
+                    <i class="fas fa-calendar-alt"></i> Calendario
+                </button>
+                
+                <button class="menu-item" data-section="productsConfig">
+                    <i class="fas fa-book"></i> Productos
+                </button>
+            </div>
+            
+            <div class="main-content">
+                <div class="admin-header">
+                    <h2><i class="fas fa-user-cog"></i> Panel de Administración</h2>
+                    <button class="close-admin" id="closeAdminPanel">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Sección Dashboard -->
+                <div class="admin-section active" id="dashboardSection">
+                    <h3><i class="fas fa-tachometer-alt"></i> Dashboard de Control</h3>
+                    
+                    <div class="files-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-number" id="totalBooks">3</div>
+                            <p style="color: #94a3b8;">Libros Subidos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Otras secciones del admin... -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <h2>Recetas creadas con Inteligencia Artificial</h2>
+            <p>Descubre la fusión perfecta entre la tradición culinaria cubana y la innovación tecnológica. Libros digitales únicos con recetas generadas por IA.</p>
+            <div class="hero-buttons">
+                <button class="cta-button" id="viewBooksBtn">
+                    <i class="fas fa-book"></i> Ver Libros
+                </button>
+                <button class="secondary-button">
+                    <i class="fas fa-play-circle"></i> Ver Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Libros -->
+    <section id="libros">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Libros</h2>
+                <p>Colección exclusiva de recetas creadas con inteligencia artificial</p>
+            </div>
+            
+            <div class="books-grid" id="booksGrid">
+                <!-- Los libros se cargarán dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Calendario -->
+    <section class="calendar-section" id="calendario">
+        <div class="container">
+            <div class="section-title">
+                <h2><i class="fas fa-calendar-alt"></i> Calendario de Fechas Conmemorativas</h2>
+                <p>Celebra con nosotros días nacionales, internacionales y marca tus propios eventos especiales</p>
+            </div>
+            
+            <div class="calendar-container">
+                <div id="calendar"></div>
+                
+                <div class="event-details">
+                    <h3><i class="fas fa-info-circle"></i> Evento del Día</h3>
+                    
+                    <div class="today-event" id="todayEvent">
+                        <h4><i class="fas fa-star"></i> Hoy: 24 de Diciembre - Nochebuena</h4>
+                        <p>Celebración cristiana de la víspera del nacimiento de Jesús.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Rifa/Anuncios -->
+    <section class="raffle-section" id="rifa">
+        <div class="container">
+            <div class="raffle-container">
+                <div class="raffle-header">
+                    <h3><i class="fas fa-gift"></i> ¡Gran Sorteo Navideño!</h3>
+                    <p>Participa y gana una colección completa de nuestros libros</p>
+                </div>
+                
+                <div class="raffle-content">
+                    <div class="raffle-info">
+                        <div class="raffle-prize">
+                            <h4>Premio Principal</h4>
+                            <p>Colección completa de 5 libros de cocina con IA</p>
+                            <p><strong>Valor: $150 USD</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="raffle-timer">
+                        <div class="timer-label">El sorteo termina en:</div>
+                        <div class="raffle-countdown" id="raffleCountdown">
+                            13:05:42:18
+                        </div>
+                        <button class="cta-button" id="participateRaffleBtn">
+                            <i class="fas fa-ticket-alt"></i> Participar en el Sorteo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Sobre Didier -->
+    <section class="about-section" id="sobre">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sobre Didier</h2>
+                <p>El creador detrás de Curiosidades Culinarias</p>
+            </div>
+            
+            <div class="about-container">
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Didier - Creador">
+                </div>
+                
+                <div class="about-text">
+                    <h3>¡Hola! Soy Didier</h3>
+                    <p>Apasionado de la cocina cubana y la tecnología. He combinado mi amor por la gastronomía tradicional con las posibilidades infinitas de la inteligencia artificial.</p>
+                    
+                    <div class="ai-badge">
+                        <i class="fas fa-robot"></i> Especialista en Cocina con IA
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Panel de Seguimiento -->
+    <section class="tracker-section" id="tracker">
+        <div class="container">
+            <div class="tracker-header">
+                <h2><i class="fas fa-chart-line"></i> Panel de Seguimiento en Tiempo Real</h2>
+                <p>Monitorea las ventas, descargas y actividad de tu tienda</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="tracker-card">
+                    <h3><i class="fas fa-shopping-cart"></i> Ventas Hoy</h3>
+                    <div class="stat-number" id="salesToday">12</div>
+                    <p>Transacciones completadas</p>
+                </div>
+                
+                <div class="tracker-card">
+                    <h3><i class="fas fa-download"></i> Descargas</h3>
+                    <div class="stat-number" id="totalDownloads">347</div>
+                    <p>Archivos descargados</p>
+                </div>
+                
+                <div class="tracker-card">
+                    <h3><i class="fas fa-users"></i> Visitas</h3>
+                    <div class="stat-number" id="totalVisits">1,245</div>
+                    <p>Visitantes únicos hoy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section id="contacto">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contacto y Métodos de Pago</h2>
+                <p>Contáctanos y elige tu método de pago preferido</p>
+            </div>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Información de Contacto</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>contacto@curiosidadesculinarias.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Envíanos un Mensaje</h3>
+                    
+                    <form id="contactForm">
+                        <input type="text" name="name" placeholder="Tu Nombre" required>
+                        <input type="email" name="email" placeholder="Tu Email" required>
+                        <textarea name="message" placeholder="Tu mensaje..." required></textarea>
+                        
+                        <button type="submit" class="cta-button">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Curiosidades Culinarias</h3>
+                    <p>Fusión de tradición culinaria cubana con innovación tecnológica.</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 Curiosidades Culinarias. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/locales/es.js"></script>
+    
+    <script>
+        // ===== CONFIGURACIÓN INICIAL =====
+        let cart = [];
+        let products = [
+            {
+                id: 'LIB001',
+                name: 'Fusión Caribeña con IA',
+                description: 'Recetas tradicionales cubanas reinventadas con toques modernos usando inteligencia artificial.',
+                price: 9.99,
+                cupPrice: 250,
+                stock: 15,
+                image: 'https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                features: ['45 recetas', 'Cocina cubana', 'Creado con IA', 'PDF de alta calidad'],
+                type: 'book'
+            },
+            {
+                id: 'LIB002',
+                name: 'Cocina Internacional AI',
+                description: 'Platos de 5 continentes generados por inteligencia artificial con ingredientes accesibles en Cuba.',
+                price: 7.99,
+                cupPrice: 200,
+                stock: 3,
+                image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                features: ['60 recetas', 'Ingredientes locales', 'Paso a paso', 'PDF descargable'],
+                type: 'book'
+            }
+        ];
+
+        // ===== FUNCIONES DEL CARRITO =====
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        function updateCartTotal() {
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function renderCartItems() {
+            const cartItems = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Tu carrito está vacío</p>';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>Precio: $${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${item.quantity - 1})" ${item.quantity <= 1 ? 'disabled' : ''}>
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="quantity-number">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${item.quantity + 1})" ${item.quantity >= item.stock ? 'disabled' : ''}>
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="cart-item-price">
+                        $${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(product) {
+            const existingItem = cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                if (existingItem.quantity < product.stock) {
+                    existingItem.quantity++;
+                } else {
+                    alert('No hay suficiente stock disponible');
+                    return;
+                }
+            } else {
+                if (product.stock > 0) {
+                    cart.push({
+                        ...product,
+                        quantity: 1
+                    });
+                } else {
+                    alert('Producto agotado');
+                    return;
+                }
+            }
+            
+            updateCartCount();
+            updateCartTotal();
+            renderCartItems();
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            const item = cart.find(item => item.id === productId);
+            if (!item) return;
+            
+            if (newQuantity < 1) {
+                cart = cart.filter(item => item.id !== productId);
+            } else if (newQuantity > item.stock) {
+                alert('No hay suficiente stock disponible');
+                return;
+            } else {
+                item.quantity = newQuantity;
+            }
+            
+            updateCartCount();
+            updateCartTotal();
+            renderCartItems();
+        }
+
+        // ===== INICIALIZAR PRODUCTOS =====
+        function initializeProducts() {
+            const booksGrid = document.getElementById('booksGrid');
+            booksGrid.innerHTML = products.map(product => `
+                <div class="book-card">
+                    <div class="book-badge">
+                        <i class="fas fa-robot"></i> IA
+                    </div>
+                    <div class="book-img" style="background-image: url('${product.image}')"></div>
+                    <div class="book-content">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        
+                        <div class="book-features">
+                            ${product.features.map(feature => `
+                                <span class="book-feature">${feature}</span>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="book-price">
+                            <div class="price">$${product.price.toFixed(2)}</div>
+                            <button class="cta-button" onclick="addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-cart-plus"></i> Añadir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== INICIALIZAR CALENDARIO =====
+        function initializeCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'es',
+                events: [
+                    {
+                        title: 'Navidad',
+                        start: '2024-12-25',
+                        backgroundColor: '#00205b'
+                    },
+                    {
+                        title: 'Año Nuevo',
+                        start: '2025-01-01',
+                        backgroundColor: '#cf142b'
+                    },
+                    {
+                        title: 'Sorteo Especial',
+                        start: '2024-12-25',
+                        backgroundColor: '#f39c12'
+                    }
+                ]
+            });
+
+            calendar.render();
+        }
+
+        // ===== FUNCIONES DEL SORTEO =====
+        function updateCountdown() {
+            const targetDate = new Date('2025-01-06T00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('raffleCountdown').textContent = 
+                `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // ===== PANEL ADMIN =====
+        function openAdminPanel() {
+            document.getElementById('adminPanel').classList.add('active');
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('active');
+        }
+
+        function switchAdminSection(sectionId) {
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId + 'Section').classList.add('active');
+            
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === sectionId) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeProducts();
+            initializeCalendar();
+            updateCartCount();
+            updateCartTotal();
+            renderCartItems();
+            
+            // Contador del sorteo
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // Carrito
+            document.getElementById('cartIcon').addEventListener('click', function() {
+                document.getElementById('cartDropdown').classList.toggle('active');
+            });
+
+            document.getElementById('closeCartDropdown').addEventListener('click', function() {
+                document.getElementById('cartDropdown').classList.remove('active');
+            });
+
+            // Admin
+            document.getElementById('adminToggleBtn').addEventListener('click', openAdminPanel);
+            document.getElementById('closeAdminPanel').addEventListener('click', closeAdminPanel);
+
+            // Menú admin
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    switchAdminSection(section);
+                });
+            });
+
+            // Cerrar dropdown al hacer clic fuera
+            document.addEventListener('click', function(event) {
+                const cartIcon = document.getElementById('cartIcon');
+                const cartDropdown = document.getElementById('cartDropdown');
+                
+                if (!cartIcon.contains(event.target) && !cartDropdown.contains(event.target)) {
+                    cartDropdown.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
