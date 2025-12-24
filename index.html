@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curiosidades Culinarias - Panel de Productos Mejorado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== ESTILOS PARA EDITOR DE PRODUCTOS MEJORADO ===== */
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #f39c12;
+            --light: #fdf2e9;
+            --dark: #2c3e50;
+            --text: #333;
+            --gray: #95a5a6;
+            --success: #27ae60;
+            --info: #3498db;
+            --cuban-blue: #00205b;
+            --cuban-red: #cf142b;
+            --tracker-bg: #0f172a;
+            --tracker-card: #1e293b;
+            --tracker-primary: #3b82f6;
+            --tracker-success: #10b981;
+            --tracker-warning: #f59e0b;
+            --tracker-danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        
+        /* ===== EDITOR DE PRODUCTOS - NUEVO ESTILO ===== */
+        .product-editor-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 5000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        .product-editor-content {
+            background-color: var(--tracker-card);
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+            border: 2px solid var(--cuban-blue);
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #334155;
+        }
+        
+        .editor-header h2 {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-editor {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-editor:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .editor-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+        
+        .editor-tab {
+            padding: 12px 25px;
+            background: #252f4a;
+            border: none;
+            color: #94a3b8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .editor-tab:hover {
+            background: #334155;
+            color: white;
+        }
+        
+        .editor-tab.active {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+        }
+        
+        .editor-section {
+            display: none;
+        }
+        
+        .editor-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 15px;
+            background: #252f4a;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .input-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--cuban-blue);
+            box-shadow: 0 0 0 3px rgba(0, 32, 91, 0.2);
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .editor-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #252f4a;
+            color: #94a3b8;
+            border: 1px solid #334155;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 5px 15px rgba(207, 20, 43, 0.3);
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #475569;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--cuban-blue);
+            background: rgba(0, 32, 91, 0.05);
+        }
+        
+        .file-list {
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        
+        .file-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .file-action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .file-action-btn:hover {
+            background: var(--cuban-blue);
+            color: white;
+        }
+        
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .feature-tag {
+            background: rgba(0, 32, 91, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+        }
+        
+        .remove-feature {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .remove-feature:hover {
+            color: var(--cuban-red);
+        }
+        
+        .add-feature {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .add-feature input {
+            flex: 1;
+        }
+        
+        .carpetas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .carpeta-item {
+            background: #252f4a;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+        
+        .carpeta-item:hover {
+            border-color: var(--cuban-blue);
+            transform: translateY(-5px);
+        }
+        
+        .carpeta-item.selected {
+            border-color: var(--cuban-red);
+            background: rgba(207, 20, 43, 0.1);
+        }
+        
+        .carpeta-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--cuban-blue);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes modalSlideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-editor-content {
+                padding: 20px;
+                width: 95%;
+            }
+            
+            .editor-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .editor-tab {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== EDITOR DE PRODUCTOS MEJORADO ===== -->
+    <div class="product-editor-modal" id="productEditorModal">
+        <div class="product-editor-content">
+            <div class="editor-header">
+                <h2><i class="fas fa-edit"></i> Editor de Productos</h2>
+                <button class="close-editor" id="closeEditorBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="editor-tabs">
+                <button class="editor-tab active" data-tab="basic">Información Básica</button>
+                <button class="editor-tab" data-tab="content">Contenido y Archivos</button>
+                <button class="editor-tab" data-tab="carpetas">Gestión de Carpetas</button>
+                <button class="editor-tab" data-tab="advanced">Opciones Avanzadas</button>
+            </div>
+            
+            <!-- PESTAÑA INFORMACIÓN BÁSICA -->
+            <div class="editor-section active" id="editorBasic">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="productName"><i class="fas fa-book"></i> Nombre del Producto</label>
+                        <input type="text" id="productName" placeholder="Ej: Fusión Caribeña con IA">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="productId"><i class="fas fa-barcode"></i> ID del Producto</label>
+                        <input type="text" id="productId" placeholder="Ej: LIB001" readonly>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="productPrice"><i class="fas fa-dollar-sign"></i> Precio USD</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" placeholder="9.99">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="productCup"><i class="fas fa-money-bill"></i> Precio CUP</label>
+                        <input type="number" id="productCup" min="0" placeholder="250">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="productStock"><i class="fas fa-box"></i> Stock Disponible</label>
+                        <input type="number" id="productStock" min="0" placeholder="15">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="productStatus"><i class="fas fa-circle"></i> Estado del Producto</label>
+                        <select id="productStatus">
+                            <option value="active">Activo</option>
+                            <option value="inactive">Inactivo</option>
+                            <option value="soldout">Agotado</option>
+                            <option value="coming">Próximamente</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group full-width">
+                        <label for="productDescription"><i class="fas fa-align-left"></i> Descripción</label>
+                        <textarea id="productDescription" placeholder="Describe el producto detalladamente..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-tags"></i> Características (Etiquetas)</label>
+                    <div class="features-list" id="featuresList">
+                        <!-- Las características se agregarán aquí dinámicamente -->
+                    </div>
+                    <div class="add-feature">
+                        <input type="text" id="newFeature" placeholder="Añadir nueva característica">
+                        <button class="btn btn-primary" id="addFeatureBtn">
+                            <i class="fas fa-plus"></i> Añadir
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PESTAÑA CONTENIDO Y ARCHIVOS -->
+            <div class="editor-section" id="editorContent">
+                <div class="input-group">
+                    <label><i class="fas fa-image"></i> Imagen Principal del Producto</label>
+                    <div class="file-upload-area" id="imageUploadArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #475569; margin-bottom: 15px;"></i>
+                        <p style="color: #94a3b8; margin-bottom: 10px;">Arrastra y suelta la imagen o haz clic para seleccionar</p>
+                        <p style="color: #64748b; font-size: 0.9rem;">Formatos: JPG, PNG, WebP (Máx. 5MB)</p>
+                        <input type="file" class="file-input" id="productImageInput" accept="image/*">
+                    </div>
+                    <div class="file-list" id="imagePreview">
+                        <!-- Vista previa de imagen -->
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-file-pdf"></i> Archivo PDF del Producto</label>
+                    <div class="file-upload-area" id="pdfUploadArea">
+                        <i class="fas fa-file-pdf" style="font-size: 3rem; color: #e74c3c; margin-bottom: 15px;"></i>
+                        <p style="color: #94a3b8; margin-bottom: 10px;">Arrastra y suelta el PDF o haz clic para seleccionar</p>
+                        <p style="color: #64748b; font-size: 0.9rem;">Tamaño máximo: 100MB</p>
+                        <input type="file" class="file-input" id="productPdfInput" accept=".pdf">
+                    </div>
+                    <div class="file-list" id="pdfPreview">
+                        <!-- Vista previa de PDF -->
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-folder"></i> Carpetas Asignadas</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;" id="assignedFolders">
+                        <!-- Carpetas asignadas aparecerán aquí -->
+                    </div>
+                    <button class="btn btn-secondary" id="manageFoldersBtn" style="margin-top: 15px;">
+                        <i class="fas fa-folder-plus"></i> Gestionar Carpetas
+                    </button>
+                </div>
+            </div>
+            
+            <!-- PESTAÑA GESTIÓN DE CARPETAS -->
+            <div class="editor-section" id="editorCarpetas">
+                <h3 style="color: white; margin-bottom: 20px;"><i class="fas fa-folder-tree"></i> Estructura de Carpetas</h3>
+                
+                <div class="carpetas-grid" id="foldersGrid">
+                    <!-- Las carpetas se cargarán dinámicamente -->
+                </div>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #334155;">
+                    <h4 style="color: #94a3b8; margin-bottom: 15px;"><i class="fas fa-folder-plus"></i> Crear Nueva Carpeta</h4>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="newCarpetaName" placeholder="Nombre de la nueva carpeta" style="flex: 1; padding: 12px; background: #252f4a; border: 2px solid #334155; border-radius: 10px; color: white;">
+                        <button class="btn btn-primary" id="createCarpetaBtn">
+                            <i class="fas fa-plus-circle"></i> Crear
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                    <h4 style="color: #94a3b8; margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Información de Carpetas</h4>
+                    <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6;">
+                        Las carpetas te ayudan a organizar tus productos por categorías. Puedes asignar múltiples carpetas a un producto.
+                        <br><br>
+                        <strong>Ubicación del servidor (para tu configuración en EUA):</strong>
+                        <code style="background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 5px; margin-top: 10px; display: inline-block;">/home/didiert/public_html/productos/</code>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- PESTAÑA OPCIONES AVANZADAS -->
+            <div class="editor-section" id="editorAdvanced">
+                <div class="input-group">
+                    <label><i class="fas fa-shield-alt"></i> Opciones de Seguridad</label>
+                    <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 10px;">
+                        <label style="color: #94a3b8; display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="downloadProtection" style="width: 18px; height: 18px;">
+                            <span>Protección contra descargas no autorizadas</span>
+                        </label>
+                        
+                        <label style="color: #94a3b8; display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="watermarkEnabled" style="width: 18px; height: 18px;">
+                            <span>Añadir marca de agua a las imágenes</span>
+                        </label>
+                        
+                        <label style="color: #94a3b8; display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="limitDownloads" style="width: 18px; height: 18px;">
+                            <span>Limitar descargas a 3 por compra</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="downloadExpiry"><i class="fas fa-clock"></i> Tiempo de Descarga</label>
+                    <select id="downloadExpiry">
+                        <option value="7">7 días después de la compra</option>
+                        <option value="30" selected>30 días después de la compra</option>
+                        <option value="90">90 días después de la compra</option>
+                        <option value="365">1 año después de la compra</option>
+                        <option value="0">Ilimitado</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="productCategory"><i class="fas fa-layer-group"></i> Categoría Principal</label>
+                    <select id="productCategory">
+                        <option value="cocina-cubana">Cocina Cubana</option>
+                        <option value="cocina-internacional">Cocina Internacional</option>
+                        <option value="postres">Postres</option>
+                        <option value="bebidas">Bebidas</option>
+                        <option value="especiales">Recetas Especiales</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-palette"></i> Color Destacado del Producto</label>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                        <input type="color" id="productColor" value="#00205b" style="width: 50px; height: 50px; border: none; border-radius: 8px; cursor: pointer;">
+                        <span id="colorValue" style="color: white; font-weight: 600;">#00205b</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="editor-actions">
+                <button class="btn btn-secondary" id="cancelEditBtn">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="btn btn-danger" id="deleteProductBtn">
+                    <i class="fas fa-trash"></i> Eliminar Producto
+                </button>
+                <button class="btn btn-primary" id="saveProductBtn">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== NOTIFICACIONES ===== -->
+    <div id="notification" class="notification"></div>
+
+    <!-- ===== JAVASCRIPT COMPLETO PARA EDITOR DE PRODUCTOS ===== -->
+    <script>
+        // ===== SISTEMA DE EDITOR DE PRODUCTOS =====
+        let currentProduct = null;
+        let productFolders = [];
+        let allFolders = [
+            { id: 'libros', name: 'Libros PDF', icon: 'fas fa-book', selected: true },
+            { id: 'imagenes', name: 'Imágenes', icon: 'fas fa-image', selected: false },
+            { id: 'recetas', name: 'Recetas', icon: 'fas fa-utensils', selected: true },
+            { id: 'descargas', name: 'Descargas', icon: 'fas fa-download', selected: true },
+            { id: 'cuba', name: 'Cocina Cubana', icon: 'fas fa-flag', selected: true },
+            { id: 'internacional', name: 'Internacional', icon: 'fas fa-globe-americas', selected: false },
+            { id: 'ia', name: 'Creado con IA', icon: 'fas fa-robot', selected: true },
+            { id: 'videos', name: 'Videos', icon: 'fas fa-video', selected: false },
+            { id: 'audios', name: 'Audios', icon: 'fas fa-music', selected: false },
+            { id: 'temporales', name: 'Temporales', icon: 'fas fa-clock', selected: false },
+            { id: 'backups', name: 'Backups', icon: 'fas fa-save', selected: false },
+            { id: 'publico', name: 'Público', icon: 'fas fa-users', selected: true }
+        ];
+        
+        let productFeatures = [];
+        
+        // ===== FUNCIONES DEL EDITOR =====
+        function showProductEditor(productId) {
+            // Cargar datos del producto
+            currentProduct = getProductData(productId);
+            
+            // Actualizar interfaz
+            document.getElementById('productName').value = currentProduct.name || '';
+            document.getElementById('productId').value = currentProduct.id || productId;
+            document.getElementById('productPrice').value = currentProduct.price || '';
+            document.getElementById('productCup').value = currentProduct.cupPrice || '';
+            document.getElementById('productStock').value = currentProduct.stock || '';
+            document.getElementById('productStatus').value = currentProduct.status || 'active';
+            document.getElementById('productDescription').value = currentProduct.description || '';
+            document.getElementById('productCategory').value = currentProduct.category || 'cocina-cubana';
+            document.getElementById('productColor').value = currentProduct.color || '#00205b';
+            document.getElementById('colorValue').textContent = currentProduct.color || '#00205b';
+            document.getElementById('downloadExpiry').value = currentProduct.downloadExpiry || '30';
+            
+            // Configurar opciones de seguridad
+            document.getElementById('downloadProtection').checked = currentProduct.downloadProtection || false;
+            document.getElementById('watermarkEnabled').checked = currentProduct.watermarkEnabled || false;
+            document.getElementById('limitDownloads').checked = currentProduct.limitDownloads || false;
+            
+            // Cargar características
+            productFeatures = currentProduct.features || ['Recetas creadas con IA', 'Ingredientes locales', 'Paso a paso'];
+            updateFeaturesList();
+            
+            // Cargar carpetas del producto
+            productFolders = currentProduct.folders || ['libros', 'recetas', 'cuba', 'ia', 'descargas', 'publico'];
+            updateAssignedFolders();
+            updateFoldersGrid();
+            
+            // Actualizar vista previa de imagen
+            updateImagePreview(currentProduct.image);
+            
+            // Actualizar vista previa de PDF
+            updatePdfPreview(currentProduct.pdf);
+            
+            // Mostrar editor
+            document.getElementById('productEditorModal').style.display = 'flex';
+            showNotification('Editor de producto cargado correctamente', 'success');
+        }
+        
+        function getProductData(productId) {
+            // Datos de ejemplo - en un sistema real esto vendría de una base de datos
+            const products = {
+                'LIB001': {
+                    id: 'LIB001',
+                    name: 'Fusión Caribeña con IA',
+                    price: '9.99',
+                    cupPrice: '250',
+                    stock: '15',
+                    status: 'active',
+                    description: 'Recetas tradicionales cubanas reinventadas con toques modernos usando inteligencia artificial.',
+                    category: 'cocina-cubana',
+                    color: '#00205b',
+                    downloadExpiry: '30',
+                    downloadProtection: true,
+                    watermarkEnabled: true,
+                    limitDownloads: true,
+                    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                    pdf: 'Fusion_Caribeña_IA.pdf',
+                    features: ['45 recetas', 'Cocina cubana', 'Creado con IA', 'PDF de alta calidad'],
+                    folders: ['libros', 'recetas', 'cuba', 'ia', 'descargas', 'publico']
+                },
+                'LIB002': {
+                    id: 'LIB002',
+                    name: 'Cocina Internacional AI',
+                    price: '7.99',
+                    cupPrice: '200',
+                    stock: '3',
+                    status: 'active',
+                    description: 'Platos de 5 continentes generados por inteligencia artificial con ingredientes accesibles en Cuba.',
+                    category: 'cocina-internacional',
+                    color: '#cf142b',
+                    downloadExpiry: '30',
+                    downloadProtection: true,
+                    watermarkEnabled: false,
+                    limitDownloads: true,
+                    image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                    pdf: 'Cocina_Internacional_AI.pdf',
+                    features: ['60 recetas', 'Ingredientes locales', 'Paso a paso', 'PDF descargable'],
+                    folders: ['libros', 'recetas', 'internacional', 'ia', 'descargas', 'publico']
+                },
+                'LIB003': {
+                    id: 'LIB003',
+                    name: 'Postres con Chat GPT',
+                    price: '6.99',
+                    cupPrice: '175',
+                    stock: '22',
+                    status: 'active',
+                    description: 'Dulces y postres creados completamente por IA, desde lo tradicional hasta innovaciones únicas.',
+                    category: 'postres',
+                    color: '#f39c12',
+                    downloadExpiry: '90',
+                    downloadProtection: true,
+                    watermarkEnabled: true,
+                    limitDownloads: false,
+                    image: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                    pdf: 'Postres_Chat_GPT.pdf',
+                    features: ['35 postres', 'Ingredientes cubanos', 'Fácil preparación', 'Incluye fotos'],
+                    folders: ['libros', 'recetas', 'postres', 'ia', 'descargas', 'publico']
+                }
+            };
+            
+            return products[productId] || {
+                id: productId,
+                name: '',
+                price: '',
+                cupPrice: '',
+                stock: '',
+                status: 'active',
+                description: '',
+                category: 'cocina-cubana',
+                color: '#00205b',
+                downloadExpiry: '30',
+                downloadProtection: false,
+                watermarkEnabled: false,
+                limitDownloads: false,
+                image: '',
+                pdf: '',
+                features: [],
+                folders: []
+            };
+        }
+        
+        function updateFeaturesList() {
+            const featuresList = document.getElementById('featuresList');
+            featuresList.innerHTML = productFeatures.map(feature => `
+                <div class="feature-tag">
+                    <i class="fas fa-tag"></i>
+                    ${feature}
+                    <button class="remove-feature" data-feature="${feature}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function updateAssignedFolders() {
+            const assignedFolders = document.getElementById('assignedFolders');
+            assignedFolders.innerHTML = productFolders.map(folderId => {
+                const folder = allFolders.find(f => f.id === folderId);
+                if (folder) {
+                    return `
+                        <div class="feature-tag">
+                            <i class="${folder.icon}"></i>
+                            ${folder.name}
+                            <button class="remove-feature" data-folder="${folderId}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                }
+                return '';
+            }).join('');
+        }
+        
+        function updateFoldersGrid() {
+            const foldersGrid = document.getElementById('foldersGrid');
+            foldersGrid.innerHTML = allFolders.map(folder => `
+                <div class="carpeta-item ${productFolders.includes(folder.id) ? 'selected' : ''}" data-folder="${folder.id}">
+                    <div class="carpeta-icon">
+                        <i class="${folder.icon}"></i>
+                    </div>
+                    <h4 style="color: white; margin-bottom: 5px;">${folder.name}</h4>
+                    <p style="color: #94a3b8; font-size: 0.8rem;">
+                        ${productFolders.includes(folder.id) ? '✓ Asignada' : 'Click para asignar'}
+                    </p>
+                </div>
+            `).join('');
+        }
+        
+        function updateImagePreview(imageUrl) {
+            const imagePreview = document.getElementById('imagePreview');
+            if (imageUrl) {
+                imagePreview.innerHTML = `
+                    <div class="file-item">
+                        <img src="${imageUrl}" alt="Vista previa">
+                        <div>
+                            <h4 style="color: white;">Imagen del producto</h4>
+                            <p style="color: #94a3b8; font-size: 0.9rem;">URL: ${imageUrl.substring(0, 50)}...</p>
+                        </div>
+                        <div class="file-actions">
+                            <button class="file-action-btn" id="changeImageBtn">
+                                <i class="fas fa-exchange-alt"></i>
+                            </button>
+                            <button class="file-action-btn" id="removeImageBtn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                imagePreview.innerHTML = '<p style="color: #94a3b8; text-align: center;">No hay imagen seleccionada</p>';
+            }
+        }
+        
+        function updatePdfPreview(pdfName) {
+            const pdfPreview = document.getElementById('pdfPreview');
+            if (pdfName) {
+                pdfPreview.innerHTML = `
+                    <div class="file-item">
+                        <i class="fas fa-file-pdf" style="font-size: 3rem; color: #e74c3c;"></i>
+                        <div>
+                            <h4 style="color: white;">${pdfName}</h4>
+                            <p style="color: #94a3b8; font-size: 0.9rem;">Archivo PDF principal del producto</p>
+                        </div>
+                        <div class="file-actions">
+                            <button class="file-action-btn" id="changePdfBtn">
+                                <i class="fas fa-exchange-alt"></i>
+                            </button>
+                            <button class="file-action-btn" id="removePdfBtn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                pdfPreview.innerHTML = '<p style="color: #94a3b8; text-align: center;">No hay PDF seleccionado</p>';
+            }
+        }
+        
+        function saveProduct() {
+            // Obtener datos del formulario
+            const productData = {
+                id: document.getElementById('productId').value,
+                name: document.getElementById('productName').value,
+                price: document.getElementById('productPrice').value,
+                cupPrice: document.getElementById('productCup').value,
+                stock: document.getElementById('productStock').value,
+                status: document.getElementById('productStatus').value,
+                description: document.getElementById('productDescription').value,
+                category: document.getElementById('productCategory').value,
+                color: document.getElementById('productColor').value,
+                downloadExpiry: document.getElementById('downloadExpiry').value,
+                downloadProtection: document.getElementById('downloadProtection').checked,
+                watermarkEnabled: document.getElementById('watermarkEnabled').checked,
+                limitDownloads: document.getElementById('limitDownloads').checked,
+                features: productFeatures,
+                folders: productFolders,
+                image: currentProduct?.image || '',
+                pdf: currentProduct?.pdf || ''
+            };
+            
+            // Validar datos
+            if (!productData.name || !productData.price || !productData.stock) {
+                showNotification('Por favor, completa los campos obligatorios', 'error');
+                return;
+            }
+            
+            // Aquí iría la lógica para guardar en el servidor
+            // Para este ejemplo, simulamos el guardado
+            
+            // Actualizar stock en la página principal
+            updateStockInMainPage(productData.id, productData.stock);
+            
+            // Mostrar confirmación
+            showNotification(`Producto "${productData.name}" guardado correctamente`, 'success');
+            
+            // Cerrar editor después de guardar
+            setTimeout(() => {
+                closeProductEditor();
+            }, 1500);
+        }
+        
+        function deleteProduct() {
+            if (!currentProduct) return;
+            
+            if (confirm(`¿Estás seguro de que deseas eliminar el producto "${currentProduct.name}"? Esta acción no se puede deshacer.`)) {
+                // Aquí iría la lógica para eliminar del servidor
+                
+                showNotification(`Producto "${currentProduct.name}" eliminado correctamente`, 'success');
+                
+                // Cerrar editor
+                closeProductEditor();
+                
+                // Recargar lista de productos en la página principal
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        }
+        
+        function updateStockInMainPage(productId, stock) {
+            // Actualizar en la página principal
+            const stockElement = document.getElementById(`stock-${productId}`);
+            if (stockElement) {
+                stockElement.textContent = stock;
+                
+                // Actualizar en el panel admin
+                const adminStockElement = document.getElementById(`adminStock${productId}`);
+                if (adminStockElement) {
+                    adminStockElement.textContent = stock;
+                }
+            }
+        }
+        
+        function closeProductEditor() {
+            document.getElementById('productEditorModal').style.display = 'none';
+            currentProduct = null;
+            productFeatures = [];
+            productFolders = [];
+        }
+        
+        function showNotification(message, type = 'success') {
+            // Crear notificación si no existe
+            let notification = document.getElementById('notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification';
+                notification.className = 'notification';
+                document.body.appendChild(notification);
+            }
+            
+            notification.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+                notification.className = 'notification';
+            }, 4000);
+        }
+        
+        function changeTab(tabId) {
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.editor-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Desactivar todos los botones de pestaña
+            document.querySelectorAll('.editor-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar pestaña seleccionada
+            document.getElementById(`editor${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`).classList.add('active');
+            
+            // Activar botón de pestaña
+            event.target.classList.add('active');
+        }
+        
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar eventos de pestañas
+            document.querySelectorAll('.editor-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    changeTab(tabId);
+                });
+            });
+            
+            // Botón cerrar editor
+            document.getElementById('closeEditorBtn').addEventListener('click', closeProductEditor);
+            
+            // Botón cancelar
+            document.getElementById('cancelEditBtn').addEventListener('click', closeProductEditor);
+            
+            // Botón eliminar producto
+            document.getElementById('deleteProductBtn').addEventListener('click', deleteProduct);
+            
+            // Botón guardar producto
+            document.getElementById('saveProductBtn').addEventListener('click', saveProduct);
+            
+            // Botón añadir característica
+            document.getElementById('addFeatureBtn').addEventListener('click', function() {
+                const newFeature = document.getElementById('newFeature').value.trim();
+                if (newFeature) {
+                    productFeatures.push(newFeature);
+                    updateFeaturesList();
+                    document.getElementById('newFeature').value = '';
+                }
+            });
+            
+            // Permitir Enter para añadir característica
+            document.getElementById('newFeature').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('addFeatureBtn').click();
+                }
+            });
+            
+            // Delegación de eventos para eliminar características
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-feature') || e.target.closest('.remove-feature')) {
+                    const btn = e.target.classList.contains('remove-feature') ? e.target : e.target.closest('.remove-feature');
+                    const feature = btn.getAttribute('data-feature');
+                    const folder = btn.getAttribute('data-folder');
+                    
+                    if (feature) {
+                        // Eliminar característica
+                        productFeatures = productFeatures.filter(f => f !== feature);
+                        updateFeaturesList();
+                    } else if (folder) {
+                        // Eliminar carpeta
+                        productFolders = productFolders.filter(f => f !== folder);
+                        updateAssignedFolders();
+                        updateFoldersGrid();
+                    }
+                }
+            });
+            
+            // Botón crear carpeta
+            document.getElementById('createCarpetaBtn').addEventListener('click', function() {
+                const folderName = document.getElementById('newCarpetaName').value.trim();
+                if (folderName) {
+                    const folderId = folderName.toLowerCase().replace(/\s+/g, '-');
+                    
+                    // Verificar si ya existe
+                    if (!allFolders.some(f => f.id === folderId)) {
+                        allFolders.push({
+                            id: folderId,
+                            name: folderName,
+                            icon: 'fas fa-folder',
+                            selected: false
+                        });
+                        
+                        // Añadir al producto actual
+                        productFolders.push(folderId);
+                        
+                        updateAssignedFolders();
+                        updateFoldersGrid();
+                        document.getElementById('newCarpetaName').value = '';
+                        
+                        showNotification(`Carpeta "${folderName}" creada y asignada al producto`, 'success');
+                    } else {
+                        showNotification('La carpeta ya existe', 'error');
+                    }
+                }
+            });
+            
+            // Click en carpetas para asignar/desasignar
+            document.addEventListener('click', function(e) {
+                const carpetaItem = e.target.closest('.carpeta-item');
+                if (carpetaItem) {
+                    const folderId = carpetaItem.getAttribute('data-folder');
+                    
+                    if (productFolders.includes(folderId)) {
+                        // Desasignar
+                        productFolders = productFolders.filter(f => f !== folderId);
+                    } else {
+                        // Asignar
+                        productFolders.push(folderId);
+                    }
+                    
+                    updateAssignedFolders();
+                    updateFoldersGrid();
+                }
+            });
+            
+            // Botón gestionar carpetas
+            document.getElementById('manageFoldersBtn').addEventListener('click', function() {
+                changeTab('carpetas');
+            });
+            
+            // Cambio de color
+            document.getElementById('productColor').addEventListener('input', function() {
+                document.getElementById('colorValue').textContent = this.value;
+            });
+            
+            // Subida de imagen
+            document.getElementById('productImageInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        currentProduct.image = event.target.result;
+                        updateImagePreview(event.target.result);
+                        showNotification('Imagen cargada correctamente', 'success');
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Subida de PDF
+            document.getElementById('productPdfInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    currentProduct.pdf = file.name;
+                    updatePdfPreview(file.name);
+                    showNotification('PDF cargado correctamente', 'success');
+                }
+            });
+            
+            // Área de subida de imagen
+            document.getElementById('imageUploadArea').addEventListener('click', function() {
+                document.getElementById('productImageInput').click();
+            });
+            
+            // Área de subida de PDF
+            document.getElementById('pdfUploadArea').addEventListener('click', function() {
+                document.getElementById('productPdfInput').click();
+            });
+            
+            // Drag and drop para imágenes
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            imageUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--cuban-blue)';
+                this.style.background = 'rgba(0, 32, 91, 0.1)';
+            });
+            
+            imageUploadArea.addEventListener('dragleave', function() {
+                this.style.borderColor = '#475569';
+                this.style.background = '';
+            });
+            
+            imageUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#475569';
+                this.style.background = '';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    document.getElementById('productImageInput').files = e.dataTransfer.files;
+                    document.getElementById('productImageInput').dispatchEvent(new Event('change'));
+                }
+            });
+            
+            // Drag and drop para PDF
+            const pdfUploadArea = document.getElementById('pdfUploadArea');
+            pdfUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--cuban-blue)';
+                this.style.background = 'rgba(0, 32, 91, 0.1)';
+            });
+            
+            pdfUploadArea.addEventListener('dragleave', function() {
+                this.style.borderColor = '#475569';
+                this.style.background = '';
+            });
+            
+            pdfUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#475569';
+                this.style.background = '';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    document.getElementById('productPdfInput').files = e.dataTransfer.files;
+                    document.getElementById('productPdfInput').dispatchEvent(new Event('change'));
+                }
+            });
+        });
+        
+        // ===== FUNCIÓN PARA INTEGRAR CON TU CÓDIGO EXISTENTE =====
+        // Esta función reemplaza la función editProduct original
+        function editProduct(productId) {
+            showProductEditor(productId);
+        }
+    </script>
+</body>
+</html>
