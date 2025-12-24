@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="p-8">
-                    <h3 class="text-xl font-black mb-2 italic uppercase">Pack Completo Didier</h3>
+                    <h3 class="text-xl font-black mb-2 italic uppercase">Pack Completo Didiert</h3>
                     <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase mb-6">
                         <span>Videos: <b id="count-vid" class="text-slate-800">0</b></span>
                         <span>PDFs: <b id="count-pdf" class="text-slate-800">0</b></span>
@@ -168,7 +168,7 @@
 
     <script>
         // --- MOTOR DE DATOS ---
-        let stats = JSON.parse(localStorage.getItem('didier_v4')) || { 
+        let stats = JSON.parse(localStorage.getItem('didiert_v4')) || { 
             views: 0, sales: 0, rifa_count: 0, stock: { video: 0, libro: 0 }, fileList: [] 
         };
         let rifaSet = JSON.parse(localStorage.getItem('rifaSet')) || { 
@@ -187,7 +187,7 @@
             }, 1000);
         });
 
-        function saveStats() { localStorage.setItem('didier_v4', JSON.stringify(stats)); updateUI(); }
+        function saveStats() { localStorage.setItem('didiert_v4', JSON.stringify(stats)); updateUI(); }
 
         function updateUI() {
             document.getElementById('view-count').innerText = stats.views;
