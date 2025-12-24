@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Gestión de PDFs</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header del Panel Admin -->
+        <header class="admin-header">
+            <h1><i class="fas fa-cogs"></i> Panel de Administración</h1>
+            <div class="admin-info">
+                <span id="admin-user">Admin</span>
+                <button class="btn-logout" id="logout-btn">Cerrar Sesión</button>
+            </div>
+        </header>
+
+        <!-- Contenido Principal -->
+        <main class="admin-main">
+            <!-- Panel Lateral -->
+            <aside class="admin-sidebar">
+                <nav class="admin-nav">
+                    <ul>
+                        <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="#gestion-pdfs"><i class="fas fa-folder"></i> Gestión de PDFs</a></li>
+                        <li><a href="#estadisticas"><i class="fas fa-chart-bar"></i> Estadísticas</a></li>
+                        <li><a href="#rifa"><i class="fas fa-gift"></i> Sistema de Rifa</a></li>
+                        <li><a href="#ajustes"><i class="fas fa-cog"></i> Ajustes</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Área de Contenido -->
+            <section class="admin-content">
+                <!-- Dashboard -->
+                <div id="dashboard" class="content-section active">
+                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-icon" style="background-color: #4CAF50;">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Carpetas de PDFs</h3>
+                                <p class="card-value" id="total-carpetas">5</p>
+                                <p class="card-desc">Carpetas activas</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon" style="background-color: #2196F3;">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Total PDFs</h3>
+                                <p class="card-value" id="total-pdfs">0</p>
+                                <p class="card-desc">Archivos PDF subidos</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon" style="background-color: #FF9800;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Visitas Web</h3>
+                                <p class="card-value" id="visitas-web">0</p>
+                                <p class="card-desc">Clientes que visitaron</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon" style="background-color: #9C27B0;">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Libros Vendidos</h3>
+                                <p class="card-value" id="libros-vendidos">0</p>
+                                <p class="card-desc">Total de ventas</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Acciones Rápidas</h3>
+                        <div class="actions-grid">
+                            <button class="action-btn" id="reset-visitas">
+                                <i class="fas fa-user-times"></i>
+                                <span>Resetear Visitas Web</span>
+                            </button>
+                            <button class="action-btn" id="reset-ventas">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Resetear Ventas</span>
+                            </button>
+                            <button class="action-btn" id="add-folder">
+                                <i class="fas fa-folder-plus"></i>
+                                <span>Nueva Carpeta PDF</span>
+                            </button>
+                            <button class="action-btn" id="refresh-stats">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Actualizar Estadísticas</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gestión de PDFs -->
+                <div id="gestion-pdfs" class="content-section">
+                    <h2><i class="fas fa-folder"></i> Gestión de Carpetas de PDFs</h2>
+                    
+                    <div class="section-header">
+                        <p>Crea y gestiona carpetas para organizar tus archivos PDF. Cada carpeta mostrará la cantidad de PDFs que contiene.</p>
+                        <button class="btn-primary" id="add-folder-btn">
+                            <i class="fas fa-plus-circle"></i> Nueva Carpeta
+                        </button>
+                    </div>
+
+                    <div class="folders-container" id="folders-list">
+                        <!-- Las carpetas se cargarán dinámicamente aquí -->
+                        <div class="loading">Cargando carpetas...</div>
+                    </div>
+
+                    <div class="upload-section">
+                        <h3><i class="fas fa-upload"></i> Subir PDF a Carpeta</h3>
+                        <div class="upload-form">
+                            <div class="form-group">
+                                <label for="select-folder">Seleccionar Carpeta:</label>
+                                <select id="select-folder" class="form-control">
+                                    <option value="">Selecciona una carpeta</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pdf-file">Seleccionar PDF:</label>
+                                <input type="file" id="pdf-file" class="form-control" accept=".pdf">
+                            </div>
+                            <div class="form-group">
+                                <label for="pdf-name">Nombre del PDF (opcional):</label>
+                                <input type="text" id="pdf-name" class="form-control" placeholder="Dejar en blanco para usar nombre original">
+                            </div>
+                            <button class="btn-primary" id="upload-pdf-btn">
+                                <i class="fas fa-upload"></i> Subir PDF
+                            </button>
+                            <div id="upload-status"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas -->
+                <div id="estadisticas" class="content-section">
+                    <h2><i class="fas fa-chart-bar"></i> Estadísticas y Contadores</h2>
+                    
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <h3>Visitas a la Web</h3>
+                            <div class="stat-value" id="stat-visitas">0</div>
+                            <p>Clientes que han visitado tu sitio web</p>
+                            <button class="btn-reset" data-target="visitas">Resetear Contador</button>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Libros Vendidos</h3>
+                            <div class="stat-value" id="stat-ventas">0</div>
+                            <p>Total de libros que se han vendido</p>
+                            <button class="btn-reset" data-target="ventas">Resetear Contador</button>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Compras Realizadas</h3>
+                            <div class="stat-value" id="stat-compras">0</div>
+                            <p>Transacciones completadas</p>
+                            <button class="btn-reset" data-target="compras">Resetear Contador</button>
+                        </div>
+                    </div>
+
+                    <div class="reset-all-section">
+                        <h3>Resetear Todos los Contadores</h3>
+                        <p>Esta acción reseteará todas las estadísticas a cero. Esta operación no se puede deshacer.</p>
+                        <div class="reset-options">
+                            <button class="btn-danger" id="reset-visitas-btn">
+                                <i class="fas fa-user-times"></i> Resetear Solo Visitas
+                            </button>
+                            <button class="btn-danger" id="reset-ventas-btn">
+                                <i class="fas fa-shopping-cart"></i> Resetear Solo Ventas
+                            </button>
+                            <button class="btn-danger" id="reset-compras-btn">
+                                <i class="fas fa-credit-card"></i> Resetear Solo Compras
+                            </button>
+                            <button class="btn-danger" id="reset-all-btn">
+                                <i class="fas fa-broom"></i> Resetear Todo
+                            </button>
+                        </div>
+                        <div id="reset-message"></div>
+                    </div>
+                </div>
+
+                <!-- Sistema de Rifa -->
+                <div id="rifa" class="content-section">
+                    <h2><i class="fas fa-gift"></i> Sistema de Rifa</h2>
+                    
+                    <div class="rifa-info">
+                        <p>Esta es la sección del sistema de rifa que ya tenías implementado. Aquí puedes gestionar los participantes, realizar sorteos y ver el historial.</p>
+                        
+                        <div class="rifa-stats">
+                            <div class="rifa-stat">
+                                <h3>Participantes Actuales</h3>
+                                <div class="rifa-value" id="rifa-participantes">0</div>
+                            </div>
+                            <div class="rifa-stat">
+                                <h3>Ganadores Totales</h3>
+                                <div class="rifa-value" id="rifa-ganadores">0</div>
+                            </div>
+                            <div class="rifa-stat">
+                                <h3>Próximo Sorteo</h3>
+                                <div class="rifa-value" id="rifa-proximo">15/12/2023</div>
+                            </div>
+                        </div>
+
+                        <div class="rifa-actions">
+                            <button class="btn-primary">
+                                <i class="fas fa-user-plus"></i> Agregar Participante
+                            </button>
+                            <button class="btn-primary">
+                                <i class="fas fa-random"></i> Realizar Sorteo
+                            </button>
+                            <button class="btn-primary">
+                                <i class="fas fa-history"></i> Ver Historial
+                            </button>
+                        </div>
+
+                        <div class="rifa-note">
+                            <p><strong>Nota:</strong> El sistema de rifa funciona de manera independiente y no se ve afectado por los reseteos de las estadísticas de ventas y visitas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ajustes -->
+                <div id="ajustes" class="content-section">
+                    <h2><i class="fas fa-cog"></i> Ajustes del Sistema</h2>
+                    
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="admin-username">Nombre de Usuario Admin:</label>
+                            <input type="text" id="admin-username" class="form-control" value="admin">
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-password">Contraseña Admin:</label>
+                            <input type="password" id="admin-password" class="form-control" placeholder="Dejar en blanco para no cambiar">
+                        </div>
+                        <div class="form-group">
+                            <label for="site-name">Nombre del Sitio Web:</label>
+                            <input type="text" id="site-name" class="form-control" value="Mi Librería Digital">
+                        </div>
+                        
+                        <h3>Configuración de Carpetas PDF</h3>
+                        <div class="form-group">
+                            <label for="max-folders">Máximo de Carpetas:</label>
+                            <input type="number" id="max-folders" class="form-control" value="10" min="1" max="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-pdf-size">Tamaño Máximo PDF (MB):</label>
+                            <input type="number" id="max-pdf-size" class="form-control" value="50" min="1" max="500">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn-primary" id="save-settings">
+                                <i class="fas fa-save"></i> Guardar Ajustes
+                            </button>
+                            <button class="btn-secondary" id="reset-settings">
+                                <i class="fas fa-undo"></i> Restablecer Valores
+                            </button>
+                        </div>
+                        <div id="settings-message"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="admin-footer">
+            <p>Sistema de Administración para Gestión de PDFs &copy; <span id="current-year">2023</span></p>
+            <p class="footer-status">Estado del sistema: <span class="status-indicator active">Operativo</span></p>
+        </footer>
+    </div>
+
+    <!-- Modal para Nueva Carpeta -->
+    <div id="folder-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-folder-plus"></i> Crear Nueva Carpeta</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="folder-name">Nombre de la Carpeta:</label>
+                    <input type="text" id="folder-name" class="form-control" placeholder="Ej: eBooks, Manuales, Cursos">
+                </div>
+                <div class="form-group">
+                    <label for="folder-description">Descripción (opcional):</label>
+                    <textarea id="folder-description" class="form-control" rows="3" placeholder="Descripción breve de lo que contendrá esta carpeta"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="folder-color">Color de la Carpeta:</label>
+                    <input type="color" id="folder-color" class="form-control" value="#4CAF50">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary close-modal">Cancelar</button>
+                <button class="btn-primary" id="create-folder-btn">Crear Carpeta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="admin-script.js"></script>
+</body>
+</html>
+/* Reset y estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header del admin */
+.admin-header {
+    background: linear-gradient(135deg, #2c3e50, #4a6491);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header h1 {
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#admin-user {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.btn-logout {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+}
+
+/* Contenido principal */
+.admin-main {
+    display: flex;
+    flex: 1;
+}
+
+/* Panel lateral */
+.admin-sidebar {
+    width: 250px;
+    background-color: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 0;
+}
+
+.admin-nav ul {
+    list-style: none;
+}
+
+.admin-nav li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.admin-nav li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.5rem;
+    color: #555;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.admin-nav li a:hover {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+}
+
+.admin-nav li.active a {
+    background-color: #e8f4ff;
+    color: #2196F3;
+    border-left: 4px solid #2196F3;
+}
+
+/* Área de contenido */
+.admin-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Cards del dashboard */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.card-content h3 {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.card-desc {
+    font-size: 0.9rem;
+    color: #95a5a6;
+}
+
+/* Acciones rápidas */
+.quick-actions {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.action-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.action-btn i {
+    font-size: 1.5rem;
+    color: #3498db;
+}
+
+/* Gestión de PDFs */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.folders-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.folder-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #4CAF50;
+    position: relative;
+}
+
+.folder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.folder-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.folder-title i {
+    font-size: 1.2rem;
+}
+
+.folder-actions button {
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.3s;
+}
+
+.folder-actions button:hover {
+    color: #3498db;
+}
+
+.folder-count {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 1rem 0;
+    color: #2c3e50;
+}
+
+.folder-count-label {
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.upload-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.upload-form {
+    margin-top: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+#upload-status {
+    margin-top: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Estadísticas */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #3498db;
+    margin: 1rem 0;
+}
+
+.btn-reset {
+    background-color: #f8f9fa;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-reset:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.reset-all-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.reset-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+/* Sistema de Rifa */
+.rifa-info {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.rifa-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.rifa-stat {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.rifa-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #9b59b6;
+    margin-top: 0.5rem;
+}
+
+.rifa-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.rifa-note {
+    background-color: #fff8e1;
+    border-left: 4px solid #ffc107;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+}
+
+/* Ajustes */
+.settings-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+/* Footer */
+.admin-footer {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.status-indicator.active {
+    background-color: #2ecc71;
+}
+
+.status-indicator.inactive {
+    background-color: #e74c3c;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.modal-header {
+    background-color: #3498db;
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-modal {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: #f1f1f1;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-main {
+        flex-direction: column;
+    }
+    
+    .admin-sidebar {
+        width: 100%;
+        padding: 0;
+    }
+    
+    .admin-nav ul {
+        display: flex;
+        overflow-x: auto;
+    }
+    
+    .admin-nav li {
+        flex-shrink: 0;
+        border-bottom: none;
+        border-right: 1px solid #f0f0f0;
+    }
+    
+    .admin-nav li.active a {
+        border-left: none;
+        border-bottom: 4px solid #2196F3;
+    }
+    
+    .dashboard-cards,
+    .folders-container,
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-footer {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+/* Reset y estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header del admin */
+.admin-header {
+    background: linear-gradient(135deg, #2c3e50, #4a6491);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header h1 {
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#admin-user {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.btn-logout {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+}
+
+/* Contenido principal */
+.admin-main {
+    display: flex;
+    flex: 1;
+}
+
+/* Panel lateral */
+.admin-sidebar {
+    width: 250px;
+    background-color: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 0;
+}
+
+.admin-nav ul {
+    list-style: none;
+}
+
+.admin-nav li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.admin-nav li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.5rem;
+    color: #555;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.admin-nav li a:hover {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+}
+
+.admin-nav li.active a {
+    background-color: #e8f4ff;
+    color: #2196F3;
+    border-left: 4px solid #2196F3;
+}
+
+/* Área de contenido */
+.admin-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Cards del dashboard */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.card-content h3 {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.card-desc {
+    font-size: 0.9rem;
+    color: #95a5a6;
+}
+
+/* Acciones rápidas */
+.quick-actions {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.action-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.action-btn i {
+    font-size: 1.5rem;
+    color: #3498db;
+}
+
+/* Gestión de PDFs */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.folders-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.folder-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #4CAF50;
+    position: relative;
+}
+
+.folder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.folder-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.folder-title i {
+    font-size: 1.2rem;
+}
+
+.folder-actions button {
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.3s;
+}
+
+.folder-actions button:hover {
+    color: #3498db;
+}
+
+.folder-count {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 1rem 0;
+    color: #2c3e50;
+}
+
+.folder-count-label {
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.upload-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.upload-form {
+    margin-top: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+#upload-status {
+    margin-top: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Estadísticas */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #3498db;
+    margin: 1rem 0;
+}
+
+.btn-reset {
+    background-color: #f8f9fa;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-reset:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.reset-all-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.reset-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+/* Sistema de Rifa */
+.rifa-info {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.rifa-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.rifa-stat {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.rifa-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #9b59b6;
+    margin-top: 0.5rem;
+}
+
+.rifa-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.rifa-note {
+    background-color: #fff8e1;
+    border-left: 4px solid #ffc107;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+}
+
+/* Ajustes */
+.settings-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+/* Footer */
+.admin-footer {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.status-indicator.active {
+    background-color: #2ecc71;
+}
+
+.status-indicator.inactive {
+    background-color: #e74c3c;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.modal-header {
+    background-color: #3498db;
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-modal {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: #f1f1f1;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-main {
+        flex-direction: column;
+    }
+    
+    .admin-sidebar {
+        width: 100%;
+        padding: 0;
+    }
+    
+    .admin-nav ul {
+        display: flex;
+        overflow-x: auto;
+    }
+    
+    .admin-nav li {
+        flex-shrink: 0;
+        border-bottom: none;
+        border-right: 1px solid #f0f0f0;
+    }
+    
+    .admin-nav li.active a {
+        border-left: none;
+        border-bottom: 4px solid #2196F3;
+    }
+    
+    .dashboard-cards,
+    .folders-container,
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-footer {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+// Datos iniciales del sistema
+let systemData = {
+    folders: [
+        { id: 1, name: "eBooks", description: "Libros electrónicos en formato PDF", color: "#4CAF50", pdfCount: 0 },
+        { id: 2, name: "Manuales", description: "Manuales de usuario y guías", color: "#2196F3", pdfCount: 0 },
+        { id: 3, name: "Cursos", description: "Materiales de cursos en PDF", color: "#FF9800", pdfCount: 0 },
+        { id: 4, name: "Investigación", description: "Artículos y papers de investigación", color: "#9C27B0", pdfCount: 0 },
+        { id: 5, name: "Reportes", description: "Reportes y documentos oficiales", color: "#F44336", pdfCount: 0 }
+    ],
+    stats: {
+        visitasWeb: 0,
+        librosVendidos: 0,
+        comprasRealizadas: 0
+    },
+    rifa: {
+        participantes: 0,
+        ganadores: 0,
+        proximoSorteo: "15/12/2023"
+    },
+    settings: {
+        adminUsername: "admin",
+        siteName: "Mi Librería Digital",
+        maxFolders: 10,
+        maxPdfSize: 50
+    }
+};
+
+// Elementos del DOM
+let currentSection = "dashboard";
+const modal = document.getElementById("folder-modal");
+const closeModalButtons = document.querySelectorAll(".close-modal");
+const createFolderBtn = document.getElementById("create-folder-btn");
+const foldersList = document.getElementById("folders-list");
+const selectFolder = document.getElementById("select-folder");
+const uploadPdfBtn = document.getElementById("upload-pdf-btn");
+const pdfFileInput = document.getElementById("pdf-file");
+const uploadStatus = document.getElementById("upload-status");
+
+// Inicialización cuando el DOM está cargado
+document.addEventListener("DOMContentLoaded", function() {
+    initAdminSystem();
+    loadSystemData();
+    setupEventListeners();
+    updateDashboard();
+    renderFolders();
+    updateYear();
+});
+
+// Inicializar el sistema
+function initAdminSystem() {
+    // Cargar datos desde localStorage o usar valores por defecto
+    const savedData = localStorage.getItem("pdfAdminSystem");
+    if (savedData) {
+        try {
+            systemData = JSON.parse(savedData);
+        } catch (e) {
+            console.error("Error al cargar datos guardados:", e);
+        }
+    }
+    
+    // Inicializar navegación
+    document.querySelectorAll(".admin-nav a").forEach(link => {
+        link.addEventListener("click", function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute("href").substring(1);
+            switchSection(targetId);
+        });
+    });
+    
+    // Botón de logout
+    document.getElementById("logout-btn").addEventListener("click", function() {
+        if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+            alert("Sesión cerrada. Redirigiendo...");
+            // En una aplicación real, aquí redirigiríamos al login
+        }
+    });
+}
+
+// Cargar datos del sistema
+function loadSystemData() {
+    // Actualizar estadísticas en el dashboard
+    document.getElementById("total-carpetas").textContent = systemData.folders.length;
+    
+    const totalPdfs = systemData.folders.reduce((total, folder) => total + folder.pdfCount, 0);
+    document.getElementById("total-pdfs").textContent = totalPdfs;
+    document.getElementById("visitas-web").textContent = systemData.stats.visitasWeb;
+    document.getElementById("libros-vendidos").textContent = systemData.stats.librosVendidos;
+    
+    // Actualizar estadísticas en la sección de estadísticas
+    document.getElementById("stat-visitas").textContent = systemData.stats.visitasWeb;
+    document.getElementById("stat-ventas").textContent = systemData.stats.librosVendidos;
+    document.getElementById("stat-compras").textContent = systemData.stats.comprasRealizadas;
+    
+    // Actualizar datos de la rifa
+    document.getElementById("rifa-participantes").textContent = systemData.rifa.participantes;
+    document.getElementById("rifa-ganadores").textContent = systemData.rifa.ganadores;
+    document.getElementById("rifa-proximo").textContent = systemData.rifa.proximoSorteo;
+    
+    // Cargar ajustes
+    document.getElementById("admin-username").value = systemData.settings.adminUsername;
+    document.getElementById("site-name").value = systemData.settings.siteName;
+    document.getElementById("max-folders").value = systemData.settings.maxFolders;
+    document.getElementById("max-pdf-size").value = systemData.settings.maxPdfSize;
+}
+
+// Configurar event listeners
+function setupEventListeners() {
+    // Botones de acciones rápidas
+    document.getElementById("reset-visitas").addEventListener("click", () => resetStat("visitas"));
+    document.getElementById("reset-ventas").addEventListener("click", () => resetStat("ventas"));
+    document.getElementById("add-folder").addEventListener("click", () => openModal());
+    document.getElementById("refresh-stats").addEventListener("click", updateDashboard);
+    
+    // Botón para agregar carpeta en la sección de gestión
+    document.getElementById("add-folder-btn").addEventListener("click", () => openModal());
+    
+    // Modal
+    closeModalButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+    });
+    
+    // Crear carpeta desde modal
+    createFolderBtn.addEventListener("click", createNewFolder);
+    
+    // Subir PDF
+    uploadPdfBtn.addEventListener("click", uploadPdf);
+    
+    // Botones de reset en estadísticas
+    document.querySelectorAll(".btn-reset").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const target = this.getAttribute("data-target");
+            resetStat(target);
+        });
+    });
+    
+    // Botones de reset específicos
+    document.getElementById("reset-visitas-btn").addEventListener("click", () => resetStat("visitas"));
+    document.getElementById("reset-ventas-btn").addEventListener("click", () => resetStat("ventas"));
+    document.getElementById("reset-compras-btn").addEventListener("click", () => resetStat("compras"));
+    document.getElementById("reset-all-btn").addEventListener("click", resetAllStats);
+    
+    // Guardar ajustes
+    document.getElementById("save-settings").addEventListener("click", saveSettings);
+    document.getElementById("reset-settings").addEventListener("click", resetSettings);
+    
+    // Cerrar modal si se hace clic fuera
+    window.addEventListener("click", function(e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+}
+
+// Cambiar sección
+function switchSection(sectionId) {
+    // Ocultar todas las secciones
+    document.querySelectorAll(".content-section").forEach(section => {
+        section.classList.remove("active");
+    });
+    
+    // Remover clase activa de todos los enlaces
+    document.querySelectorAll(".admin-nav li").forEach(item => {
+        item.classList.remove("active");
+    });
+    
+    // Mostrar sección seleccionada
+    document.getElementById(sectionId).classList.add("active");
+    
+    // Activar enlace correspondiente
+    document.querySelector(`.admin-nav a[href="#${sectionId}"]`).parentElement.classList.add("active");
+    
+    currentSection = sectionId;
+    
+    // Actualizar contenido específico de la sección
+    if (sectionId === "gestion-pdfs") {
+        updateFolderSelect();
+    }
+}
+
+// Actualizar dashboard
+function updateDashboard() {
+    // Simular actualización de datos
+    const totalPdfs = systemData.folders.reduce((total, folder) => total + folder.pdfCount, 0);
+    document.getElementById("total-pdfs").textContent = totalPdfs;
+    
+    // Actualizar con datos del sistema
+    document.getElementById("visitas-web").textContent = systemData.stats.visitasWeb;
+    document.getElementById("libros-vendidos").textContent = systemData.stats.librosVendidos;
+    
+    // Mostrar notificación de actualización
+    showNotification("Dashboard actualizado correctamente", "success");
+}
+
+// Abrir modal para nueva carpeta
+function openModal() {
+    document.getElementById("folder-name").value = "";
+    document.getElementById("folder-description").value = "";
+    document.getElementById("folder-color").value = "#4CAF50";
+    modal.style.display = "flex";
+}
+
+// Crear nueva carpeta
+function createNewFolder() {
+    const folderName = document.getElementById("folder-name").value.trim();
+    const folderDescription = document.getElementById("folder-description").value.trim();
+    const folderColor = document.getElementById("folder-color").value;
+    
+    if (!folderName) {
+        alert("Por favor, ingresa un nombre para la carpeta");
+        return;
+    }
+    
+    // Verificar límite de carpetas
+    if (systemData.folders.length >= systemData.settings.maxFolders) {
+        alert(`No puedes crear más de ${systemData.settings.maxFolders} carpetas.`);
+        return;
+    }
+    
+    // Verificar si ya existe una carpeta con ese nombre
+    if (systemData.folders.some(folder => folder.name.toLowerCase() === folderName.toLowerCase())) {
+        alert("Ya existe una carpeta con ese nombre. Por favor, elige otro.");
+        return;
+    }
+    
+    // Crear nueva carpeta
+    const newFolder = {
+        id: systemData.folders.length > 0 ? Math.max(...systemData.folders.map(f => f.id)) + 1 : 1,
+        name: folderName,
+        description: folderDescription,
+        color: folderColor,
+        pdfCount: 0
+    };
+    
+    systemData.folders.push(newFolder);
+    saveSystemData();
+    renderFolders();
+    updateFolderSelect();
+    modal.style.display = "none";
+    
+    // Actualizar dashboard
+    document.getElementById("total-carpetas").textContent = systemData.folders.length;
+    
+    showNotification(`Carpeta "${folderName}" creada correctamente`, "success");
+}
+
+// Renderizar lista de carpetas
+function renderFolders() {
+    if (systemData.folders.length === 0) {
+        foldersList.innerHTML = `
+            <div class="no-folders">
+                <i class="fas fa-folder-open fa-3x"></i>
+                <h3>No hay carpetas creadas</h3>
+                <p>Crea tu primera carpeta para organizar tus PDFs</p>
+                <button class="btn-primary" id="create-first-folder">
+                    <i class="fas fa-plus-circle"></i> Crear Primera Carpeta
+                </button>
+            </div>
+        `;
+        
+        document.getElementById("create-first-folder")?.addEventListener("click", () => openModal());
+        return;
+    }
+    
+    let foldersHTML = "";
+    
+    systemData.folders.forEach(folder => {
+        foldersHTML += `
+            <div class="folder-card" style="border-left-color: ${folder.color}">
+                <div class="folder-header">
+                    <div class="folder-title">
+                        <i class="fas fa-folder" style="color: ${folder.color}"></i>
+                        <h3>${folder.name}</h3>
+                    </div>
+                    <div class="folder-actions">
+                        <button class="edit-folder" data-id="${folder.id}" title="Editar carpeta">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-folder" data-id="${folder.id}" title="Eliminar carpeta">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="folder-description">${folder.description || "Sin descripción"}</p>
+                <div class="folder-count">${folder.pdfCount}</div>
+                <p class="folder-count-label">PDFs en esta carpeta</p>
+                <div class="folder-upload">
+                    <button class="btn-primary upload-to-folder" data-id="${folder.id}">
+                        <i class="fas fa-upload"></i> Subir PDF aquí
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    foldersList.innerHTML = foldersHTML;
+    
+    // Agregar event listeners a los botones de las carpetas
+    document.querySelectorAll(".edit-folder").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const folderId = parseInt(this.getAttribute("data-id"));
+            editFolder(folderId);
+        });
+    });
+    
+    document.querySelectorAll(".delete-folder").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const folderId = parseInt(this.getAttribute("data-id"));
+            deleteFolder(folderId);
+        });
+    });
+    
+    document.querySelectorAll(".upload-to-folder").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const folderId = parseInt(this.getAttribute("data-id"));
+            selectFolder.value = folderId;
+            switchSection("gestion-pdfs");
+            pdfFileInput.focus();
+        });
+    });
+}
+
+// Actualizar select de carpetas
+function updateFolderSelect() {
+    let options = '<option value="">Selecciona una carpeta</option>';
+    
+    systemData.folders.forEach(folder => {
+        options += `<option value="${folder.id}">${folder.name} (${folder.pdfCount} PDFs)</option>`;
+    });
+    
+    selectFolder.innerHTML = options;
+}
+
+// Editar carpeta
+function editFolder(folderId) {
+    const folder = systemData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    document.getElementById("folder-name").value = folder.name;
+    document.getElementById("folder-description").value = folder.description || "";
+    document.getElementById("folder-color").value = folder.color;
+    
+    // Cambiar texto del botón
+    createFolderBtn.textContent = "Actualizar Carpeta";
+    createFolderBtn.onclick = function() {
+        updateFolder(folderId);
+    };
+    
+    modal.style.display = "flex";
+}
+
+// Actualizar carpeta
+function updateFolder(folderId) {
+    const folderIndex = systemData.folders.findIndex(f => f.id === folderId);
+    if (folderIndex === -1) return;
+    
+    const folderName = document.getElementById("folder-name").value.trim();
+    const folderDescription = document.getElementById("folder-description").value.trim();
+    const folderColor = document.getElementById("folder-color").value;
+    
+    if (!folderName) {
+        alert("Por favor, ingresa un nombre para la carpeta");
+        return;
+    }
+    
+    // Verificar si ya existe otra carpeta con ese nombre
+    const duplicate = systemData.folders.some((folder, index) => 
+        folder.name.toLowerCase() === folderName.toLowerCase() && index !== folderIndex
+    );
+    
+    if (duplicate) {
+        alert("Ya existe otra carpeta con ese nombre. Por favor, elige otro.");
+        return;
+    }
+    
+    // Actualizar carpeta
+    systemData.folders[folderIndex].name = folderName;
+    systemData.folders[folderIndex].description = folderDescription;
+    systemData.folders[folderIndex].color = folderColor;
+    
+    saveSystemData();
+    renderFolders();
+    updateFolderSelect();
+    modal.style.display = "none";
+    
+    // Restaurar botón
+    createFolderBtn.textContent = "Crear Carpeta";
+    createFolderBtn.onclick = createNewFolder;
+    
+    showNotification(`Carpeta "${folderName}" actualizada correctamente`, "success");
+}
+
+// Eliminar carpeta
+function deleteFolder(folderId) {
+    const folder = systemData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    if (!confirm(`¿Estás seguro de que quieres eliminar la carpeta "${folder.name}"? Esto no eliminará los PDFs físicos.`)) {
+        return;
+    }
+    
+    // Eliminar carpeta
+    systemData.folders = systemData.folders.filter(f => f.id !== folderId);
+    saveSystemData();
+    renderFolders();
+    updateFolderSelect();
+    
+    // Actualizar dashboard
+    document.getElementById("total-carpetas").textContent = systemData.folders.length;
+    
+    showNotification(`Carpeta "${folder.name}" eliminada correctamente`, "success");
+}
+
+// Subir PDF
+function uploadPdf() {
+    const folderId = parseInt(selectFolder.value);
+    const pdfFile = pdfFileInput.files[0];
+    const pdfName = document.getElementById("pdf-name").value.trim();
+    
+    if (!folderId) {
+        showUploadStatus("Por favor, selecciona una carpeta", "error");
+        return;
+    }
+    
+    if (!pdfFile) {
+        showUploadStatus("Por favor, selecciona un archivo PDF", "error");
+        return;
+    }
+    
+    // Verificar que sea un PDF
+    if (pdfFile.type !== "application/pdf") {
+        showUploadStatus("El archivo debe ser un PDF", "error");
+        return;
+    }
+    
+    // Verificar tamaño máximo
+    const maxSizeMB = systemData.settings.maxPdfSize;
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    
+    if (pdfFile.size > maxSizeBytes) {
+        showUploadStatus(`El archivo es demasiado grande. El tamaño máximo es ${maxSizeMB}MB`, "error");
+        return;
+    }
+    
+    // Encontrar la carpeta
+    const folderIndex = systemData.folders.findIndex(f => f.id === folderId);
+    if (folderIndex === -1) {
+        showUploadStatus("Carpeta no encontrada", "error");
+        return;
+    }
+    
+    // Simular subida de archivo
+    showUploadStatus("Subiendo PDF...", "uploading");
+    
+    setTimeout(() => {
+        // Incrementar contador de PDFs en la carpeta
+        systemData.folders[folderIndex].pdfCount++;
+        
+        // Guardar datos
+        saveSystemData();
+        
+        // Actualizar interfaz
+        renderFolders();
+        updateFolderSelect();
+        
+        // Limpiar formulario
+        pdfFileInput.value = "";
+        document.getElementById("pdf-name").value = "";
+        
+        // Mostrar confirmación
+        const fileName = pdfName || pdfFile.name;
+        showUploadStatus(`PDF "${fileName}" subido correctamente a la carpeta "${systemData.folders[folderIndex].name}"`, "success");
+        
+        // Actualizar dashboard
+        const totalPdfs = systemData.folders.reduce((total, folder) => total + folder.pdfCount, 0);
+        document.getElementById("total-pdfs").textContent = totalPdfs;
+    }, 1500);
+}
+
+// Mostrar estado de subida
+function showUploadStatus(message, type) {
+    uploadStatus.textContent = message;
+    uploadStatus.className = "";
+    
+    switch(type) {
+        case "error":
+            uploadStatus.style.backgroundColor = "#ffebee";
+            uploadStatus.style.color = "#c62828";
+            uploadStatus.style.border = "1px solid #ffcdd2";
+            break;
+        case "success":
+            uploadStatus.style.backgroundColor = "#e8f5e9";
+            uploadStatus.style.color = "#2e7d32";
+            uploadStatus.style.border = "1px solid #c8e6c9";
+            break;
+        case "uploading":
+            uploadStatus.style.backgroundColor = "#e3f2fd";
+            uploadStatus.style.color = "#1565c0";
+            uploadStatus.style.border = "1px solid #bbdefb";
+            break;
+    }
+}
+
+// Resetear estadística específica
+function resetStat(statType) {
+    let statName = "";
+    
+    switch(statType) {
+        case "visitas":
+            if (!confirm("¿Resetear el contador de visitas web a cero?")) return;
+            systemData.stats.visitasWeb = 0;
+            statName = "Visitas web";
+            break;
+        case "ventas":
+            if (!confirm("¿Resetear el contador de libros vendidos a cero?")) return;
+            systemData.stats.librosVendidos = 0;
+            statName = "Libros vendidos";
+            break;
+        case "compras":
+            if (!confirm("¿Resetear el contador de compras realizadas a cero?")) return;
+            systemData.stats.comprasRealizadas = 0;
+            statName = "Compras realizadas";
+            break;
+        default:
+            return;
+    }
+    
+    saveSystemData();
+    loadSystemData();
+    updateDashboard();
+    
+    showNotification(`${statName} reseteado correctamente a cero`, "success");
+}
+
+// Resetear todas las estadísticas
+function resetAllStats() {
+    if (!confirm("¿Estás seguro de que quieres resetear TODAS las estadísticas a cero? Esta acción no se puede deshacer.")) {
+        return;
+    }
+    
+    systemData.stats = {
+        visitasWeb: 0,
+        librosVendidos: 0,
+        comprasRealizadas: 0
+    };
+    
+    saveSystemData();
+    loadSystemData();
+    updateDashboard();
+    
+    showNotification("Todas las estadísticas han sido reseteadas a cero", "success");
+}
+
+// Guardar ajustes
+function saveSettings() {
+    const adminUsername = document.getElementById("admin-username").value.trim();
+    const siteName = document.getElementById("site-name").value.trim();
+    const maxFolders = parseInt(document.getElementById("max-folders").value);
+    const maxPdfSize = parseInt(document.getElementById("max-pdf-size").value);
+    
+    if (!adminUsername || !siteName || !maxFolders || !maxPdfSize) {
+        showSettingsMessage("Por favor, completa todos los campos", "error");
+        return;
+    }
+    
+    if (maxFolders < 1 || maxFolders > 50) {
+        showSettingsMessage("El máximo de carpetas debe estar entre 1 y 50", "error");
+        return;
+    }
+    
+    if (maxPdfSize < 1 || maxPdfSize > 500) {
+        showSettingsMessage("El tamaño máximo de PDF debe estar entre 1 y 500 MB", "error");
+        return;
+    }
+    
+    // Actualizar ajustes
+    systemData.settings.adminUsername = adminUsername;
+    systemData.settings.siteName = siteName;
+    systemData.settings.maxFolders = maxFolders;
+    systemData.settings.maxPdfSize = maxPdfSize;
+    
+    saveSystemData();
+    
+    // Actualizar nombre de usuario en el header
+    document.getElementById("admin-user").textContent = adminUsername;
+    
+    showSettingsMessage("Ajustes guardados correctamente", "success");
+}
+
+// Restablecer ajustes
+function resetSettings() {
+    if (!confirm("¿Restablecer ajustes a los valores por defecto?")) return;
+    
+    systemData.settings = {
+        adminUsername: "admin",
+        siteName: "Mi Librería Digital",
+        maxFolders: 10,
+        maxPdfSize: 50
+    };
+    
+    saveSystemData();
+    loadSystemData();
+    
+    showSettingsMessage("Ajustes restablecidos correctamente", "success");
+}
+
+// Mostrar mensaje en ajustes
+function showSettingsMessage(message, type) {
+    const settingsMessage = document.getElementById("settings-message");
+    settingsMessage.textContent = message;
+    settingsMessage.className = "";
+    
+    if (type === "error") {
+        settingsMessage.style.color = "#c62828";
+    } else if (type === "success") {
+        settingsMessage.style.color = "#2e7d32";
+    }
+    
+    // Ocultar mensaje después de 3 segundos
+    setTimeout(() => {
+        settingsMessage.textContent = "";
+    }, 3000);
+}
+
+// Mostrar notificación
+function showNotification(message, type) {
+    // Crear elemento de notificación
+    const notification = document.createElement("div");
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === "success" ? "check-circle" : "exclamation-circle"}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Estilos para la notificación
+    notification.style.position = "fixed";
+    notification.style.top = "20px";
+    notification.style.right = "20px";
+    notification.style.padding = "15px 20px";
+    notification.style.borderRadius = "5px";
+    notification.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+    notification.style.display = "flex";
+    notification.style.alignItems = "center";
+    notification.style.gap = "10px";
+    notification.style.zIndex = "1000";
+    notification.style.fontWeight = "500";
+    
+    if (type === "success") {
+        notification.style.backgroundColor = "#d4edda";
+        notification.style.color = "#155724";
+        notification.style.border = "1px solid #c3e6cb";
+    } else {
+        notification.style.backgroundColor = "#f8d7da";
+        notification.style.color = "#721c24";
+        notification.style.border = "1px solid #f5c6cb";
+    }
+    
+    // Agregar al DOM
+    document.body.appendChild(notification);
+    
+    // Remover después de 3 segundos
+    setTimeout(() => {
+        notification.style.opacity = "0";
+        notification.style.transition = "opacity 0.5s";
+        setTimeout(() => {
+            if (notification.parentNode) {
+                document.body.removeChild(notification);
+            }
+        }, 500);
+    }, 3000);
+}
+
+// Guardar datos del sistema
+function saveSystemData() {
+    localStorage.setItem("pdfAdminSystem", JSON.stringify(systemData));
+}
+
+// Actualizar año actual en el footer
+function updateYear() {
+    document.getElementById("current-year").textContent = new Date().getFullYear();
+}
+      <?php
+// pdf-manager.php - Backend para gestión de PDFs (simulación)
+
+// Este archivo simularía el backend en un sistema real
+// En un entorno real, aquí se manejaría la subida de archivos al servidor
+
+header('Content-Type: application/json');
+
+// Simular respuesta para subida de PDF
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+    
+    if ($action === 'upload_pdf') {
+        // En un sistema real, aquí se procesaría el archivo subido
+        $folderId = $_POST['folder_id'] ?? 0;
+        $fileName = $_POST['file_name'] ?? 'archivo.pdf';
+        
+        // Simular éxito después de 1 segundo
+        sleep(1);
+        
+        echo json_encode([
+            'success' => true,
+            'message' => "PDF '$fileName' subido correctamente",
+            'folder_id' => $folderId,
+            'file_name' => $fileName
+        ]);
+        exit;
+    }
+    
+    if ($action === 'create_folder') {
+        $folderName = $_POST['folder_name'] ?? '';
+        $folderDescription = $_POST['folder_description'] ?? '';
+        
+        // Simular éxito después de 0.5 segundos
+        sleep(0.5);
+        
+        echo json_encode([
+            'success' => true,
+            'message' => "Carpeta '$folderName' creada correctamente",
+            'folder_id' => rand(100, 999),
+            'folder_name' => $folderName
+        ]);
+        exit;
+    }
+}
+
+// Para otros métodos o acciones no definidas
+echo json_encode([
+    'success' => false,
+    'message' => 'Acción no válida'
+]);
