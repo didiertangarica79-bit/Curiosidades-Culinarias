@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Librería Digital - Carrito de Compras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, #1a237e 0%, #4a148c 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: #ffcc00;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: #ffcc00;
+        }
+
+        /* Contadores del header */
+        .header-counters {
+            display: flex;
+            gap: 20px;
+        }
+
+        .counter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 8px;
+            min-width: 100px;
+        }
+
+        .counter i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: #ffcc00;
+        }
+
+        .counter-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .counter-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* Main content */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* Catálogo de libros */
+        .catalog {
+            flex: 3;
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .catalog h2 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .book-card {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-image {
+            height: 180px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 4rem;
+        }
+
+        .book-info {
+            padding: 20px;
+        }
+
+        .book-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a237e;
+        }
+
+        .book-author {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .book-price {
+            font-weight: bold;
+            color: #4a148c;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background-color: #4a148c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #1a237e;
+        }
+
+        /* Panel del carrito */
+        .cart-panel {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .cart-panel h2 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-icon {
+            color: #4a148c;
+            font-size: 1.5rem;
+        }
+
+        /* Nueva sección para dinero del comprador */
+        .buyer-money {
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .money-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .money-label {
+            font-weight: 600;
+            color: #1b5e20;
+        }
+
+        .money-amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .cart-items {
+            min-height: 200px;
+            margin-bottom: 25px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #4a148c;
+        }
+
+        .cart-total {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .total-final {
+            font-weight: bold;
+            font-size: 1.4rem;
+            color: #1a237e;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background-color: #f57c00;
+        }
+
+        /* Contadores de actividad */
+        .activity-counters {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .activity-counter {
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .activity-counter i {
+            font-size: 1.8rem;
+            color: #4a148c;
+            margin-bottom: 10px;
+        }
+
+        .activity-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1a237e;
+            margin: 5px 0;
+        }
+
+        .activity-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Reloj y retroseso */
+        .clock-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #1a237e;
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .clock-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            font-family: monospace;
+            margin: 10px 0;
+            letter-spacing: 2px;
+            color: #ffcc00;
+        }
+
+        .retroceso-counter {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .retroceso-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            padding: 25px 0;
+            background-color: #1a237e;
+            color: white;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo i {
+            font-size: 1.8rem;
+            color: #ffcc00;
+        }
+
+        .footer-counters {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-counter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            
+            .activity-counters {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-book-open"></i>
+                    <h1>Librería <span>Digital</span></h1>
+                </div>
+                
+                <div class="header-counters">
+                    <div class="counter">
+                        <i class="fas fa-users"></i>
+                        <div class="counter-value" id="visits-counter">0</div>
+                        <div class="counter-label">Visitantes</div>
+                    </div>
+                    
+                    <div class="counter">
+                        <i class="fas fa-book"></i>
+                        <div class="counter-value" id="books-viewed-counter">0</div>
+                        <div class="counter-label">Libros Vistos</div>
+                    </div>
+                    
+                    <div class="counter">
+                        <i class="fas fa-shopping-cart"></i>
+                        <div class="counter-value" id="cart-items-counter">0</div>
+                        <div class="counter-label">En Carrito</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Catálogo de libros -->
+            <section class="catalog">
+                <h2>Catálogo de Libros Disponibles</h2>
+                
+                <div class="books-grid" id="books-container">
+                    <!-- Libros se cargarán aquí dinámicamente -->
+                </div>
+                
+                <!-- Contadores de actividad -->
+                <div class="activity-counters">
+                    <div class="activity-counter">
+                        <i class="fas fa-eye"></i>
+                        <div class="activity-value" id="book-detail-views">0</div>
+                        <div class="activity-label">Vistas a Detalles</div>
+                    </div>
+                    
+                    <div class="activity-counter">
+                        <i class="fas fa-folder-open"></i>
+                        <div class="activity-value" id="folder-views">0</div>
+                        <div class="activity-label">Carpetas Visitadas</div>
+                    </div>
+                    
+                    <div class="activity-counter">
+                        <i class="fas fa-cart-plus"></i>
+                        <div class="activity-value" id="items-added">0</div>
+                        <div class="activity-label">Artículos Agregados</div>
+                    </div>
+                    
+                    <div class="activity-counter">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="activity-value" id="purchases">0</div>
+                        <div class="activity-label">Compras Realizadas</div>
+                    </div>
+                </div>
+                
+                <!-- Reloj y contador de retroceso -->
+                <div class="clock-section">
+                    <h3><i class="fas fa-clock"></i> Reloj en Tiempo Real</h3>
+                    <div class="clock-display" id="clock">00:00:00</div>
+                    
+                    <div class="retroceso-counter">
+                        <div class="counter-label">Contador de Retroseso</div>
+                        <div class="retroceso-value" id="retroceso-counter">0</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Panel del carrito -->
+            <aside class="cart-panel">
+                <h2>
+                    <span>Carrito de Compras</span>
+                    <i class="fas fa-shopping-cart cart-icon"></i>
+                </h2>
+                
+                <!-- Nueva sección para mostrar el dinero del comprador -->
+                <div class="buyer-money">
+                    <div class="money-display">
+                        <div class="money-label">Dinero Disponible:</div>
+                        <div class="money-amount" id="buyer-money">$0.00</div>
+                    </div>
+                </div>
+                
+                <div class="cart-items" id="cart-items">
+                    <!-- Los productos del carrito aparecerán aquí -->
+                    <div class="empty-cart-message" id="empty-cart-message">
+                        <p style="text-align: center; color: #666; padding: 30px 0;">
+                            <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 15px; color: #ddd; display: block;"></i>
+                            Tu carrito está vacío
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="cart-total">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Envío:</span>
+                        <span id="shipping">$0.00</span>
+                    </div>
+                    <div class="total-row total-final">
+                        <span>Total:</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                </div>
+                
+                <button class="checkout-btn" id="checkout-btn" disabled>
+                    <i class="fas fa-lock"></i> Finalizar Compra
+                </button>
+                
+                <!-- Información adicional del carrito -->
+                <div style="margin-top: 25px; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
+                    <h4 style="color: #1a237e; margin-bottom: 10px;">Resumen de Actividad</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Artículos en carrito:</span>
+                        <span id="cart-summary-items">0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Valor total:</span>
+                        <span id="cart-summary-total">$0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Libros vistos:</span>
+                        <span id="cart-summary-books">0</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-book"></i>
+                    <div>Librería Digital &copy; 2023</div>
+                </div>
+                
+                <div class="footer-counters">
+                    <div class="footer-counter">
+                        <div class="counter-value" id="footer-visits">0</div>
+                        <div class="counter-label">Visitas</div>
+                    </div>
+                    
+                    <div class="footer-counter">
+                        <div class="counter-value" id="footer-books">0</div>
+                        <div class="counter-label">Libros</div>
+                    </div>
+                    
+                    <div class="footer-counter">
+                        <div class="counter-value" id="footer-cart">0</div>
+                        <div class="counter-label">En Carrito</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Datos de libros
+        const books = [
+            { id: 1, title: "Cien Años de Soledad", author: "Gabriel García Márquez", price: 24.99, category: "Novela" },
+            { id: 2, title: "El Quijote", author: "Miguel de Cervantes", price: 29.99, category: "Clásico" },
+            { id: 3, title: "La Sombra del Viento", author: "Carlos Ruiz Zafón", price: 19.99, category: "Misterio" },
+            { id: 4, title: "Ficciones", author: "Jorge Luis Borges", price: 22.50, category: "Cuentos" },
+            { id: 5, title: "Rayuela", author: "Julio Cortázar", price: 21.99, category: "Experimental" },
+            { id: 6, title: "Los Detectives Salvajes", author: "Roberto Bolaño", price: 27.99, category: "Novela" },
+            { id: 7, title: "La Casa de los Espíritus", author: "Isabel Allende", price: 23.50, category: "Realismo Mágico" },
+            { id: 8, title: "El Amor en los Tiempos del Cólera", author: "Gabriel García Márquez", price: 20.99, category: "Novela" }
+        ];
+
+        // Estado de la aplicación
+        let appState = {
+            visits: 0,
+            booksViewed: 0,
+            bookDetailViews: 0,
+            folderViews: 0,
+            itemsAdded: 0,
+            purchases: 0,
+            cartItems: 0,
+            cart: [],
+            buyerMoney: 1000.00 // Dinero inicial del comprador
+        };
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar contadores desde 0 como solicitado
+            updateAllCounters();
+            
+            // Cargar libros en el catálogo
+            loadBooks();
+            
+            // Configurar eventos
+            setupEventListeners();
+            
+            // Iniciar reloj
+            startClock();
+            
+            // Simular visita inicial a la página
+            simulateInitialVisit();
+        });
+
+        // Función para actualizar todos los contadores en la página
+        function updateAllCounters() {
+            // Contadores del header
+            document.getElementById('visits-counter').textContent = appState.visits;
+            document.getElementById('books-viewed-counter').textContent = appState.booksViewed;
+            document.getElementById('cart-items-counter').textContent = appState.cartItems;
+            
+            // Contadores de actividad
+            document.getElementById('book-detail-views').textContent = appState.bookDetailViews;
+            document.getElementById('folder-views').textContent = appState.folderViews;
+            document.getElementById('items-added').textContent = appState.itemsAdded;
+            document.getElementById('purchases').textContent = appState.purchases;
+            
+            // Dinero del comprador en el carrito
+            document.getElementById('buyer-money').textContent = `$${appState.buyerMoney.toFixed(2)}`;
+            
+            // Contadores del footer
+            document.getElementById('footer-visits').textContent = appState.visits;
+            document.getElementById('footer-books').textContent = appState.booksViewed;
+            document.getElementById('footer-cart').textContent = appState.cartItems;
+            
+            // Resumen en el carrito
+            document.getElementById('cart-summary-items').textContent = appState.cartItems;
+            document.getElementById('cart-summary-total').textContent = `$${calculateCartTotal().toFixed(2)}`;
+            document.getElementById('cart-summary-books').textContent = appState.booksViewed;
+            
+            // Actualizar carrito
+            updateCartDisplay();
+        }
+
+        // Función para cargar libros en el catálogo
+        function loadBooks() {
+            const booksContainer = document.getElementById('books-container');
+            booksContainer.innerHTML = '';
+            
+            books.forEach(book => {
+                const bookElement = document.createElement('div');
+                bookElement.className = 'book-card';
+                bookElement.dataset.id = book.id;
+                bookElement.dataset.category = book.category;
+                
+                bookElement.innerHTML = `
+                    <div class="book-image">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">${book.title}</h3>
+                        <p class="book-author">${book.author}</p>
+                        <p class="book-price">$${book.price.toFixed(2)}</p>
+                        <button class="add-to-cart" data-id="${book.id}">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                `;
+                
+                booksContainer.appendChild(bookElement);
+            });
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Eventos para agregar al carrito
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
+                    const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
+                    const bookId = parseInt(button.dataset.id);
+                    addToCart(bookId);
+                }
+                
+                // Simular vista de detalles de libro al hacer clic en una tarjeta
+                if (e.target.closest('.book-card')) {
+                    const bookCard = e.target.closest('.book-card');
+                    viewBookDetails(parseInt(bookCard.dataset.id));
+                }
+                
+                // Simular vista de carpeta al hacer clic en categoría
+                if (e.target.closest('.book-card') && e.target.closest('.book-card').dataset.category) {
+                    const category = e.target.closest('.book-card').dataset.category;
+                    viewFolder(category);
+                }
+            });
+            
+            // Evento para finalizar compra
+            document.getElementById('checkout-btn').addEventListener('click', function() {
+                completePurchase();
+            });
+        }
+
+        // Función para agregar un libro al carrito
+        function addToCart(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            
+            // Verificar si el libro ya está en el carrito
+            const existingItem = appState.cart.find(item => item.id === bookId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                appState.cart.push({
+                    id: book.id,
+                    title: book.title,
+                    price: book.price,
+                    quantity: 1
+                });
+            }
+            
+            // Actualizar contadores
+            appState.cartItems++;
+            appState.itemsAdded++;
+            
+            // Actualizar la pantalla
+            updateAllCounters();
+            
+            // Mostrar notificación
+            showNotification(`${book.title} agregado al carrito`);
+        }
+
+        // Función para actualizar la visualización del carrito
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            // Mostrar u ocultar mensaje de carrito vacío
+            if (appState.cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                checkoutBtn.disabled = true;
+            } else {
+                emptyCartMessage.style.display = 'none';
+                checkoutBtn.disabled = false;
+                
+                // Generar HTML de los items del carrito
+                let cartHTML = '';
+                let subtotal = 0;
+                
+                appState.cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+                    
+                    cartHTML += `
+                        <div class="cart-item" data-id="${item.id}">
+                            <div class="item-name">${item.title} (x${item.quantity})</div>
+                            <div class="item-price">$${itemTotal.toFixed(2)}</div>
+                        </div>
+                    `;
+                });
+                
+                cartItemsContainer.innerHTML = cartHTML + (cartItemsContainer.innerHTML.includes('empty-cart-message') ? '<div id="empty-cart-message" style="display:none;">...</div>' : '');
+                
+                // Calcular envío
+                const shipping = subtotal > 50 ? 0 : 5.99;
+                const total = subtotal + shipping;
+                
+                // Actualizar totales
+                document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+                document.getElementById('shipping').textContent = shipping === 0 ? "GRATIS" : `$${shipping.toFixed(2)}`;
+                document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+            }
+        }
+
+        // Función para calcular el total del carrito
+        function calculateCartTotal() {
+            return appState.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        }
+
+        // Función para simular visita inicial a la página
+        function simulateInitialVisit() {
+            // Incrementar contador de visitas
+            appState.visits++;
+            updateAllCounters();
+        }
+
+        // Función para simular vista de detalles de libro
+        function viewBookDetails(bookId) {
+            appState.bookDetailViews++;
+            updateAllCounters();
+        }
+
+        // Función para simular vista de carpeta
+        function viewFolder(category) {
+            appState.folderViews++;
+            updateAllCounters();
+        }
+
+        // Función para completar una compra
+        function completePurchase() {
+            const cartTotal = calculateCartTotal();
+            
+            // Verificar si el comprador tiene suficiente dinero
+            if (cartTotal > appState.buyerMoney) {
+                showNotification("No tienes suficiente dinero para completar esta compra", "error");
+                return;
+            }
+            
+            // Realizar la compra
+            appState.buyerMoney -= cartTotal;
+            appState.purchases++;
+            
+            // Vaciar el carrito
+            appState.cart = [];
+            appState.cartItems = 0;
+            
+            // Actualizar contadores
+            updateAllCounters();
+            
+            // Mostrar notificación de éxito
+            showNotification(`Compra completada exitosamente. Total: $${cartTotal.toFixed(2)}`, "success");
+        }
+
+        // Función para mostrar notificaciones
+        function showNotification(message, type = "info") {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background-color: ${type === "error" ? "#f44336" : type === "success" ? "#4CAF50" : "#2196F3"};
+                color: white;
+                border-radius: 5px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            // Agregar keyframes para animación
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remover notificación después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Función para el reloj en tiempo real
+        function startClock() {
+            function updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString();
+                document.getElementById('clock').textContent = timeString;
+            }
+            
+            // Actualizar cada segundo
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        // NO MODIFICAR - Función para el contador de retroseso
+        function updateRetrocesoCounter() {
+            // Esta función se mantiene como está, sin modificaciones
+            const retrocesoCounter = document.getElementById('retroceso-counter');
+            let counter = parseInt(retrocesoCounter.textContent);
+            counter++;
+            retrocesoCounter.textContent = counter;
+        }
+
+        // Llamar a la función de retroseso cada 10 segundos (como estaba)
+        setInterval(updateRetrocesoCounter, 10000);
+    </script>
+</body>
+</html>
