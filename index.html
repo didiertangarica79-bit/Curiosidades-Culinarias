@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curiosidades Culinarias - Libros de Cocina en PDF</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos existentes (se mantienen igual) */
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #f39c12;
+            --light: #fdf2e9;
+            --dark: #2c3e50;
+            --text: #333;
+            --gray: #95a5a6;
+            --success: #27ae60;
+            --info: #3498db;
+            --cuban-blue: #00205b;
+            --cuban-red: #cf142b;
+            --tracker-bg: #0f172a;
+            --tracker-card: #1e293b;
+            --tracker-primary: #3b82f6;
+            --tracker-success: #10b981;
+            --tracker-warning: #f59e0b;
+            --tracker-danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* ... (todos los estilos existentes se mantienen igual) ... */
+        
+        /* NUEVOS ESTILOS PARA LA GESTIÓN DE CARPETAS */
+        .folders-management {
+            margin-top: 30px;
+        }
+        
+        .folders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .folder-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .folder-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .folder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .folder-name {
+            font-size: 1.5rem;
+            color: var(--cuban-blue);
+            font-weight: 600;
+        }
+        
+        .folder-badge {
+            background: linear-gradient(to right, var(--cuban-blue), var(--cuban-red));
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .folder-files {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .folder-file-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border-left: 3px solid var(--cuban-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .file-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .delete-file {
+            color: var(--cuban-red);
+        }
+        
+        .view-file {
+            color: var(--cuban-blue);
+        }
+        
+        .folder-empty {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .folder-form {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        .folder-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .folder-form-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .folder-form-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .folder-form-btn.save {
+            background: var(--success);
+            color: white;
+        }
+        
+        .folder-form-btn.cancel {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd !important;
+        }
+        
+        .upload-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .upload-status.error {
+            background: var(--cuban-red);
+        }
+        
+        .upload-status.info {
+            background: var(--cuban-blue);
+        }
+        
+        .uploaded-book-info {
+            background: #f0f9ff;
+            border: 2px solid var(--cuban-blue);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .uploaded-book-info.active {
+            display: block;
+        }
+        
+        .uploaded-book-info h4 {
+            color: var(--cuban-blue);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .uploaded-book-info p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .uploaded-book-info strong {
+            color: var(--cuban-red);
+        }
+        
+        .folder-selector {
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .folder-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--cuban-blue);
+        }
+        
+        .folder-selector select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .file-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .file-icon {
+            font-size: 1.5rem;
+            color: var(--cuban-blue);
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: var(--cuban-blue);
+        }
+        
+        .file-size {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .file-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        /* Ajuste para las pestañas del admin */
+        .admin-tabs {
+            overflow-x: auto;
+            flex-wrap: nowrap;
+        }
+        
+        .admin-tab {
+            white-space: nowrap;
+        }
+        
+        /* Estilos para el mensaje de archivo subido */
+        .upload-success-message {
+            background: linear-gradient(to right, var(--success), #219653);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .upload-success-message.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .upload-success-message i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Bandera de Cuba -->
+    <div class="cuba-flag"></div>
+
+    <!-- Header existente (sin cambios) -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-utensils logo-icon"></i>
+                <h1>Curiosidades <span>Culinarias</span></h1>
+            </div>
+            
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#libros">Libros PDF</a></li>
+                    <li><a href="#almanaque">Almanaque</a></li>
+                    <li><a href="#calendario">Calendario Mundial</a></li>
+                    <li><a href="#pagos">Pagos</a></li>
+                    <li><a href="#seguimiento">Estadísticas</a></li>
+                    <li><a href="#sobre">Sobre Didiert</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="#soporte">Soporte</a></li>
+                </ul>
+            </nav>
+            
+            <div class="cart-container" id="cartBtn">
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+            
+            <a href="#admin-panel" class="cta-button" title="Panel administrativo">
+                <i class="fas fa-chart-line"></i> Panel Admin
+            </a>
+        </div>
+    </header>
+
+    <!-- Modal del Carrito (sin cambios) -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3><i class="fas fa-shopping-cart"></i> Tu Carrito</h3>
+                <button class="close-cart" id="closeCart">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <div class="cart-empty" id="cartEmpty">
+                    <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>Tu carrito está vacío</p>
+                    <p>¡Añade algunos libros de cocina!</p>
+                </div>
+            </div>
+            
+            <div class="payment-section" id="paymentSection" style="display: none;">
+                <h4 style="color: var(--cuban-blue); margin-bottom: 15px;">Información de Pago</h4>
+                <div class="payment-input-group">
+                    <label for="moneyAvailable">Dinero Disponible (USD):</label>
+                    <input type="number" id="moneyAvailable" min="0" step="0.01" placeholder="Ej: 50.00" value="0">
+                </div>
+                <div class="payment-details" id="paymentDetails">
+                    <div class="payment-row">
+                        <span>Total de la compra:</span>
+                        <span id="cartTotalDisplay">$0.00</span>
+                    </div>
+                    <div class="payment-row">
+                        <span>Dinero disponible:</span>
+                        <span id="availableMoneyDisplay">$0.00</span>
+                    </div>
+                    <div class="payment-row" id="changeRow">
+                        <span>Vuelto:</span>
+                        <span id="changeAmount">$0.00</span>
+                    </div>
+                    <div class="payment-row negative" id="missingRow" style="display: none;">
+                        <span>Faltante:</span>
+                        <span id="missingAmount">$0.00</span>
+                    </div>
+                    <div class="payment-row total">
+                        <span>Total general:</span>
+                        <span id="grandTotal">$0.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cart-total" id="cartTotal" style="display: none;">
+                <span>Total:</span>
+                <span id="cartTotalAmount">$0.00 USD</span>
+            </div>
+            <div class="cart-actions" id="cartActions" style="display: none;">
+                <button class="clear-cart" id="clearCart">
+                    <i class="fas fa-trash"></i> Vaciar Carrito
+                </button>
+                <button class="checkout" id="checkoutBtn">
+                    <i class="fas fa-check"></i> Finalizar Compra
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secciones existentes (sin cambios) -->
+    <!-- Hero, Libros, Almanaque, Calendario, Rifa, Pagos, Estadísticas, Sobre, Contacto, Soporte -->
+    
+    <!-- Sección del Panel de Administración - MODIFICADA -->
+    <section id="admin-panel" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="section-title">
+                <h2><i class="fas fa-chart-line"></i> Panel de Administración</h2>
+                <p>Gestión completa de ventas, estadísticas y configuración</p>
+            </div>
+            
+            <!-- Mensaje de archivo subido -->
+            <div class="upload-success-message" id="uploadSuccessMessage">
+                <i class="fas fa-check-circle"></i>
+                <span id="uploadSuccessText">Archivo subido correctamente</span>
+            </div>
+            
+            <div class="admin-container">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="stats">Estadísticas</button>
+                    <button class="admin-tab" data-tab="raffle">Configurar Sorteo</button>
+                    <button class="admin-tab" data-tab="calendar">Calendario Personal</button>
+                    <!-- Cambiado de "Contadores" a "Estadísticas Avanzadas" -->
+                    <button class="admin-tab" data-tab="advanced-stats">Estadísticas Avanzadas</button>
+                    <button class="admin-tab" data-tab="uploads">Subir Archivos</button>
+                    <button class="admin-tab" data-tab="folders">Gestionar Carpetas</button>
+                    <button class="admin-tab" data-tab="reset">Restablecer</button>
+                </div>
+                
+                <!-- Pestaña de Estadísticas (sin cambios) -->
+                <div class="admin-content active" id="statsTab">
+                    <h3>Estadísticas de Ventas</h3>
+                    <div class="book-sales-stats">
+                        <div class="book-stat-item">
+                            <h4>Cocina Internacional AI</h4>
+                            <div class="book-stat-number" id="adminBook1Sales">0</div>
+                            <p>Ventas totales</p>
+                            <button class="reset-btn" style="margin-top: 10px; padding: 5px 10px; font-size: 0.9rem;" onclick="resetBookSales(1)">
+                                <i class="fas fa-redo"></i> Reiniciar
+                            </button>
+                        </div>
+                        <div class="book-stat-item">
+                            <h4>Fusión Caribeña con IA</h4>
+                            <div class="book-stat-number" id="adminBook2Sales">0</div>
+                            <p>Ventas totales</p>
+                            <button class="reset-btn" style="margin-top: 10px; padding: 5px 10px; font-size: 0.9rem;" onclick="resetBookSales(2)">
+                                <i class="fas fa-redo"></i> Reiniciar
+                            </button>
+                        </div>
+                        <div class="book-stat-item">
+                            <h4>Postres con Chat GPT</h4>
+                            <div class="book-stat-number" id="adminBook3Sales">0</div>
+                            <p>Ventas totales</p>
+                            <button class="reset-btn" style="margin-top: 10px; padding: 5px 10px; font-size: 0.9rem;" onclick="resetBookSales(3)">
+                                <i class="fas fa-redo"></i> Reiniciar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                        <h4>Estadísticas Generales</h4>
+                        <div class="payment-row">
+                            <span>Ventas Nacionales:</span>
+                            <span id="adminSalesCuba">0</span>
+                        </div>
+                        <div class="payment-row">
+                            <span>Ventas Internacionales:</span>
+                            <span id="adminSalesInternational">0</span>
+                        </div>
+                        <div class="payment-row">
+                            <span>Total de Ventas:</span>
+                            <span id="adminTotalSales">0</span>
+                        </div>
+                        <div class="payment-row">
+                            <span>Visitas a la web:</span>
+                            <span id="adminWebsiteVisits">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Configurar Sorteo (sin cambios) -->
+                <div class="admin-content" id="raffleTab">
+                    <h3>Configurar Sorteo</h3>
+                    <div class="admin-form-group">
+                        <label for="rafflePrizeInput">Premio del Sorteo:</label>
+                        <input type="text" id="rafflePrizeInput" placeholder="Ej: Libro 'Fusión Caribeña con IA' GRATIS">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="raffleDescriptionInput">Descripción del Sorteo:</label>
+                        <textarea id="raffleDescriptionInput" rows="3" placeholder="Describe el sorteo..."></textarea>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="raffleLinkInput">Enlace del Sorteo:</label>
+                        <input type="text" id="raffleLinkInput" placeholder="https://mitienda.didiert.com">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="raffleDaysInput">Días para el sorteo:</label>
+                        <input type="number" id="raffleDaysInput" min="1" max="30" value="5">
+                    </div>
+                    <div class="admin-buttons">
+                        <button class="reset-btn" onclick="resetRaffleConfig()">
+                            <i class="fas fa-redo"></i> Restablecer
+                        </button>
+                        <button class="save-btn" onclick="saveRaffleConfig()">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Calendario Personal (sin cambios) -->
+                <div class="admin-content" id="calendarTab">
+                    <h3>Calendario Personal</h3>
+                    <div class="admin-form-group">
+                        <label for="eventDate">Fecha del Evento:</label>
+                        <input type="date" id="eventDate">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="eventName">Nombre del Evento:</label>
+                        <input type="text" id="eventName" placeholder="Ej: Cumpleaños de Didiert">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="eventDescription">Descripción:</label>
+                        <textarea id="eventDescription" rows="3" placeholder="Descripción del evento..."></textarea>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="eventTypeSelect">Tipo de Evento:</label>
+                        <select id="eventTypeSelect">
+                            <option value="personal">Personal</option>
+                            <option value="business">Negocios</option>
+                            <option value="holiday">Feriado</option>
+                            <option value="reminder">Recordatorio</option>
+                        </select>
+                    </div>
+                    <div class="admin-buttons">
+                        <button class="reset-btn" onclick="resetCalendarEvent()">
+                            <i class="fas fa-redo"></i> Limpiar
+                        </button>
+                        <button class="save-btn" onclick="addCalendarEvent()">
+                            <i class="fas fa-plus"></i> Añadir Evento
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Eventos Agregados</h4>
+                        <div id="personalEventsList" style="margin-top: 15px; max-height: 200px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <p style="color: #666; text-align: center;">No hay eventos personales agregados</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Estadísticas Avanzadas (ANTES Contadores) -->
+                <div class="admin-content" id="advanced-statsTab">
+                    <h3><i class="fas fa-chart-bar"></i> Estadísticas Avanzadas</h3>
+                    <p>Configuración de contadores y estadísticas detalladas</p>
+                    
+                    <div class="admin-form-group">
+                        <label for="cubaSalesInput">Ventas Nacionales (Cuba):</label>
+                        <input type="number" id="cubaSalesInput" min="0" value="0">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="internationalSalesInput">Ventas Internacionales:</label>
+                        <input type="number" id="internationalSalesInput" min="0" value="0">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="websiteVisitsInput">Visitas a la Web:</label>
+                        <input type="number" id="websiteVisitsInput" min="0" value="0">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="bookOfDayInput">Libro del Día (Ventas):</label>
+                        <input type="number" id="bookOfDayInput" min="0" value="0">
+                    </div>
+                    <div class="admin-buttons">
+                        <button class="reset-btn" onclick="resetAllCounters()">
+                            <i class="fas fa-redo"></i> Reiniciar Todo
+                        </button>
+                        <button class="save-btn" onclick="updateCounters()">
+                            <i class="fas fa-save"></i> Actualizar Contadores
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Subir Archivos - MEJORADA -->
+                <div class="admin-content" id="uploadsTab">
+                    <h3><i class="fas fa-cloud-upload-alt"></i> Subir Archivos a la Web</h3>
+                    <p>Sube libros PDF y archivos multimedia para tu sitio web</p>
+                    
+                    <!-- Selector de carpeta -->
+                    <div class="folder-selector">
+                        <label for="uploadFolderSelect">Seleccionar carpeta de destino:</label>
+                        <select id="uploadFolderSelect">
+                            <option value="libros">📚 Libros de Cocina</option>
+                            <option value="postres">🍰 Postres</option>
+                            <option value="recetas">📝 Recetas</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Área de subida de archivos -->
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Arrastra y suelta archivos aquí o haz clic para seleccionar</p>
+                        <p><small>Formatos aceptados: PDF, JPG, PNG, DOC, TXT, MP4, MP3</small></p>
+                        <input type="file" id="fileInput" multiple style="display: none;">
+                    </div>
+                    
+                    <!-- Información del libro subido -->
+                    <div class="uploaded-book-info" id="uploadedBookInfo">
+                        <h4><i class="fas fa-check-circle"></i> ¡Libro subido exitosamente!</h4>
+                        <p>Tu libro ha sido subido correctamente y está disponible en la carpeta:</p>
+                        <p><strong id="uploadedFolderName">📚 Libros de Cocina</strong></p>
+                        <p>Puedes gestionar tus archivos en la pestaña <strong>"Gestionar Carpetas"</strong>.</p>
+                    </div>
+                    
+                    <!-- Lista de archivos subidos -->
+                    <div style="margin-top: 30px;">
+                        <h4><i class="fas fa-file-alt"></i> Archivos Subidos Recientemente</h4>
+                        <div id="uploadedFilesList" style="margin-top: 15px; max-height: 200px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <p style="color: #666; text-align: center;">No hay archivos subidos aún</p>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-buttons" style="margin-top: 20px;">
+                        <button class="reset-btn" onclick="clearUploadedFiles()">
+                            <i class="fas fa-trash"></i> Limpiar Lista
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- NUEVA PESTAÑA: Gestionar Carpetas -->
+                <div class="admin-content" id="foldersTab">
+                    <h3><i class="fas fa-folder"></i> Gestionar Carpetas</h3>
+                    <p>Administra las carpetas de inicio y sus archivos</p>
+                    
+                    <div class="folders-management">
+                        <div class="folders-grid" id="foldersGrid">
+                            <!-- Las carpetas se generarán dinámicamente con JavaScript -->
+                        </div>
+                        
+                        <div style="margin-top: 30px; padding: 20px; background: #f0f9ff; border-radius: 10px; border: 2px solid var(--cuban-blue);">
+                            <h4><i class="fas fa-plus-circle"></i> Crear Nueva Carpeta</h4>
+                            <div class="folder-form">
+                                <input type="text" id="newFolderName" placeholder="Nombre de la nueva carpeta" style="margin-bottom: 10px;">
+                                <div class="folder-form-buttons">
+                                    <button class="folder-form-btn cancel" onclick="cancelNewFolder()">
+                                        Cancelar
+                                    </button>
+                                    <button class="folder-form-btn save" onclick="createNewFolder()">
+                                        <i class="fas fa-plus"></i> Crear Carpeta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Restablecer (sin cambios) -->
+                <div class="admin-content" id="resetTab">
+                    <h3>Restablecer Configuraciones</h3>
+                    <p>Selecciona qué configuraciones deseas restablecer a sus valores predeterminados:</p>
+                    
+                    <div style="margin-top: 20px;">
+                        <div style="margin-bottom: 15px;">
+                            <input type="checkbox" id="resetSales" checked>
+                            <label for="resetSales">Ventas y estadísticas</label>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <input type="checkbox" id="resetRaffle" checked>
+                            <label for="resetRaffle">Configuración del sorteo</label>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <input type="checkbox" id="resetCalendar" checked>
+                            <label for="resetCalendar">Eventos del calendario</label>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <input type="checkbox" id="resetCounters" checked>
+                            <label for="resetCounters">Contadores</label>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <input type="checkbox" id="resetUploads">
+                            <label for="resetUploads">Archivos subidos</label>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <input type="checkbox" id="resetFolders">
+                            <label for="resetFolders">Carpetas personalizadas</label>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-buttons">
+                        <button class="reset-btn" onclick="confirmReset()" style="background: #ef4444; color: white;">
+                            <i class="fas fa-exclamation-triangle"></i> Restablecer Seleccionados
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 15px; background: #fff5f5; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <p><strong><i class="fas fa-exclamation-circle"></i> Advertencia:</strong> Esta acción no se puede deshacer. Se perderán todos los datos seleccionados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer existente (sin cambios) -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Curiosidades Culinarias</h3>
+                    <p>Libros de cocina en PDF creados con inteligencia artificial. Recetas innovadoras para todos los gustos.</p>
+                    <div class="social-icons">
+                        <a href="https://youtube.com/@didiertangarica" target="_blank" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <button class="whatsapp-button" id="footerWhatsappBtn" style="background: none; border: none; padding: 0; cursor: pointer; width: 40px; height: 40px;">
+                            <i class="fab fa-whatsapp" style="color: white; font-size: 1.2rem;"></i>
+                        </button>
+                        <a href="mailto:culinariascuriosidades4@gmail.com" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#libros">Libros PDF</a></li>
+                        <li><a href="#almanaque">Almanaque</a></li>
+                        <li><a href="#calendario">Calendario Mundial</a></li>
+                        <li><a href="#pagos">Métodos de Pago</a></li>
+                        <li><a href="#seguimiento">Estadísticas</a></li>
+                        <li><a href="#sobre">Sobre Didiert</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                        <li><a href="#soporte">Soporte</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Libros Destacados</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Fusión Caribeña con IA</a></li>
+                        <li><a href="#">Cocina Internacional AI</a></li>
+                        <li><a href="#">Postres con Chat GPT</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Información Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Términos y Condiciones</a></li>
+                        <li><a href="#">Política de Privacidad</a></li>
+                        <li><a href="#">Aviso Legal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 Curiosidades Culinarias. Todos los derechos reservados. | Diseñado con ❤️ por Didiert</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">Este sitio web es un proyecto educativo. Los libros mencionados son ejemplos ficticios.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Variables globales
+        let currentYear = new Date().getFullYear();
+        let whatsappNumber = "+5352494433";
+        
+        // Variables para el carrito
+        let cart = [];
+        let cartCount = 0;
+        let cartTotal = 0;
+        
+        // Variables para estadísticas
+        let salesCuba = 0;
+        let salesInternational = 0;
+        let websiteVisits = 0;
+        let bookOfDaySales = 0;
+        let bookOfDayName = "No hay ventas aún";
+        let salesHistory = [];
+        
+        // Estadísticas por libro
+        let bookSales = {
+            1: { name: "Cocina Internacional AI", sales: 0 },
+            2: { name: "Fusión Caribeña con IA", sales: 0 },
+            3: { name: "Postres con Chat GPT", sales: 0 }
+        };
+        
+        // Variables para el sorteo
+        let raffleEndTime = new Date();
+        raffleEndTime.setDate(raffleEndTime.getDate() + 5); // 5 días desde ahora
+        let raffleConfig = {
+            prize: "Libro 'Fusión Caribeña con IA' GRATIS + Acceso a mi tienda online",
+            description: "Visita mi nueva tienda online donde encontrarás productos exclusivos. Participa en este sorteo para ganar un libro GRATIS y descuentos especiales en tu primera compra.",
+            link: "https://mitienda.didiert.com",
+            days: 5
+        };
+        
+        // Eventos personales del calendario
+        let personalEvents = [];
+        
+        // Archivos subidos
+        let uploadedFiles = [];
+        
+        // NUEVO: Sistema de carpetas
+        let folders = {
+            'libros': {
+                name: '📚 Libros de Cocina',
+                description: 'Libros PDF de cocina internacional y tradicional',
+                files: [],
+                createdAt: new Date().toISOString()
+            },
+            'postres': {
+                name: '🍰 Postres',
+                description: 'Recetas de postres y dulces',
+                files: [],
+                createdAt: new Date().toISOString()
+            },
+            'recetas': {
+                name: '📝 Recetas',
+                description: 'Recetas individuales y colecciones',
+                files: [],
+                createdAt: new Date().toISOString()
+            }
+        };
+        
+        // Inicializar contador de visitas
+        function initializeWebsiteVisits() {
+            const savedVisits = localStorage.getItem('websiteVisits');
+            if (savedVisits) {
+                websiteVisits = parseInt(savedVisits);
+            } else {
+                websiteVisits = 0;
+            }
+            websiteVisits++;
+            localStorage.setItem('websiteVisits', websiteVisits.toString());
+            updateWebsiteVisitsDisplay();
+        }
+        
+        // NUEVO: Función para mostrar notificaciones
+        function showUploadStatus(message, type = 'success') {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `upload-status ${type}`;
+            statusDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+            document.body.appendChild(statusDiv);
+            
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(statusDiv);
+                }, 300);
+            }, 3000);
+        }
+        
+        // NUEVO: Función para mostrar información del libro subido
+        function showUploadedBookInfo(folderId, fileName) {
+            const infoDiv = document.getElementById('uploadedBookInfo');
+            const folderName = document.getElementById('uploadedFolderName');
+            const folder = folders[folderId];
+            
+            if (folder) {
+                folderName.textContent = folder.name;
+                infoDiv.classList.add('active');
+                
+                // Mostrar también en el mensaje de éxito
+                document.getElementById('uploadSuccessText').textContent = `${fileName} subido correctamente a ${folder.name}`;
+                document.getElementById('uploadSuccessMessage').classList.add('active');
+                
+                // Ocultar después de 5 segundos
+                setTimeout(() => {
+                    infoDiv.classList.remove('active');
+                    document.getElementById('uploadSuccessMessage').classList.remove('active');
+                }, 5000);
+            }
+        }
+        
+        // NUEVO: Función para cargar carpetas
+        function loadFolders() {
+            const savedFolders = localStorage.getItem('foldersData');
+            if (savedFolders) {
+                const parsedFolders = JSON.parse(savedFolders);
+                // Combinar con las carpetas por defecto
+                folders = { ...folders, ...parsedFolders };
+            }
+            renderFolders();
+        }
+        
+        // NUEVO: Función para renderizar carpetas
+        function renderFolders() {
+            const foldersGrid = document.getElementById('foldersGrid');
+            if (!foldersGrid) return;
+            
+            foldersGrid.innerHTML = '';
+            
+            for (const folderId in folders) {
+                const folder = folders[folderId];
+                
+                const folderCard = document.createElement('div');
+                folderCard.className = 'folder-card';
+                folderCard.dataset.folderId = folderId;
+                
+                let filesHTML = '';
+                if (folder.files && folder.files.length > 0) {
+                    folder.files.forEach((file, index) => {
+                        const fileDate = new Date(file.date).toLocaleDateString('es-ES', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+                        
+                        filesHTML += `
+                            <div class="folder-file-item">
+                                <div class="file-details">
+                                    <i class="fas fa-file ${getFileIconClass(file.type)} file-icon"></i>
+                                    <div class="file-info">
+                                        <div class="file-name">${file.name}</div>
+                                        <div class="file-size">${file.size}</div>
+                                        <div class="file-date">${fileDate}</div>
+                                    </div>
+                                </div>
+                                <div class="file-actions">
+                                    <button class="file-action-btn view-file" onclick="viewFile('${folderId}', ${index})" title="Ver archivo">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="file-action-btn delete-file" onclick="deleteFile('${folderId}', ${index})" title="Eliminar archivo">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    filesHTML = `<div class="folder-empty">No hay archivos en esta carpeta</div>`;
+                }
+                
+                folderCard.innerHTML = `
+                    <div class="folder-header">
+                        <div class="folder-name">${folder.name}</div>
+                        <div class="folder-badge">${folder.files ? folder.files.length : 0} archivos</div>
+                    </div>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${folder.description || 'Sin descripción'}</p>
+                    
+                    <div class="folder-files">
+                        ${filesHTML}
+                    </div>
+                    
+                    <div class="folder-form">
+                        <input type="text" class="folder-rename-input" placeholder="Nuevo nombre para la carpeta" value="${folder.name}" style="margin-bottom: 10px;">
+                        <textarea class="folder-desc-input" placeholder="Nueva descripción" rows="2" style="width: 100%; margin-bottom: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">${folder.description || ''}</textarea>
+                        <div class="folder-form-buttons">
+                            <button class="folder-form-btn save" onclick="updateFolder('${folderId}')">
+                                <i class="fas fa-save"></i> Guardar Cambios
+                            </button>
+                            <button class="folder-form-btn cancel" onclick="deleteFolder('${folderId}')" style="background: var(--cuban-red); color: white;">
+                                <i class="fas fa-trash"></i> Eliminar Carpeta
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                foldersGrid.appendChild(folderCard);
+            }
+        }
+        
+        // NUEVO: Función para obtener clase de icono según tipo de archivo
+        function getFileIconClass(fileType) {
+            if (fileType.includes('pdf')) return 'fa-file-pdf';
+            if (fileType.includes('image')) return 'fa-file-image';
+            if (fileType.includes('video')) return 'fa-file-video';
+            if (fileType.includes('audio')) return 'fa-file-audio';
+            if (fileType.includes('text') || fileType.includes('document')) return 'fa-file-alt';
+            return 'fa-file';
+        }
+        
+        // NUEVO: Función para actualizar una carpeta
+        function updateFolder(folderId) {
+            const folderCard = document.querySelector(`.folder-card[data-folder-id="${folderId}"]`);
+            if (!folderCard) return;
+            
+            const newName = folderCard.querySelector('.folder-rename-input').value;
+            const newDesc = folderCard.querySelector('.folder-desc-input').value;
+            
+            if (!newName.trim()) {
+                showUploadStatus('El nombre de la carpeta no puede estar vacío', 'error');
+                return;
+            }
+            
+            folders[folderId].name = newName;
+            folders[folderId].description = newDesc;
+            
+            saveFolders();
+            renderFolders();
+            showUploadStatus(`Carpeta "${newName}" actualizada correctamente`, 'success');
+        }
+        
+        // NUEVO: Función para eliminar una carpeta
+        function deleteFolder(folderId) {
+            if (!confirm(`¿Estás seguro de que quieres eliminar la carpeta "${folders[folderId].name}"? Se eliminarán todos los archivos dentro.`)) {
+                return;
+            }
+            
+            delete folders[folderId];
+            saveFolders();
+            renderFolders();
+            showUploadStatus('Carpeta eliminada correctamente', 'info');
+        }
+        
+        // NUEVO: Función para crear una nueva carpeta
+        function createNewFolder() {
+            const newFolderName = document.getElementById('newFolderName').value;
+            
+            if (!newFolderName.trim()) {
+                showUploadStatus('Debes ingresar un nombre para la carpeta', 'error');
+                return;
+            }
+            
+            const folderId = newFolderName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+            
+            if (folders[folderId]) {
+                showUploadStatus('Ya existe una carpeta con ese nombre o similar', 'error');
+                return;
+            }
+            
+            folders[folderId] = {
+                name: newFolderName,
+                description: 'Nueva carpeta creada por el administrador',
+                files: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            saveFolders();
+            renderFolders();
+            document.getElementById('newFolderName').value = '';
+            
+            // Añadir al selector de carpetas
+            const folderSelect = document.getElementById('uploadFolderSelect');
+            const option = document.createElement('option');
+            option.value = folderId;
+            option.textContent = newFolderName;
+            folderSelect.appendChild(option);
+            
+            showUploadStatus(`Carpeta "${newFolderName}" creada correctamente`, 'success');
+        }
+        
+        // NUEVO: Función para cancelar creación de carpeta
+        function cancelNewFolder() {
+            document.getElementById('newFolderName').value = '';
+        }
+        
+        // NUEVO: Función para guardar carpetas
+        function saveFolders() {
+            localStorage.setItem('foldersData', JSON.stringify(folders));
+        }
+        
+        // NUEVO: Función para ver un archivo
+        function viewFile(folderId, fileIndex) {
+            const folder = folders[folderId];
+            if (!folder || !folder.files || !folder.files[fileIndex]) return;
+            
+            const file = folder.files[fileIndex];
+            showUploadStatus(`Abriendo archivo: ${file.name}`, 'info');
+            
+            // En un entorno real, aquí abriríamos el archivo
+            // Por ahora, solo mostramos un mensaje
+            alert(`Archivo: ${file.name}\nTipo: ${file.type}\nTamaño: ${file.size}\nSubido: ${new Date(file.date).toLocaleString()}`);
+        }
+        
+        // NUEVO: Función para eliminar un archivo
+        function deleteFile(folderId, fileIndex) {
+            const folder = folders[folderId];
+            if (!folder || !folder.files || !folder.files[fileIndex]) return;
+            
+            const fileName = folder.files[fileIndex].name;
+            
+            if (!confirm(`¿Eliminar el archivo "${fileName}"?`)) {
+                return;
+            }
+            
+            folder.files.splice(fileIndex, 1);
+            saveFolders();
+            renderFolders();
+            showUploadStatus(`Archivo "${fileName}" eliminado`, 'info');
+        }
+        
+        // MODIFICADA: Función para manejar la subida de archivos
+        function handleFileUpload() {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+            
+            if (files.length === 0) return;
+            
+            const folderSelect = document.getElementById('uploadFolderSelect');
+            const selectedFolder = folderSelect.value;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileInfo = {
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: file.type,
+                    date: new Date().toISOString()
+                };
+                
+                // Añadir a la carpeta seleccionada
+                if (folders[selectedFolder]) {
+                    folders[selectedFolder].files.push(fileInfo);
+                } else {
+                    // Si la carpeta no existe, usar la primera disponible
+                    const firstFolder = Object.keys(folders)[0];
+                    folders[firstFolder].files.push(fileInfo);
+                    selectedFolder = firstFolder;
+                }
+                
+                // También añadir a la lista general de archivos subidos
+                uploadedFiles.push(fileInfo);
+            }
+            
+            // Guardar cambios
+            saveFolders();
+            updateUploadedFilesList();
+            renderFolders();
+            
+            // Mostrar información del archivo subido
+            if (files.length === 1) {
+                showUploadedBookInfo(selectedFolder, files[0].name);
+            } else {
+                showUploadStatus(`${files.length} archivos subidos correctamente a ${folders[selectedFolder].name}`, 'success');
+                document.getElementById('uploadSuccessText').textContent = `${files.length} archivos subidos correctamente`;
+                document.getElementById('uploadSuccessMessage').classList.add('active');
+                setTimeout(() => {
+                    document.getElementById('uploadSuccessMessage').classList.remove('active');
+                }, 5000);
+            }
+            
+            // Limpiar input
+            fileInput.value = '';
+        }
+        
+        // NUEVO: Función para formatear tamaño de archivo
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // MODIFICADA: Función para actualizar lista de archivos subidos
+        function updateUploadedFilesList() {
+            const filesList = document.getElementById('uploadedFilesList');
+            
+            if (uploadedFiles.length === 0) {
+                filesList.innerHTML = '<p style="color: #666; text-align: center;">No hay archivos subidos aún</p>';
+                return;
+            }
+            
+            let filesHTML = '';
+            // Mostrar solo los últimos 5 archivos
+            const recentFiles = uploadedFiles.slice(-5).reverse();
+            
+            recentFiles.forEach((file, index) => {
+                const fileDate = new Date(file.date).toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const iconClass = getFileIconClass(file.type);
+                
+                filesHTML += `
+                    <div style="background: white; padding: 10px; margin-bottom: 10px; border-radius: 5px; border-left: 4px solid var(--success);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas ${iconClass}" style="font-size: 1.5rem; color: var(--success);"></i>
+                            <div style="flex: 1;">
+                                <strong>${file.name}</strong>
+                                <p style="margin: 5px 0; font-size: 0.85rem; color: #666;">
+                                    ${file.size} • ${fileDate}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            filesList.innerHTML = filesHTML;
+        }
+        
+        // MODIFICADA: Función para limpiar archivos subidos
+        function clearUploadedFiles() {
+            if (!confirm('¿Eliminar todos los archivos de la lista? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            
+            uploadedFiles = [];
+            
+            // También limpiar archivos de todas las carpetas
+            for (const folderId in folders) {
+                folders[folderId].files = [];
+            }
+            
+            saveFolders();
+            updateUploadedFilesList();
+            renderFolders();
+            showUploadStatus('Lista de archivos limpiada', 'info');
+        }
+        
+        // MODIFICADA: Función para cargar estadísticas
+        function loadStatistics() {
+            const savedStats = localStorage.getItem('salesStatistics');
+            if (savedStats) {
+                const stats = JSON.parse(savedStats);
+                salesCuba = stats.salesCuba || 0;
+                salesInternational = stats.salesInternational || 0;
+                bookSales = stats.bookSales || {
+                    1: { name: "Cocina Internacional AI", sales: 0 },
+                    2: { name: "Fusión Caribeña con IA", sales: 0 },
+                    3: { name: "Postres con Chat GPT", sales: 0 }
+                };
+                bookOfDaySales = stats.bookOfDaySales || 0;
+                bookOfDayName = stats.bookOfDayName || "No hay ventas aún";
+                salesHistory = stats.salesHistory || [];
+                
+                // Actualizar displays
+                document.getElementById('publicSalesCuba').textContent = salesCuba;
+                document.getElementById('adminSalesCuba').textContent = salesCuba;
+                document.getElementById('publicSalesInternational').textContent = salesInternational;
+                document.getElementById('adminSalesInternational').textContent = salesInternational;
+                document.getElementById('adminTotalSales').textContent = salesCuba + salesInternational;
+                document.getElementById('bookOfDaySales').textContent = bookOfDaySales;
+                document.getElementById('bookOfDayName').textContent = bookOfDayName;
+                
+                updateBookSalesDisplay();
+                updateSalesHistory();
+            }
+            
+            // Cargar configuración del sorteo
+            const savedRaffleConfig = localStorage.getItem('raffleConfig');
+            if (savedRaffleConfig) {
+                raffleConfig = JSON.parse(savedRaffleConfig);
+                raffleEndTime = new Date();
+                raffleEndTime.setDate(raffleEndTime.getDate() + raffleConfig.days);
+                
+                // Actualizar inputs del admin
+                document.getElementById('rafflePrizeInput').value = raffleConfig.prize;
+                document.getElementById('raffleDescriptionInput').value = raffleConfig.description;
+                document.getElementById('raffleLinkInput').value = raffleConfig.link;
+                document.getElementById('raffleDaysInput').value = raffleConfig.days;
+                
+                // Actualizar página principal
+                document.getElementById('rafflePrizeName').innerHTML = `🎁 <strong>${raffleConfig.prize}</strong>`;
+                document.getElementById('raffleDescription').textContent = raffleConfig.description;
+                document.getElementById('raffleLink').href = raffleConfig.link;
+                document.getElementById('raffleLink').textContent = raffleConfig.link;
+            }
+            
+            // Cargar eventos personales
+            const savedEvents = localStorage.getItem('personalEvents');
+            if (savedEvents) {
+                personalEvents = JSON.parse(savedEvents);
+                updatePersonalEventsList();
+            }
+            
+            // Cargar archivos subidos
+            const savedFiles = localStorage.getItem('uploadedFiles');
+            if (savedFiles) {
+                uploadedFiles = JSON.parse(savedFiles);
+                updateUploadedFilesList();
+            }
+            
+            // Cargar carpetas
+            loadFolders();
+        }
+        
+        // MODIFICADA: Función para confirmar restablecimiento
+        function confirmReset() {
+            if (!confirm('¿Estás seguro de que quieres restablecer las configuraciones seleccionadas? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            
+            // Restablecer ventas y estadísticas
+            if (document.getElementById('resetSales').checked) {
+                salesCuba = 0;
+                salesInternational = 0;
+                bookOfDaySales = 0;
+                salesHistory = [];
+                
+                for (const id in bookSales) {
+                    bookSales[id].sales = 0;
+                }
+                
+                updateCounters();
+                updateBookSalesDisplay();
+                updateBookOfDay();
+                updateSalesHistory();
+            }
+            
+            // Restablecer sorteo
+            if (document.getElementById('resetRaffle').checked) {
+                resetRaffleConfig();
+            }
+            
+            // Restablecer calendario
+            if (document.getElementById('resetCalendar').checked) {
+                personalEvents = [];
+                updatePersonalEventsList();
+                localStorage.removeItem('personalEvents');
+            }
+            
+            // Restablecer contadores
+            if (document.getElementById('resetCounters').checked) {
+                websiteVisits = 0;
+                localStorage.setItem('websiteVisits', '0');
+                updateWebsiteVisitsDisplay();
+            }
+            
+            // Restablecer archivos
+            if (document.getElementById('resetUploads').checked) {
+                uploadedFiles = [];
+                updateUploadedFilesList();
+                localStorage.removeItem('uploadedFiles');
+            }
+            
+            // Restablecer carpetas
+            if (document.getElementById('resetFolders').checked) {
+                folders = {
+                    'libros': {
+                        name: '📚 Libros de Cocina',
+                        description: 'Libros PDF de cocina internacional y tradicional',
+                        files: [],
+                        createdAt: new Date().toISOString()
+                    },
+                    'postres': {
+                        name: '🍰 Postres',
+                        description: 'Recetas de postres y dulces',
+                        files: [],
+                        createdAt: new Date().toISOString()
+                    },
+                    'recetas': {
+                        name: '📝 Recetas',
+                        description: 'Recetas individuales y colecciones',
+                        files: [],
+                        createdAt: new Date().toISOString()
+                    }
+                };
+                saveFolders();
+                renderFolders();
+            }
+            
+            showUploadStatus('Configuraciones restablecidas', 'success');
+        }
+        
+        // MODIFICADA: Función para cambiar pestañas del admin
+        function switchAdminTab(tabId) {
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.admin-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Desactivar todos los botones
+            document.querySelectorAll('.admin-tab').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Mostrar la pestaña seleccionada
+            document.getElementById(tabId + 'Tab').classList.add('active');
+            
+            // Activar el botón correspondiente
+            event.target.classList.add('active');
+            
+            // Si es la pestaña de carpetas, renderizar las carpetas
+            if (tabId === 'folders') {
+                renderFolders();
+            }
+        }
+        
+        // El resto de las funciones existentes se mantienen igual...
+        // (Funciones del carrito, estadísticas, calendario, etc.)
+        
+        // Inicialización cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar visitas al sitio web
+            initializeWebsiteVisits();
+            
+            // Cargar estadísticas guardadas
+            loadStatistics();
+            
+            // Inicializar almanaque
+            updateSmallAlmanac();
+            
+            // Cargar eventos del calendario
+            loadCalendarEvents();
+            
+            // Configurar pestañas del admin
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchAdminTab(tabId);
+                });
+            });
+            
+            // Event listeners para el carrito
+            document.getElementById('cartBtn').addEventListener('click', openCart);
+            document.getElementById('closeCart').addEventListener('click', closeCart);
+            document.getElementById('clearCart').addEventListener('click', clearCart);
+            document.getElementById('checkoutBtn').addEventListener('click', checkout);
+            
+            // Actualizar cálculos de pago cuando cambia el dinero disponible
+            document.getElementById('moneyAvailable').addEventListener('input', updatePaymentCalculations);
+            
+            // Event listeners para botones de añadir al carrito
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    const price = this.getAttribute('data-price');
+                    addToCart(id, name, price);
+                });
+            });
+            
+            // Cerrar carrito al hacer clic fuera
+            document.getElementById('cartModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeCart();
+                }
+            });
+            
+            // Botón de simular venta
+            document.getElementById('simulateSaleBtn').addEventListener('click', simulateSale);
+            
+            // Calendario
+            document.getElementById('monthSelect').addEventListener('change', loadCalendarEvents);
+            document.getElementById('countrySelect').addEventListener('change', loadCalendarEvents);
+            document.getElementById('typeSelect').addEventListener('change', loadCalendarEvents);
+            
+            document.getElementById('refreshAlmanacBtn').addEventListener('click', updateSmallAlmanac);
+            document.getElementById('toggleFullCalendarBtn').addEventListener('click', toggleFullCalendar);
+            document.getElementById('hideFullCalendarBtn').addEventListener('click', toggleFullCalendar);
+            document.getElementById('prevYearBtn').addEventListener('click', () => changeYear(-1));
+            document.getElementById('nextYearBtn').addEventListener('click', () => changeYear(1));
+            
+            // WhatsApp
+            document.getElementById('whatsappCubaBtn').addEventListener('click', redirectToWhatsApp);
+            document.getElementById('whatsappContactBtn').addEventListener('click', redirectToWhatsApp);
+            document.getElementById('footerWhatsappBtn').addEventListener('click', redirectToWhatsApp);
+            
+            // Sorteo
+            document.getElementById('participateBtn').addEventListener('click', participateInRaffle);
+            
+            // Formularios
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showNotification('Mensaje enviado correctamente. Te responderemos pronto.', 'success');
+                this.reset();
+            });
+            
+            document.getElementById('supportForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showNotification('Solicitud de soporte enviada. Te contactaremos pronto.', 'success');
+                this.reset();
+            });
+            
+            // Menú móvil
+            document.querySelector('.mobile-menu').addEventListener('click', function() {
+                const nav = document.querySelector('nav');
+                nav.classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer clic en un enlace
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const nav = document.querySelector('nav');
+                    nav.classList.remove('active');
+                });
+            });
+            
+            // Subida de archivos
+            document.getElementById('fileUploadArea').addEventListener('click', function() {
+                document.getElementById('fileInput').click();
+            });
+            
+            document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+            
+            // Inicializar reloj y temporizadores
+            updateCurrentTime();
+            updateRaffleTimer();
+            
+            // Actualizar reloj cada segundo
+            setInterval(updateCurrentTime, 1000);
+            
+            // Actualizar temporizador del sorteo cada segundo
+            setInterval(updateRaffleTimer, 1000);
+            
+            // Mostrar mensaje de bienvenida
+            setTimeout(() => {
+                showNotification('¡Bienvenido a Curiosidades Culinarias! Explora nuestros libros de cocina creados con IA.', 'info');
+            }, 1000);
+        });
+        
+        // NOTA: Todas las funciones existentes del código original (addToCart, updateCart, etc.)
+        // deben mantenerse en el archivo. Solo he mostrado las funciones nuevas y modificadas.
+        // Para un archivo completo, necesitarías combinar este código con el código original.
+    </script>
+</body>
+</html>
